@@ -23,10 +23,10 @@ EXCLUDE: TAMILNADU-INDIA
 ```
 Now, `DISTRIBUTOR2` can distribute the movie anywhere in `INDIA`, except inside `TAMILNADU-INDIA` and `KARNATAKA-INDIA` - `DISTRIBUTOR2`'s permissions are always a subset of `DISTRIBUTOR1`'s permissions. It's impossible/invalid for `DISTRIBUTOR2` to have `INCLUDE: CHINA`, for example, because `DISTRIBUTOR1` isn't authorized to do that in the first place. 
 
-If `DISTRIBUTOR2` authorizes `DISTRIBUTOR3` to handle just the city of Coimbatore, for example:
+If `DISTRIBUTOR2` authorizes `DISTRIBUTOR3` to handle just the city of Hubli, Karnataka, India, for example:
 ```
 Permissions for DISTRIBUTOR3 < DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: COIMBATORE-TAMILNADU-INDIA
+INCLUDE: HUBLI-KARNATAKA-INDIA
 ```
 Again, `DISTRIBUTOR2` cannot authorize `DISTRIBUTOR3` with a region that they themselves do not have access to. 
 
