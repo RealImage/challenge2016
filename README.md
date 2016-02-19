@@ -20,28 +20,6 @@ Write a program in any language you want (If you're here from Gophercon, use Go 
 
 To submit a solution, fork this repo and send a Pull Request on Github. 
 
-# Real Image Challenge 2016
-
-In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
-
-Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
-```
-Permissions for DISTRIBUTOR1
-INCLUDE: INDIA
-INCLUDE: UNITEDSTATES
-EXCLUDE: KARNATAKA-INDIA
-EXCLUDE: CHENNAI-TAMILNADU-INDIA
-```
-This allows `DISTRIBUTOR1` to distribute in any city inside the United States and India, *except* cities in the state of Karnataka (in India) and the city of Chennai (in Tamil Nadu, India).
-
-At this point, asking your program if `DISTRIBUTOR1` has permission to distribute in `CHICAGO-ILLINOIS-UNITEDSTATES` should get `YES` as the answer, and asking if distribution can happen in `CHENNAI-TAMILNADU-INDIA` should of course be `NO`. Asking if distribution is possible in `BANGALORE-KARNATAKA-INDIA` should also be `NO`, because the whole state of Karnataka has been excluded.
-
-We've provided a CSV with the list of all countries, states and cities in the world that we know of - please use the data mentioned there for for this program. *The codes you see there may be different from what you see here, so please always use the codes in the CSV*. This Readme is only an example. 
-
-Write a program in any language you want (If you're here from Gophercon, use Go :D) that accepts the authorizations for a distributor and answers if they can distribute in a particular city. Feel free to make your own input and output format / command line tool / GUI / Webservice / whatever you want. Feel free to hold the dataset in whatever structure you want, but try not to use external databases - as far as possible stick to your langauage without bringing in MySQL/Postgres/MongoDB/Redis/Etc.
-
-To submit a solution, fork this repo and send a Pull Request on Github. 
-
 ##Bonus Points
 
 Sometimes, a distributor might split the work of distribution amount smaller sub-distiributors inside their autohorized geographies. For instance, `DISTRIBUTOR1` might assign the following permissions to `DISTRIBUTOR2`:
