@@ -1,0 +1,20 @@
+# distributor_name, region, expected_result
+DISTRIBUTOR1, INDIA, true
+DISTRIBUTOR1, MEXICO, false
+DISTRIBUTOR1, BANGALORE-KARNATAKA-INDIA, false
+DISTRIBUTOR1, CHENNAI-Tamil nadu-INDIA, false
+DISTRIBUTOR1, Tamil nadu-INDIA, true
+DISTRIBUTOR1, KERALA-INDIA, true
+DISTRIBUTOR1, Navalgund-KARNATAKA-INDIA, false
+DISTRIBUTOR2, CHENNAI-Tamil nadu-INDIA, false
+DISTRIBUTOR2, TAMIL NADU-INDIA, false
+DISTRIBUTOR2, Navalgund-KARNATAKA-INDIA, false
+DISTRIBUTOR3, Navalgund-KARNATAKA-INDIA, false
+DISTRIBUTOR3, Hubli-KARNATAKA-INDIA, false
+DISTRIBUTOR3, Devikulam-Kerala-INDIA, true
+DISTRIBUTOR3, Teixeira de Freitas-Bahia-Brazil, false
+DISTRIBUTOR4, Teixeira de Freitas-Bahia-Brazil, false
+DISTRIBUTOR4, Francisco I Madero-Durango-Mexico, true
+DISTRIBUTOR5, BANGALORE-KARNATAKA-INDIA, false
+DISTRIBUTOR5, Mexico, false
+DISTRIBUTOR5, Fort Hunt-Virginia-United States, true
