@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	// "io"
 )
 
 type Location struct {
@@ -19,15 +18,41 @@ type Location struct {
 }
 
 type Distributer struct {
-	Name               string
-	IncLocs            []Location
-	ExcLocs            []Location
-	SubDistributerKeys []string // Sub distributer keys, we keep map of distrbuter -> its permission logic indepndendly.
+	Name            string
+	IncLocs         []Location
+	ExcLocs         []Location
+	ParentDistNames []string // Sub distributer keys, we keep map of distrbuter -> its permission logic indepndendly.
 }
 
 // Single depth map to quickly locate the availability of the distributer
 // for a given location.
 type Distributers map[string]Distributer
+
+var distributer_map Distributers
+
+/**
+* Check given location is comes under this location object.
+*
+* TODO: Use better substring matching, Tries or so.
+*
+ */
+func (_l *Location) Is_sublocation(loc *Location) bool {
+	fmt.Println(loc, _l)
+	//fmt.Println(loc.Country_code, loc.Province_code, loc.City_code, len(loc.Country_code))
+	if len(_l.Country_code) > 0 && loc.Country_code != _l.Country_code {
+		fmt.Println("===> Country doesn't match")
+		return false
+	}
+	if len(_l.Province_code) > 0 && loc.Province_code != _l.Province_code {
+		fmt.Println("===> Province doesn't match")
+		return false
+	}
+	if len(_l.City_code) > 0 && loc.City_code != _l.City_code {
+		fmt.Println("===> City doesn't match")
+		return false
+	}
+	return true
+}
 
 /**
 * Check the given distributer has permission to distribute movies under the
@@ -36,7 +61,28 @@ type Distributers map[string]Distributer
 * @param location - Formated after CITY-PROVINCE-COUNTRY format.
 *
  */
-func (*Distributer) has_permission(location string) bool {
+func (_d *Distributer) has_permission(location string) bool {
+	sr_loc := get_locations(location)[0]
+	// Check in Include list, if found exact match return
+	for _, loc := range _d.IncLocs {
+		fmt.Printf("Loc under check: %s\n", loc)
+		if loc.Is_sublocation(&sr_loc) {
+			fmt.Println("========>")
+			for _, loc := range _d.ExcLocs {
+				if loc.Is_sublocation(&sr_loc) {
+					fmt.Println("===>")
+					return false
+				}
+			}
+			return true
+		}
+	}
+
+	//for _, parent := range _d.ParentDistNames {
+	//	p_dist := distributer_map[parent]
+	//	return p_dist.has_permission(location)
+	//}
+	fmt.Println("------> Doesn't match any ")
 	return false
 }
 
@@ -51,7 +97,7 @@ func PrintDistributerMap(distributers Distributers) {
 		fmt.Printf("\tName: %s\n", v.Name)
 		fmt.Printf("\tIncLocs: %s\n", v.IncLocs)
 		fmt.Printf("\tExcLocs: %s\n", v.ExcLocs)
-		fmt.Printf("\tSubDistributerKeys: %s\n\n", v.SubDistributerKeys)
+		fmt.Printf("\tParentDistName: %s\n\n", v.ParentDistNames)
 	}
 }
 
@@ -108,9 +154,41 @@ func get_sub_distributers(distributer string) []string {
 	return sub_distributers
 }
 
+func check_permission(d string, l string) bool {
+	//fmt.Printf("Dname: %s, Location: %s\n", d, l)
+	d_obj := distributer_map[d]
+	return d_obj.has_permission(l)
+}
+
 func input_from_stdin() {
+	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Print("Enter Your choice: ")
+		fmt.Print("\n1. Check Distributer Permission: ")
+		fmt.Print("\n2. Quit.")
+		fmt.Print("\nEnter Your choice: ")
+		input, _ := reader.ReadString('\n')
+		fmt.Printf("Your Choice: %s", input)
+
+		switch strings.TrimSpace(input) {
+		case "1":
+			fmt.Print("Enter the Input eg: D1, CITY-PROVINCE-COUNTRY format: ")
+			input, _ := reader.ReadString('\n')
+			text := strings.Split(input, ",")
+			d, l := strings.TrimSpace(text[0]), strings.TrimSpace(text[1])
+
+			has_permission := ""
+			if check_permission(d, l) {
+				has_permission = "ON"
+			} else {
+				has_permission = "OFF"
+			}
+			fmt.Printf(" Distributer: %s, Location %s - Has permission ?: %s",
+				d, l, has_permission)
+		case "2":
+			os.Exit(0)
+		default:
+			fmt.Println("Please pick correct option...")
+		}
 	}
 }
 
@@ -139,7 +217,7 @@ func main() {
 	// TODO: Use two-pass search to avoid this constrain.
 	dist_permission_csv, _ := os.Open("./dist_permission.csv")
 
-	distributers := make(Distributers)
+	distributer_map = make(Distributers)
 
 	csv_reader := csv.NewReader(bufio.NewReader(dist_permission_csv))
 	records, _ := csv_reader.ReadAll()
@@ -148,17 +226,18 @@ func main() {
 	for _, record := range records[1:] {
 		distributer := new(Distributer)
 		d_name, d_parents := get_distributer_name(record[0])
-		distributer.Name = d_name
-		distributer.SubDistributerKeys = d_parents
+		distributer.Name = strings.TrimSpace(d_name)
+		distributer.ParentDistNames = d_parents
 		distributer.IncLocs = get_locations(record[1])
 		distributer.ExcLocs = get_locations(record[2])
-		distributers[distributer.Name] = *distributer
+		distributer_map[distributer.Name] = *distributer
 	}
-	PrintDistributerMap(distributers)
+	//PrintDistributerMap(distributer_map)
 
 	/*************************************************************************
 	* Search On the populated data.
 	**************************************************************************
 	*
 	 */
+	input_from_stdin()
 }
