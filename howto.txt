@@ -1,10 +1,10 @@
 To compile:
-  Goto parent dir and run go build. This will generate executables(Eg: challenge2016)
+  Goto parent dir and run go build. This will generate executables(Eg: distributors)
 
 How to run this script:
-  ./challenge2016 <path to the rule file> <distrubutor> <locationcode to query>
+  ./distributors <path to the rule file> <distrubutor> <locationcode to query>
 
-  eg: ./challenge2016 ./distributors.rule DISTRIBUTOR2 BENGU-KA-IN
+  eg: ./distributors ./distributors.rule DISTRIBUTOR2 BENGU-KA-IN
 
   If distributors is allowed to operate on a given location this script will return YES. otherwise NO.
 
@@ -19,3 +19,4 @@ adding one level hierarchy.
     Permissions: d3 < d2
 
 - Rules are case sensitive.
+- I have committed distributors binary also. So that you don't need to have golang installed.
