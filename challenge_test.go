@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"fmt"
 	"testing"
 )
 
@@ -27,6 +26,9 @@ func TestSingleLevelPermissionCheck(t *testing.T) {
 		t.Errorf("D2 has authorization to distribute in MH-IN")
 	}
 
+	// As when checking only we are identifying invalid authorization mapping.
+	// Could be added when creating the data structure itself and remove the
+	// conflicting distributer and throw error.
 	if HasAuthorized("D3", "HUBLI-KA-IN") {
 		t.Errorf("D3 doesn't have authorization to distribute in HUBLI-KA-IN as D2 Doesn't hve it.")
 	}
@@ -45,5 +47,24 @@ func TestMultipleLevelPermissionCheck(t *testing.T) {
 
 	if HasAuthorized("D2", "CENAI-TN-IN") {
 		t.Errorf("D2 doesn't have authorization to distribute in KA-IN")
+	}
+
+	if HasAuthorized("D3", "TN-IN") {
+		t.Errorf("D3 doesn't have authorization to distribute in TN-IN")
+	}
+
+	if HasAuthorized("D3", "KA-IN") {
+		t.Errorf("D3 doesn't have authorization to distribute in KA-IN")
+	}
+
+	if !HasAuthorized("D3", "MH-IN") {
+		t.Errorf("D3 has authorization to distribute in MH-IN")
+	}
+
+	if !HasAuthorized("D3", "PUNE-MH-IN") {
+		t.Errorf("D3 has authorization to distribute in PUNE-MH-IN")
+	}
+	if HasAuthorized("D3", "CN") {
+		t.Errorf("D3 has doesn't have authorization to distribute in CN")
 	}
 }

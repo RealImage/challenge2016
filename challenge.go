@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	//"time"
 )
 
 type Location struct {
@@ -22,7 +21,7 @@ type Distributer struct {
 	Name            string
 	IncLocs         []Location
 	ExcLocs         []Location
-	ParentDistNames []string // Sub distributer keys, we keep map of distrbuter -> its permission logic indepndendly.
+	ParentDistNames []string
 }
 
 // Single depth map to quickly locate the availability of the distributer
@@ -77,7 +76,7 @@ func (_d *Distributer) GetAllIncLocs() []Location {
 *
  */
 func (_d *Distributer) HasPermission(location string) bool {
-	sr_loc := get_locations(location)[0]
+	sr_loc := getLocations(location)[0]
 
 	// Check in Include list, if found exact match return
 	for _, loc := range _d.GetAllIncLocs() {
@@ -111,7 +110,7 @@ func PrintDistributerMap(distributers Distributers) {
 *
 *	Where Location1 follows CITY-PROVINCE-COUNTRY format.
  */
-func get_locations(location string) []Location {
+func getLocations(location string) []Location {
 	location = strings.TrimSpace(location)
 	locs := strings.Split(location, ":")
 	var loc_objs []Location
@@ -143,7 +142,7 @@ func get_locations(location string) []Location {
 *
 * @return: D1, [D2, ...]
  */
-func get_distributer_name(name string) (string, []string) {
+func getDistributerName(name string) (string, []string) {
 	var d_name []string
 	for _, name := range strings.Split(name, "<") {
 		d_name = append(d_name, strings.TrimSpace(name))
@@ -157,18 +156,12 @@ func get_distributer_name(name string) (string, []string) {
 	}
 }
 
-// Split the distributer hiearachy by spliting with delimiter as "<"
-func get_sub_distributers(distributer string) []string {
-	sub_distributers := make([]string, 0)
-	return sub_distributers
-}
-
 func HasAuthorized(d string, l string) bool {
 	d_obj := DistributerMap[d]
 	return d_obj.HasPermission(l)
 }
 
-func input_from_stdin() {
+func inputFromStdin() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print("\n1. Check Distributer Permission: ")
@@ -226,11 +219,11 @@ func Load_rule_csv() {
 	// Skip the headers.
 	for _, record := range records[1:] {
 		distributer := new(Distributer)
-		d_name, d_parents := get_distributer_name(record[0])
+		d_name, d_parents := getDistributerName(record[0])
 		distributer.Name = strings.TrimSpace(d_name)
 		distributer.ParentDistNames = d_parents
-		distributer.IncLocs = get_locations(record[1])
-		distributer.ExcLocs = get_locations(record[2])
+		distributer.IncLocs = getLocations(record[1])
+		distributer.ExcLocs = getLocations(record[2])
 		DistributerMap[distributer.Name] = *distributer
 	}
 }
@@ -251,5 +244,5 @@ func main() {
 	**************************************************************************
 	*
 	 */
-	input_from_stdin()
+	inputFromStdin()
 }
