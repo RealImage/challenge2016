@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	//"time"
 )
 
 type Location struct {
@@ -37,18 +38,13 @@ var DistributerMap Distributers
 *
  */
 func (_l *Location) IsSublocation(loc *Location) bool {
-	fmt.Println(loc, _l)
-	//fmt.Println(loc.Country_code, loc.Province_code, loc.City_code, len(loc.Country_code))
 	if len(_l.Country_code) > 0 && loc.Country_code != _l.Country_code {
-		//fmt.Println("===> Country doesn't match")
 		return false
 	}
 	if len(_l.Province_code) > 0 && loc.Province_code != _l.Province_code {
-		//fmt.Println("===> Province doesn't match")
 		return false
 	}
 	if len(_l.City_code) > 0 && loc.City_code != _l.City_code {
-		//fmt.Println("===> City doesn't match")
 		return false
 	}
 	return true
@@ -62,6 +58,25 @@ func (_l *Location) IsEmpty() bool {
 	}
 }
 
+func (_d *Distributer) GetAllExcLocs() []Location {
+	locations := _d.ExcLocs
+	for _, d_parent := range _d.ParentDistNames {
+		parent_obj := DistributerMap[d_parent]
+		locations = append(locations, parent_obj.GetAllExcLocs()...)
+	}
+	return locations
+}
+
+func (_d *Distributer) GetAllIncLocs() []Location {
+	var locations []Location
+	locations = append(locations, _d.IncLocs...)
+	for _, d_parent := range _d.ParentDistNames {
+		parent_obj := DistributerMap[d_parent]
+		locations = append(locations, parent_obj.GetAllIncLocs()...)
+	}
+	return locations
+}
+
 /**
 * Check the given distributer has permission to distribute movies under the
 * given location.
@@ -69,31 +84,20 @@ func (_l *Location) IsEmpty() bool {
 * @param location - Formated after CITY-PROVINCE-COUNTRY format.
 *
  */
-func (_d *Distributer) has_permission(location string) bool {
+func (_d *Distributer) HasPermission(location string) bool {
 	sr_loc := get_locations(location)[0]
 
 	// Check in Include list, if found exact match return
-	for _, loc := range _d.IncLocs {
-		fmt.Printf("Loc under check: %s\n", loc)
+	for _, loc := range _d.GetAllIncLocs() {
 		if loc.IsSublocation(&sr_loc) {
-			fmt.Println("========>")
-			fmt.Println(_d.ExcLocs)
-			for _, loc := range _d.ExcLocs {
+			for _, loc := range _d.GetAllExcLocs() {
 				if loc.IsSublocation(&sr_loc) {
-					fmt.Println("--->")
 					return false
 				}
 			}
 			return true
 		}
 	}
-
-	for _, parent := range _d.ParentDistNames {
-		p_dist := DistributerMap[parent]
-		return p_dist.has_permission(location)
-	}
-
-	fmt.Println("------> Doesn't match any ")
 	return false
 }
 
@@ -153,7 +157,10 @@ func get_locations(location string) []Location {
 * @return: D1, [D2, ...]
  */
 func get_distributer_name(name string) (string, []string) {
-	d_name := strings.Split(name, "<")
+	var d_name []string
+	for _, name := range strings.Split(name, "<") {
+		d_name = append(d_name, strings.TrimSpace(name))
+	}
 	if len(d_name) == 1 {
 		return d_name[0], []string{}
 	} else if len(d_name) > 1 {
@@ -169,10 +176,9 @@ func get_sub_distributers(distributer string) []string {
 	return sub_distributers
 }
 
-func CheckPermission(d string, l string) bool {
-	//fmt.Printf("Dname: %s, Location: %s\n", d, l)
+func HasAuthorized(d string, l string) bool {
 	d_obj := DistributerMap[d]
-	return d_obj.has_permission(l)
+	return d_obj.HasPermission(l)
 }
 
 func input_from_stdin() {
@@ -191,14 +197,14 @@ func input_from_stdin() {
 			text := strings.Split(input, ",")
 			d, l := strings.TrimSpace(text[0]), strings.TrimSpace(text[1])
 
-			has_permission := ""
-			if CheckPermission(d, l) {
-				has_permission = "ON"
+			HasPermission := ""
+			if HasAuthorized(d, l) {
+				HasPermission = "ON"
 			} else {
-				has_permission = "OFF"
+				HasPermission = "OFF"
 			}
 			fmt.Printf(" Distributer: %s, Location %s - Has permission ?: %s",
-				d, l, has_permission)
+				d, l, HasPermission)
 		case "2":
 			os.Exit(0)
 		default:
@@ -238,9 +244,6 @@ func Load_rule_csv() {
 		distributer.ParentDistNames = d_parents
 		distributer.IncLocs = get_locations(record[1])
 		distributer.ExcLocs = get_locations(record[2])
-
-		//fmt.Println("ExcLocs: ", distributer.ExcLocs)
-
 		DistributerMap[distributer.Name] = *distributer
 	}
 }
