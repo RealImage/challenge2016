@@ -28,7 +28,7 @@ type Distributer struct {
 // for a given location.
 type Distributers map[string]Distributer
 
-var distributer_map Distributers
+var DistributerMap Distributers
 
 /**
 * Check given location is comes under this location object.
@@ -36,22 +36,30 @@ var distributer_map Distributers
 * TODO: Use better substring matching, Tries or so.
 *
  */
-func (_l *Location) Is_sublocation(loc *Location) bool {
+func (_l *Location) IsSublocation(loc *Location) bool {
 	fmt.Println(loc, _l)
 	//fmt.Println(loc.Country_code, loc.Province_code, loc.City_code, len(loc.Country_code))
 	if len(_l.Country_code) > 0 && loc.Country_code != _l.Country_code {
-		fmt.Println("===> Country doesn't match")
+		//fmt.Println("===> Country doesn't match")
 		return false
 	}
 	if len(_l.Province_code) > 0 && loc.Province_code != _l.Province_code {
-		fmt.Println("===> Province doesn't match")
+		//fmt.Println("===> Province doesn't match")
 		return false
 	}
 	if len(_l.City_code) > 0 && loc.City_code != _l.City_code {
-		fmt.Println("===> City doesn't match")
+		//fmt.Println("===> City doesn't match")
 		return false
 	}
 	return true
+}
+
+func (_l *Location) IsEmpty() bool {
+	if _l.Country_code == "" && _l.Province_code == "" && _l.City_code == "" {
+		return true
+	} else {
+		return false
+	}
 }
 
 /**
@@ -63,14 +71,16 @@ func (_l *Location) Is_sublocation(loc *Location) bool {
  */
 func (_d *Distributer) has_permission(location string) bool {
 	sr_loc := get_locations(location)[0]
+
 	// Check in Include list, if found exact match return
 	for _, loc := range _d.IncLocs {
 		fmt.Printf("Loc under check: %s\n", loc)
-		if loc.Is_sublocation(&sr_loc) {
+		if loc.IsSublocation(&sr_loc) {
 			fmt.Println("========>")
+			fmt.Println(_d.ExcLocs)
 			for _, loc := range _d.ExcLocs {
-				if loc.Is_sublocation(&sr_loc) {
-					fmt.Println("===>")
+				if loc.IsSublocation(&sr_loc) {
+					fmt.Println("--->")
 					return false
 				}
 			}
@@ -78,10 +88,11 @@ func (_d *Distributer) has_permission(location string) bool {
 		}
 	}
 
-	//for _, parent := range _d.ParentDistNames {
-	//	p_dist := distributer_map[parent]
-	//	return p_dist.has_permission(location)
-	//}
+	for _, parent := range _d.ParentDistNames {
+		p_dist := DistributerMap[parent]
+		return p_dist.has_permission(location)
+	}
+
 	fmt.Println("------> Doesn't match any ")
 	return false
 }
@@ -112,8 +123,8 @@ func PrintDistributerMap(distributers Distributers) {
 func get_locations(location string) []Location {
 	location = strings.TrimSpace(location)
 	locs := strings.Split(location, ":")
-	loc_objs := make([]Location, len(locs))
-	for i, l := range locs {
+	var loc_objs []Location
+	for _, l := range locs {
 		loc_obj := new(Location)
 		// Get sub locations.
 		sub_locs := strings.Split(l, "-")
@@ -127,7 +138,11 @@ func get_locations(location string) []Location {
 		} else if len(sub_locs) == 1 {
 			loc_obj.Country_code = sub_locs[0]
 		}
-		loc_objs[i] = *loc_obj
+
+		if loc_obj.Country_code != "" || loc_obj.Province_code != "" ||
+			loc_obj.City_code != "" {
+			loc_objs = append(loc_objs, *loc_obj)
+		}
 	}
 	return loc_objs
 }
@@ -154,9 +169,9 @@ func get_sub_distributers(distributer string) []string {
 	return sub_distributers
 }
 
-func check_permission(d string, l string) bool {
+func CheckPermission(d string, l string) bool {
 	//fmt.Printf("Dname: %s, Location: %s\n", d, l)
-	d_obj := distributer_map[d]
+	d_obj := DistributerMap[d]
 	return d_obj.has_permission(l)
 }
 
@@ -177,7 +192,7 @@ func input_from_stdin() {
 			d, l := strings.TrimSpace(text[0]), strings.TrimSpace(text[1])
 
 			has_permission := ""
-			if check_permission(d, l) {
+			if CheckPermission(d, l) {
 				has_permission = "ON"
 			} else {
 				has_permission = "OFF"
@@ -192,14 +207,7 @@ func input_from_stdin() {
 	}
 }
 
-func main() {
-
-	/*************************************************************************
-	* Load Data
-	**************************************************************************
-	*
-	 */
-
+func Load_rule_csv() {
 	// CSV Format
 	// Distributers, Included location, Excluded locations
 	// D1, CITY-ST-COUN:..., CITY-ST-COUNT:...
@@ -217,7 +225,7 @@ func main() {
 	// TODO: Use two-pass search to avoid this constrain.
 	dist_permission_csv, _ := os.Open("./dist_permission.csv")
 
-	distributer_map = make(Distributers)
+	DistributerMap = make(Distributers)
 
 	csv_reader := csv.NewReader(bufio.NewReader(dist_permission_csv))
 	records, _ := csv_reader.ReadAll()
@@ -230,9 +238,23 @@ func main() {
 		distributer.ParentDistNames = d_parents
 		distributer.IncLocs = get_locations(record[1])
 		distributer.ExcLocs = get_locations(record[2])
-		distributer_map[distributer.Name] = *distributer
+
+		//fmt.Println("ExcLocs: ", distributer.ExcLocs)
+
+		DistributerMap[distributer.Name] = *distributer
 	}
-	//PrintDistributerMap(distributer_map)
+}
+
+func main() {
+
+	/*************************************************************************
+	* Load Data
+	**************************************************************************
+	*
+	 */
+	Load_rule_csv()
+
+	//PrintDistributerMap(DistributerMap)
 
 	/*************************************************************************
 	* Search On the populated data.
