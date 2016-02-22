@@ -50,14 +50,6 @@ func (_l *Location) IsSublocation(loc *Location) bool {
 	return true
 }
 
-func (_l *Location) IsEmpty() bool {
-	if _l.Country_code == "" && _l.Province_code == "" && _l.City_code == "" {
-		return true
-	} else {
-		return false
-	}
-}
-
 func (_d *Distributer) GetAllExcLocs() []Location {
 	locations := _d.ExcLocs
 	for _, d_parent := range _d.ParentDistNames {
@@ -99,11 +91,6 @@ func (_d *Distributer) HasPermission(location string) bool {
 		}
 	}
 	return false
-}
-
-func (d *Distributer) set_parents(name string, distributers *Distributers) {
-	var parents []string
-	parents = append(parents, name)
 }
 
 func PrintDistributerMap(distributers Distributers) {
