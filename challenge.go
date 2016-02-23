@@ -49,23 +49,20 @@ func (_l *Location) IsSublocation(loc *Location) bool {
 	return true
 }
 
-func (_d *Distributer) GetAllExcLocs() []Location {
-	locations := _d.ExcLocs
+/**
+* Get all Include and Exclude Location recursively for given distributer.
+ */
+func (_d *Distributer) GetAllLocs() ([]Location, []Location) {
+	var incLocs, excLocs []Location
+	incLocs = append(incLocs, _d.IncLocs...)
+	excLocs = append(excLocs, _d.ExcLocs...)
 	for _, d_parent := range _d.ParentDistNames {
 		parent_obj := DistributerMap[d_parent]
-		locations = append(locations, parent_obj.GetAllExcLocs()...)
+		parentIncLocs, parentExcLocs := parent_obj.GetAllLocs()
+		incLocs = append(incLocs, parentIncLocs...)
+		excLocs = append(excLocs, parentExcLocs...)
 	}
-	return locations
-}
-
-func (_d *Distributer) GetAllIncLocs() []Location {
-	var locations []Location
-	locations = append(locations, _d.IncLocs...)
-	for _, d_parent := range _d.ParentDistNames {
-		parent_obj := DistributerMap[d_parent]
-		locations = append(locations, parent_obj.GetAllIncLocs()...)
-	}
-	return locations
+	return incLocs, excLocs
 }
 
 /**
@@ -79,16 +76,19 @@ func (_d *Distributer) HasPermission(location string) bool {
 	sr_loc := getLocations(location)[0]
 
 	// Check in Include list, if found exact match return
-	for _, loc := range _d.GetAllIncLocs() {
+	incLocs, excLocs := _d.GetAllLocs()
+	for _, loc := range incLocs {
 		if loc.IsSublocation(&sr_loc) {
-			for _, loc := range _d.GetAllExcLocs() {
+			for _, loc := range excLocs {
 				if loc.IsSublocation(&sr_loc) {
 					return false
 				}
 			}
+			// Matched Include location and not there in Exclude location.
 			return true
 		}
 	}
+	// Doesn't match any Include locations.
 	return false
 }
 
