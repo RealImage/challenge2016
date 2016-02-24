@@ -2,3 +2,6 @@ Distributer Name, Include Locations, Exclude Locations
 D1, IN:US, KA-IN:CENAI-TN-IN
 D2 < D1, IN, TN-IN
 D3 < D2 < D1, HUBLI-KA-IN,
+D4 < D2 < D1,,KL-IN
+D5 < D2, ,PY-IN:KL-IN
+D6 < D1,,PY-IN:KL-IN

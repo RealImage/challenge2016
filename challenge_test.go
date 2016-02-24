@@ -67,4 +67,41 @@ func TestMultipleLevelPermissionCheck(t *testing.T) {
 	if HasAuthorized("D3", "CN") {
 		t.Errorf("D3 has doesn't have authorization to distribute in CN")
 	}
+
+	if HasAuthorized("D4", "KA-IN") {
+		t.Errorf("D4 has doesn't have authorization to distribute in KA-IN")
+	}
+
+	if HasAuthorized("D4", "KL-IN") {
+		t.Errorf("D4 doesn't have authorization to distribute in KL-IN")
+	}
+
+	if !HasAuthorized("D4", "PUNE-MH-IN") {
+		t.Errorf("D4 has authorization to distribute in PUNE-MH-IN")
+	}
+
+	if !HasAuthorized("D5", "IN") {
+		t.Errorf("D5 has authorization to distribute in IN")
+	}
+
+	if HasAuthorized("D5", "PY-IN") {
+		t.Errorf("D5 doesn't have authorization to distribute in PY-IN")
+	}
+
+	if HasAuthorized("D5", "KA-IN") {
+		t.Errorf("D5 doesn't have authorization to distribute in KA-IN")
+	}
+	if HasAuthorized("D5", "KL-IN") {
+		t.Errorf("D5 doesn't have authorization to distribute in KL-IN")
+	}
+
+	if HasAuthorized("D6", "KL-IN") {
+		t.Errorf("D6 doesn't have authorization to distribute in KL-IN")
+	}
+	if HasAuthorized("D6", "PY-IN") {
+		t.Errorf("D6 doesn't have authorization to distribute in PY-IN")
+	}
+	if !HasAuthorized("D6", "TN-IN") {
+		t.Errorf("D6 has authorization to distribute in TN-IN")
+	}
 }
