@@ -10,7 +10,7 @@ Files
 
 * inputs/cities.csv - Your original file
 * inputs/distributors.txt - input file with the rules for distributors. City, Province, Country
-names should match the text in cities.csv and they must hyphen separated as described in the
+names should match the text in cities.csv and they must be hyphen separated as described in the
 problem description. Associated codes are not used. Input  is not case sensitive.
 * inputs/test_cases.txt - some sample test cases to verify the program. Even though I'm familiar
 with testing frameworks, I didn't use any testing framework. I tried to keep things very simple.

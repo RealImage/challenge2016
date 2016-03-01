@@ -44,7 +44,7 @@ class Distributor
   def can_distribute_in?(location, repo)
     return false if excluded_anywhere?(location, repo)
     return true if included_anywhere?(location, repo)
-    false
+    !has_included_some_region?
   end
 
   def included_anywhere?(location, repo)
@@ -59,6 +59,12 @@ class Distributor
     result || self.parent_distributor.excluded_anywhere?(location, repo)
   end
 
+  def has_included_some_region?
+    result = @includes[:cities].count > 0 || @includes[:states].count > 0 || @includes[:countries].count > 0
+    return result if self.parent_distributor.nil?
+    result || self.parent_distributor.has_included_some_region?
+  end
+
   private
 
   def split(location)
@@ -66,14 +72,14 @@ class Distributor
   end
 
   def included?(location, repo)
-    to_bool(@includes, location, repo, true)
+    to_bool(@includes, location, repo)
   end
 
   def excluded?(location, repo)
-    to_bool(@excludes, location, repo, false)
+    to_bool(@excludes, location, repo)
   end
 
-  def to_bool(source, location, repo, default)
+  def to_bool(source, location, repo)
     city, state, country = *split(location.upcase)
 
     city_instance = repo.cities[city]
