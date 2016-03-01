@@ -21,7 +21,12 @@ type Distributor struct {
 var distributorMapper map[string]Distributor
 
 func main() {
-	ruleFile, err := os.Open(os.Args[1])
+	loadDistributorRules(os.Args[1])
+	fmt.Println(computeAndWriteAnswers(os.Args[2], os.Args[3]))
+}
+
+func loadDistributorRules(rulesFile string) {
+	ruleFile, err := os.Open(rulesFile)
 	if err != nil {
 		fmt.Println("Error while loading the file: " + err.Error())
 		return
@@ -30,37 +35,11 @@ func main() {
 	defer ruleFile.Close()
 	distributorMapper = make(map[string]Distributor)
 	getDistributorPermissions(ruleFile)
-
-	inputFile, err := os.Open(os.Args[2])
-	if err != nil {
-		fmt.Println("Error while loading the input file: " + err.Error())
-		return
-	}
-	defer inputFile.Close()
-	computeAndWriteAnswers(inputFile, os.Args[3])
 }
 
-func computeAndWriteAnswers(inputFile io.Reader, outputFilePath string) {
-	outputFile, err := os.Create(outputFilePath)
-	if err != nil {
-		fmt.Println("Couldn't create the output file: " + err.Error())
-		return
-	}
-	defer outputFile.Close()
-
-	scanner := bufio.NewScanner(inputFile)
-	for scanner.Scan() {
-		inputText := scanner.Text()
-		if inputText == "" {
-			return
-		}
-		answer := getAnswer(inputText)
-		_, err = io.WriteString(outputFile, answer+"\n")
-		if err != nil {
-			fmt.Println("Couldn't write to the output file: " + err.Error())
-			return
-		}
-	}
+func computeAndWriteAnswers(distributor string, location string) string {
+	answer := getAnswer(distributor + " " + location)
+	return answer
 }
 
 func getAnswer(inputText string) string {
