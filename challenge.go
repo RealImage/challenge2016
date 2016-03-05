@@ -9,12 +9,13 @@ import (
 )
 
 type Location struct {
-	City_code     string
-	Province_code string
-	Country_code  string
-	City_name     string
-	Province_name string
-	Country_name  string
+	CityCode      string
+	ProvinceCode  string
+	CountryCode   string
+	CityName      string
+	ProvinceName  string
+	CountryName   string
+	CanonicalName string
 }
 
 type Distributer struct {
@@ -37,13 +38,13 @@ var DistributerMap Distributers
 *
  */
 func (_l *Location) IsSublocation(loc *Location) bool {
-	if len(_l.Country_code) > 0 && loc.Country_code != _l.Country_code {
+	if len(_l.CountryCode) > 0 && loc.CountryCode != _l.CountryCode {
 		return false
 	}
-	if len(_l.Province_code) > 0 && loc.Province_code != _l.Province_code {
+	if len(_l.ProvinceCode) > 0 && loc.ProvinceCode != _l.ProvinceCode {
 		return false
 	}
-	if len(_l.City_code) > 0 && loc.City_code != _l.City_code {
+	if len(_l.CityCode) > 0 && loc.CityCode != _l.CityCode {
 		return false
 	}
 	return true
@@ -56,11 +57,28 @@ func (_d *Distributer) GetAllLocs() ([]Location, []Location) {
 	var incLocs, excLocs []Location
 	incLocs = append(incLocs, _d.IncLocs...)
 	excLocs = append(excLocs, _d.ExcLocs...)
-	for _, d_parent := range _d.ParentDistNames {
-		parent_obj := DistributerMap[d_parent]
-		parentIncLocs, parentExcLocs := parent_obj.GetAllLocs()
-		incLocs = append(incLocs, parentIncLocs...)
-		excLocs = append(excLocs, parentExcLocs...)
+
+	// Only exclusions for a distributer, Then extract out the inclusion for it.
+	if len(incLocs) == 0 && len(_d.ParentDistNames) == 0 && len(excLocs) > 0 {
+		var _incLocs []Location
+		for _, ex := range excLocs {
+			locs := strings.Split(ex.CanonicalName, "-")
+			// Global inclusion by adding inclusion separately.
+			for len(locs) > 1 {
+				_incLocs = append(_incLocs,
+					getLocations(strings.Join(locs[1:], "-"))...)
+				locs = locs[1:]
+			}
+			_incLocs = append(_incLocs, ex)
+		}
+		incLocs = append(incLocs, _incLocs...)
+	} else {
+		for _, d_parent := range _d.ParentDistNames {
+			parent_obj := DistributerMap[d_parent]
+			parentIncLocs, parentExcLocs := parent_obj.GetAllLocs()
+			incLocs = append(incLocs, parentIncLocs...)
+			excLocs = append(excLocs, parentExcLocs...)
+		}
 	}
 	return incLocs, excLocs
 }
@@ -73,20 +91,21 @@ func (_d *Distributer) GetAllLocs() ([]Location, []Location) {
 *
  */
 func (_d *Distributer) HasPermission(location string) bool {
-	sr_loc := getLocations(location)[0]
+	srLoc := getLocations(location)[0]
 
 	// Check in Include list, if found exact match return
 	incLocs, excLocs := _d.GetAllLocs()
 	for _, loc := range incLocs {
-		if loc.IsSublocation(&sr_loc) {
+		if loc.IsSublocation(&srLoc) {
 			for _, loc := range excLocs {
-				if loc.IsSublocation(&sr_loc) {
+				if loc.IsSublocation(&srLoc) {
 					return false
 				}
 			}
 			// Matched Include location and not there in Exclude location.
 			return true
 		}
+		//fmt.Println(">>> No match with incLocs", srLoc, loc)
 	}
 	// Doesn't match any Include locations.
 	return false
@@ -113,28 +132,29 @@ func PrintDistributerMap(distributers Distributers) {
 func getLocations(location string) []Location {
 	location = strings.TrimSpace(location)
 	locs := strings.Split(location, ":")
-	var loc_objs []Location
+	var locObjs []Location
 	for _, l := range locs {
-		loc_obj := new(Location)
+		locObj := new(Location)
 		// Get sub locations.
-		sub_locs := strings.Split(l, "-")
-		if len(sub_locs) == 3 {
-			loc_obj.City_code = sub_locs[0]
-			loc_obj.Province_code = sub_locs[1]
-			loc_obj.Country_code = sub_locs[2]
-		} else if len(sub_locs) == 2 {
-			loc_obj.Province_code = sub_locs[0]
-			loc_obj.Country_code = sub_locs[1]
-		} else if len(sub_locs) == 1 {
-			loc_obj.Country_code = sub_locs[0]
+		locObj.CanonicalName = l
+		subLocs := strings.Split(l, "-")
+		if len(subLocs) == 3 {
+			locObj.CityCode = subLocs[0]
+			locObj.ProvinceCode = subLocs[1]
+			locObj.CountryCode = subLocs[2]
+		} else if len(subLocs) == 2 {
+			locObj.ProvinceCode = subLocs[0]
+			locObj.CountryCode = subLocs[1]
+		} else if len(subLocs) == 1 {
+			locObj.CountryCode = subLocs[0]
 		}
 
-		if loc_obj.Country_code != "" || loc_obj.Province_code != "" ||
-			loc_obj.City_code != "" {
-			loc_objs = append(loc_objs, *loc_obj)
+		if locObj.CountryCode != "" || locObj.ProvinceCode != "" ||
+			locObj.CityCode != "" {
+			locObjs = append(locObjs, *locObj)
 		}
 	}
-	return loc_objs
+	return locObjs
 }
 
 /*
@@ -143,14 +163,14 @@ func getLocations(location string) []Location {
 * @return: D1, [D2, ...]
  */
 func getDistributerName(name string) (string, []string) {
-	var d_name []string
+	var dName []string
 	for _, name := range strings.Split(name, "<") {
-		d_name = append(d_name, strings.TrimSpace(name))
+		dName = append(dName, strings.TrimSpace(name))
 	}
-	if len(d_name) == 1 {
-		return d_name[0], []string{}
-	} else if len(d_name) > 1 {
-		return d_name[0], d_name[1:]
+	if len(dName) == 1 {
+		return dName[0], []string{}
+	} else if len(dName) > 1 {
+		return dName[0], dName[1:]
 	} else {
 		return "", []string{}
 	}
@@ -193,7 +213,7 @@ func inputFromStdin() {
 	}
 }
 
-func Load_rule_csv() {
+func LoadRuleCsv() {
 	// CSV Format
 	// Distributers, Included location, Excluded locations
 	// D1, CITY-ST-COUN:..., CITY-ST-COUNT:...
@@ -219,9 +239,9 @@ func Load_rule_csv() {
 	// Skip the headers.
 	for _, record := range records[1:] {
 		distributer := new(Distributer)
-		d_name, d_parents := getDistributerName(record[0])
-		distributer.Name = strings.TrimSpace(d_name)
-		distributer.ParentDistNames = d_parents
+		dName, dParents := getDistributerName(record[0])
+		distributer.Name = strings.TrimSpace(dName)
+		distributer.ParentDistNames = dParents
 		distributer.IncLocs = getLocations(record[1])
 		distributer.ExcLocs = getLocations(record[2])
 		DistributerMap[distributer.Name] = *distributer
@@ -235,7 +255,7 @@ func main() {
 	**************************************************************************
 	*
 	 */
-	Load_rule_csv()
+	LoadRuleCsv()
 
 	//PrintDistributerMap(DistributerMap)
 

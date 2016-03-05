@@ -5,7 +5,7 @@ import (
 )
 
 func TestSingleLevelPermissionCheck(t *testing.T) {
-	Load_rule_csv()
+	LoadRuleCsv()
 	if !HasAuthorized("D1", "IN") {
 		t.Errorf("D1 has authorization to distribute in IN")
 	}
@@ -35,7 +35,7 @@ func TestSingleLevelPermissionCheck(t *testing.T) {
 }
 
 func TestMultipleLevelPermissionCheck(t *testing.T) {
-	Load_rule_csv()
+	LoadRuleCsv()
 
 	if HasAuthorized("D2", "TN-IN") {
 		t.Errorf("D2 doesn't have authorization to distribute in TN-IN")
@@ -81,7 +81,7 @@ func TestMultipleLevelPermissionCheck(t *testing.T) {
 	}
 
 	if !HasAuthorized("D5", "IN") {
-		t.Errorf("D5 has authorization to distribute in IN")
+		t.Errorf("D5 authorization to distribute in IN")
 	}
 
 	if HasAuthorized("D5", "PY-IN") {
@@ -103,5 +103,58 @@ func TestMultipleLevelPermissionCheck(t *testing.T) {
 	}
 	if !HasAuthorized("D6", "TN-IN") {
 		t.Errorf("D6 has authorization to distribute in TN-IN")
+	}
+
+	if HasAuthorized("D7", "TN-IN") {
+		t.Errorf("D7 has authorization to distribute in TN-IN")
+	}
+
+	if HasAuthorized("D7", "HUBLI-KA-IN") {
+		t.Errorf("D7 doesn't have authorization to distribute in HUBLI-KA-IN as D1 doesn't have authorization in KA-IN")
+	}
+	if HasAuthorized("D8", "HUBLI-KA-IN") {
+		t.Errorf("D7 has authorization to distribute in TN-IN")
+	}
+
+	if HasAuthorized("D10", "KL-IN") {
+		t.Errorf("D10 doesn't have authroization to distribute in KL-IN")
+	}
+	if HasAuthorized("D10", "NY-US") {
+		t.Errorf("D10 doesn't have authroization to distribute in NY-US")
+	}
+	if HasAuthorized("D10", "KA-IN") {
+		t.Errorf("D10 doesn't have authroization to distribute in KA-IN")
+	}
+	if HasAuthorized("D10", "CENAI-TN-IN") {
+		t.Errorf("D10 doesn't have authroization to distribute in CENAI-TN-IN")
+	}
+	if !HasAuthorized("D10", "MH-IN") {
+		t.Errorf("D10 have authroization to distribute in MH-IN")
+	}
+	if !HasAuthorized("D10", "DC-US") {
+		t.Errorf("D10 have authroization to distribute in DC-US")
+	}
+
+	// Only Exclusion distributers
+	if HasAuthorized("D11", "KL-IN") {
+		t.Errorf("D11 doesn't have authroization to distribute in KL-IN")
+	}
+	if HasAuthorized("D11", "TN-IN") {
+		t.Errorf("D11 doesn't have authroization to distribute in TN-IN")
+	}
+	if HasAuthorized("D11", "AH-DC-US") {
+		t.Errorf("D11 doesn't have authroization to distribute in AH-DC-US")
+	}
+	if !HasAuthorized("D11", "MH-IN") {
+		t.Errorf("D11 have authroization to distribute in MH-IN")
+	}
+	if !HasAuthorized("D11", "DC-IN") {
+		t.Errorf("D11 have authroization to distribute in DC-IN")
+	}
+	if !HasAuthorized("D11", "IN") {
+		t.Errorf("D11 have authroization to distribute in IN")
+	}
+	if !HasAuthorized("D11", "US") {
+		t.Errorf("D11 have authroization to distribute all the places in US")
 	}
 }
