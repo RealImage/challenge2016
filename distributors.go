@@ -110,15 +110,15 @@ func isDistributorAllowed(name string, country string, state string, city string
 			}
 		}
 
-		innerLoopInc := false
-		for _, ic := range dis.Includes {
-			ci, s, co := getSplittedLocation(ic)
-			if isSubset(ci, s, co, city, state, country) {
-				innerLoopInc = true
-				break
-			}
-		}
-		included = included && innerLoopInc
+		// innerLoopInc := false
+		// for _, ic := range dis.Includes {
+		// 	ci, s, co := getSplittedLocation(ic)
+		// 	if isSubset(ci, s, co, city, state, country) {
+		// 		innerLoopInc = true
+		// 		break
+		// 	}
+		// }
+		// included = included && innerLoopInc
 
 		if dis.ParentDistributor == nil {
 			break
