@@ -50,6 +50,19 @@ func (_l *Location) IsSublocation(loc *Location) bool {
 	return true
 }
 
+func (_l *Location) IsEqual(locs ...Location) bool {
+	var match bool
+	for _, loc := range locs {
+		match = _l.CountryCode == loc.CountryCode &&
+			_l.ProvinceCode == loc.ProvinceCode && _l.CityCode == loc.CityCode
+
+		if match {
+			return true
+		}
+	}
+	return false
+}
+
 /**
 * Get all Include and Exclude Location recursively for given distributer.
  */
@@ -57,28 +70,11 @@ func (_d *Distributer) GetAllLocs() ([]Location, []Location) {
 	var incLocs, excLocs []Location
 	incLocs = append(incLocs, _d.IncLocs...)
 	excLocs = append(excLocs, _d.ExcLocs...)
-
-	// Only exclusions for a distributer, Then extract out the inclusion for it.
-	if len(incLocs) == 0 && len(_d.ParentDistNames) == 0 && len(excLocs) > 0 {
-		var _incLocs []Location
-		for _, ex := range excLocs {
-			locs := strings.Split(ex.CanonicalName, "-")
-			// Global inclusion by adding inclusion separately.
-			for len(locs) > 1 {
-				_incLocs = append(_incLocs,
-					getLocations(strings.Join(locs[1:], "-"))...)
-				locs = locs[1:]
-			}
-			_incLocs = append(_incLocs, ex)
-		}
-		incLocs = append(incLocs, _incLocs...)
-	} else {
-		for _, d_parent := range _d.ParentDistNames {
-			parent_obj := DistributerMap[d_parent]
-			parentIncLocs, parentExcLocs := parent_obj.GetAllLocs()
-			incLocs = append(incLocs, parentIncLocs...)
-			excLocs = append(excLocs, parentExcLocs...)
-		}
+	for _, d_parent := range _d.ParentDistNames {
+		parent_obj := DistributerMap[d_parent]
+		parentIncLocs, parentExcLocs := parent_obj.GetAllLocs()
+		incLocs = append(incLocs, parentIncLocs...)
+		excLocs = append(excLocs, parentExcLocs...)
 	}
 	return incLocs, excLocs
 }
@@ -95,17 +91,21 @@ func (_d *Distributer) HasPermission(location string) bool {
 
 	// Check in Include list, if found exact match return
 	incLocs, excLocs := _d.GetAllLocs()
-	for _, loc := range incLocs {
-		if loc.IsSublocation(&srLoc) {
-			for _, loc := range excLocs {
-				if loc.IsSublocation(&srLoc) {
-					return false
+	if len(incLocs) > 0 {
+		for _, loc := range incLocs {
+			if loc.IsSublocation(&srLoc) {
+				for _, loc := range excLocs {
+					if loc.IsSublocation(&srLoc) {
+						return false
+					}
 				}
+				// Matched Include location and not there in Exclude location.
+				return true
 			}
-			// Matched Include location and not there in Exclude location.
-			return true
+			//fmt.Println(">>> No match with incLocs", srLoc, loc)
 		}
-		//fmt.Println(">>> No match with incLocs", srLoc, loc)
+	} else {
+		return !srLoc.IsEqual(excLocs...)
 	}
 	// Doesn't match any Include locations.
 	return false

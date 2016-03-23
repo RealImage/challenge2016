@@ -135,7 +135,7 @@ func TestMultipleLevelPermissionCheck(t *testing.T) {
 		t.Errorf("D10 have authroization to distribute in DC-US")
 	}
 
-	// Only Exclusion distributers
+	//Only Exclusion distributers
 	if HasAuthorized("D11", "KL-IN") {
 		t.Errorf("D11 doesn't have authroization to distribute in KL-IN")
 	}
@@ -156,5 +156,31 @@ func TestMultipleLevelPermissionCheck(t *testing.T) {
 	}
 	if !HasAuthorized("D11", "US") {
 		t.Errorf("D11 have authroization to distribute all the places in US")
+	}
+
+	if HasAuthorized("D12", "TN-IN") {
+		t.Errorf("D12 doesn't have authroization to distribute all the places in TN-IN")
+	}
+	if !HasAuthorized("D12", "IN") {
+		t.Errorf("D12 have authroization to distribute all the places in IN")
+	}
+	if !HasAuthorized("D12", "US") {
+		t.Errorf("D12 have authroization to distribute all the places in US")
+	}
+	if !HasAuthorized("D12", "DC-US") {
+		t.Errorf("D12 have authroization to distribute all the places in DC-US")
+	}
+	if !HasAuthorized("D12", "AK-DC-US") {
+		t.Errorf("D12 have authroization to distribute all the places in AK-DC-US")
+	}
+
+	if HasAuthorized("D13", "DC-US") {
+		t.Errorf("D13 doesn't have authroization to distribute all the places in US")
+	}
+	if HasAuthorized("D13", "IN") {
+		t.Errorf("D13 doesn't have authroization to distribute all the places in IN")
+	}
+	if !HasAuthorized("D13", "TN-IN") {
+		t.Errorf("D13 have authroization to distribute all the places in TN-IN")
 	}
 }
