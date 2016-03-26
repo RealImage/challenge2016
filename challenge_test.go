@@ -161,6 +161,9 @@ func TestMultipleLevelPermissionCheck(t *testing.T) {
 	if HasAuthorized("D12", "TN-IN") {
 		t.Errorf("D12 doesn't have authroization to distribute all the places in TN-IN")
 	}
+	if HasAuthorized("D12", "CHENI-TN-IN") {
+		t.Errorf("D12 doesn't have authroization to distribute all the places in TN-IN")
+	}
 	if !HasAuthorized("D12", "IN") {
 		t.Errorf("D12 have authroization to distribute all the places in IN")
 	}

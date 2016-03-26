@@ -50,13 +50,12 @@ func (_l *Location) IsSublocation(loc *Location) bool {
 	return true
 }
 
-func (_l *Location) IsEqual(locs ...Location) bool {
-	var match bool
+/**
+* Check the loc objects comes under any of given location.
+ */
+func (_l *Location) IsUnderAny(locs []Location) bool {
 	for _, loc := range locs {
-		match = _l.CountryCode == loc.CountryCode &&
-			_l.ProvinceCode == loc.ProvinceCode && _l.CityCode == loc.CityCode
-
-		if match {
+		if loc.IsSublocation(_l) {
 			return true
 		}
 	}
@@ -94,18 +93,11 @@ func (_d *Distributer) HasPermission(location string) bool {
 	if len(incLocs) > 0 {
 		for _, loc := range incLocs {
 			if loc.IsSublocation(&srLoc) {
-				for _, loc := range excLocs {
-					if loc.IsSublocation(&srLoc) {
-						return false
-					}
-				}
-				// Matched Include location and not there in Exclude location.
-				return true
+				return !srLoc.IsUnderAny(excLocs)
 			}
-			//fmt.Println(">>> No match with incLocs", srLoc, loc)
 		}
 	} else {
-		return !srLoc.IsEqual(excLocs...)
+		return !srLoc.IsUnderAny(excLocs)
 	}
 	// Doesn't match any Include locations.
 	return false
