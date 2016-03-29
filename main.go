@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"strings"
 )
@@ -23,7 +22,6 @@ var distributorMapper map[string]Distributor
 
 func main() {
 	loadDistributorRules(os.Args[1])
-	fmt.Println(distributorMapper)
 	fmt.Println(computeAndWriteAnswers(os.Args[2], os.Args[3]))
 }
 
@@ -111,13 +109,11 @@ func checkCityPermit(distributor string, location string) string {
 	if statePermit == "NO" {
 		return "NO"
 	}
-	log.Println(statePermit)
 	for _, v := range distributorMapper[distributor].CityExcludes {
 		if v == location {
 			return "NO"
 		}
 	}
-	log.Println("CITY EXCLUDE")
 	for _, v := range distributorMapper[distributor].CityIncludes {
 		if v == location {
 			return "YES"
