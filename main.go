@@ -61,6 +61,10 @@ func getAnswer(inputText string) string {
 }
 
 func checkCountryPermit(distributor string, country string) string {
+	if len(distributorMapper[distributor].CountryIncludes) == 0 {
+		return "YES"
+	}
+
 	for _, v := range distributorMapper[distributor].CountryExcludes {
 		if v == country {
 			return "NO"
@@ -75,7 +79,7 @@ func checkCountryPermit(distributor string, country string) string {
 			return "YES"
 		}
 	}
-	return "YES"
+	return "NO"
 }
 
 func checkStatePermit(distributor string, location string) string {
