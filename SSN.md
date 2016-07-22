@@ -34,6 +34,6 @@ Vivek takes the USA and China.
 
 **You will notice that no two players can ever have the same city in their territory.** Any input that would make this happen is invalid. Try to design your input format in a way that such mistakes are either obvious or difficult to make. 
 
-**Please talk to us when you have a workable solution again.**
+**Please talk to us again when you have a workable solution.**
 
 If you're still here, try expanding your format and game to accommodate exclusions. For instance, Harini might take Tamil Nadu *except* Madurai and Coimbatore. Talk to us about the logical implications of doing this.  
