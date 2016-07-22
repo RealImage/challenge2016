@@ -10,6 +10,8 @@ To run the game, input / read a list of cities and the box office collection amo
 
 **We have attached a CSV file with all the countries, states and cities in the world. Use the codes from that file to play the game.**
 
+https://raw.githubusercontent.com/RealImage/challenge2016/master/cities.csv
+
 **Get the game working with these rules first, and show us your solution.**
 
 Now that your game works, figure out the best way for players to input their choices. Design an input file / format to play the game with any number of players, all asking for multiple geographies. 
