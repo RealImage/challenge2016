@@ -18,7 +18,7 @@ Now that your game works, figure out the best way for players to input their cho
 
 For example,
 Harini takes the USA and Germany;
-Hedge takes China and Japan;
+Hegdge takes China and Japan;
 Shudan takes the rest of the world.
 
 or 
