@@ -1,4 +1,4 @@
-require './parse_input_csv.rb'
+require './csv_util.rb'
 
 CsvUtil.parse_csv('./input.csv')
 
@@ -12,6 +12,6 @@ while process
   unless input == "exit"
     result = Distributor.perform(input)
     process = true
-  	puts "Has Permission? - #{result}"
+    puts "Has Permission? - #{result}"
   end
 end
