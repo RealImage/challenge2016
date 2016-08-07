@@ -35,6 +35,8 @@ class TestDistributor < Test::Unit::TestCase
   def test_permission
     distributor1 = Distributor.new({"Distributor Name" => "Distributor1","Allowed locations"=>"INDIA,UNITEDSTATES","Unallowed locations" => "KARNATAKA-INDIA,CHENNAI-TAMILNADU-INDIA","Extends" => ""})
     distributor2 = Distributor.new({"Distributor Name" => "Distributor2","Allowed locations"=>"INDIA","Unallowed locations" => "TAMILNADU-INDIA","Extends" => "Distributor1"})
+    distributor3 = Distributor.new({"Distributor Name" => "Distributor2","Allowed locations"=>"INDIA","Unallowed locations" => "KERALA-INDIA","Extends" => "Distributor1,Distributor2"})
+    
     assert_equal("No", distributor1.has_permission?("KARNATAKA-INDIA"))
     assert_equal("No", distributor2.has_permission?("KARNATAKA-INDIA"))
 
@@ -52,5 +54,13 @@ class TestDistributor < Test::Unit::TestCase
     assert_equal("Yes", distributor1.has_permission?("ERODE-TAMILNADU-INDIA"))
     assert_equal("No", distributor2.has_permission?("ERODE-TAMILNADU-INDIA"))
     assert_equal("Yes", distributor2.has_permission?("KERALA-INDIA"))
+    
+    assert_equal("No", distributor3.has_permission?("KERALA-INDIA"))
+    assert_equal("No", distributor3.has_permission?("ERODE-TAMILNADU-INDIA"))
+    assert_equal("No", distributor3.has_permission?("TAMILNADU-INDIA"))
+    assert_equal("No", distributor3.has_permission?("UNITEDSTATES"))
+    assert_equal("No", distributor3.has_permission?("KARNATAKA-INDIA"))
+    assert_equal("Yes", distributor3.has_permission?("INDIA"))
+    assert_equal("Yes", distributor3.has_permission?("MP-INDIA"))
   end
 end
