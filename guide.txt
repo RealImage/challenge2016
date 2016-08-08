@@ -6,6 +6,16 @@ Ruby - 2.2.0
 
 ###################################
 
+Notes: 
+
+1.Give all the distributors inputs in the "input.csv" file. Go through the sample input csv file for providing the inputs. "cities.csv" is not used. "input.csv" is used to provide all information related to distributor's
+
+2.Only basic validations covered like distributor not found to check the permission. Extensive Validations not covered like (city - state - country) combination is valid?
+
+Assumptions:
+1. Distributor will always have INCLUDE(Allowed locations).
+2. All entries in Input.csv are given in correct format
+
 Command to run the code: 
 
 1. Open this folder in the terminal and execute the following
@@ -27,11 +37,5 @@ Files:
 1. process.rb - gets the distributor name and location and tells the permission
 2. csv_util - Read the input.csv and load the distributor objects
 3. distributor.rb - Create new Distributor objects and check permissions
-
-Notes: 
-
-1.Give all the distributors inputs in the input.csv file. Go through the sample input csv file for providing the inputs.
-
-2.Only basic validations covered like distributor not found to check the permission. Extensive Validations not covered.
 
 ###################################
