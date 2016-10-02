@@ -3,7 +3,7 @@ package repository
 import (
 	"sync"
 
-	"github.com/RealImage/challenge2016/locationService/domain"
+	"github.com/RealImage/challenge2016/location/domain"
 )
 
 type LocationRepository struct {

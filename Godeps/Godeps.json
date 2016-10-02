@@ -1,20 +1,11 @@
 {
-	"ImportPath": "github.com/RealImage/challenge2016/cmd/locationService",
+	"ImportPath": "github.com/RealImage/challenge2016",
 	"GoVersion": "go1.7",
 	"GodepVersion": "v74",
+	"Packages": [
+		".\\..."
+	],
 	"Deps": [
-		{
-			"ImportPath": "github.com/RealImage/challenge2016/locationService",
-			"Rev": "733aed937a038e4ac4553997c79e91b0c840c247"
-		},
-		{
-			"ImportPath": "github.com/RealImage/challenge2016/locationService/domain",
-			"Rev": "733aed937a038e4ac4553997c79e91b0c840c247"
-		},
-		{
-			"ImportPath": "github.com/RealImage/challenge2016/repository/inmemory",
-			"Rev": "733aed937a038e4ac4553997c79e91b0c840c247"
-		},
 		{
 			"ImportPath": "github.com/beorn7/perks/quantile",
 			"Rev": "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9"
@@ -36,6 +27,11 @@
 		},
 		{
 			"ImportPath": "github.com/go-kit/kit/metrics/prometheus",
+			"Comment": "v0.2.0",
+			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/tracing/opentracing",
 			"Comment": "v0.2.0",
 			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
 		},
@@ -73,6 +69,21 @@
 			"Rev": "c12348ce28de40eed0136aa2b644d0ee0650e56c"
 		},
 		{
+			"ImportPath": "github.com/opentracing/opentracing-go",
+			"Comment": "v1.0.0-2-g30dda93",
+			"Rev": "30dda9350627161ff15581c0bdc504e32ec9a536"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go/ext",
+			"Comment": "v1.0.0-2-g30dda93",
+			"Rev": "30dda9350627161ff15581c0bdc504e32ec9a536"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go/log",
+			"Comment": "v1.0.0-2-g30dda93",
+			"Rev": "30dda9350627161ff15581c0bdc504e32ec9a536"
+		},
+		{
 			"ImportPath": "github.com/prometheus/client_golang/prometheus",
 			"Comment": "v0.8.0-7-g5636dc6",
 			"Rev": "5636dc67ae776adf5590da7349e70fbb9559972d"
@@ -105,6 +116,11 @@
 		{
 			"ImportPath": "golang.org/x/net/context/ctxhttp",
 			"Rev": "cd95c68ba21fc7ee16ee38cc420473e3d8c4afd8"
+		},
+		{
+			"ImportPath": "google.golang.org/grpc/metadata",
+			"Comment": "v1.0.1-GA-79-gc2983be",
+			"Rev": "c2983be903f6966c83c6ea86ba74df0b7cc882cd"
 		}
 	]
 }

@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/RealImage/challenge2016/locationService"
-	"github.com/RealImage/challenge2016/repository/inmemory"
+	"github.com/RealImage/challenge2016/location/locationService"
+	"github.com/RealImage/challenge2016/location/repository/inmemory"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/metrics"

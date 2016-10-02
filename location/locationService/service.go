@@ -3,7 +3,7 @@ package locationService
 import (
 	"golang.org/x/net/context"
 
-	"github.com/RealImage/challenge2016/locationService/domain"
+	"github.com/RealImage/challenge2016/location/domain"
 )
 
 type Service interface {

@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/RealImage/challenge2016/locationService"
+	"github.com/RealImage/challenge2016/location/locationService"
 	stdopentracing "github.com/opentracing/opentracing-go"
 
 	"github.com/go-kit/kit/log"

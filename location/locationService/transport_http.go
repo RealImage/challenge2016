@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/RealImage/challenge2016/locationService/domain"
+	"github.com/RealImage/challenge2016/location/domain"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/context"
 
