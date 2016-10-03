@@ -61,6 +61,30 @@ func (r *LocationRepository) Store(c *domain.Location) (err error) {
 	return nil
 }
 
+func (r *LocationRepository) CountryExists(countryCode domain.CountryCode) (ok bool, err error) {
+	_, err = r.findCountry(countryCode)
+	if err != nil {
+		return false, nil
+	}
+	return true, nil
+}
+
+func (r *LocationRepository) StateExists(countryCode domain.CountryCode, stateCode domain.StateCode) (stateOk bool, err error) {
+	_, err = r.findState(countryCode, stateCode)
+	if err != nil {
+		return
+	}
+	return true, nil
+}
+
+func (r *LocationRepository) CityExists(countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (cityOk bool, err error) {
+	_, err = r.findCity(countryCode, stateCode, cityCode)
+	if err != nil {
+		return
+	}
+	return true, nil
+}
+
 func (r *LocationRepository) Find(countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (c *domain.Location, err error) {
 	country, err := r.findCountry(countryCode)
 	if err != nil {

@@ -1,17 +1,12 @@
 package domain
 
-import "errors"
-
-var (
-	ErrNotFound        = errors.New("Not Found")
-	ErrExists          = errors.New("Exists")
-	ErrInvalidArgument = errors.New("Invalid Argument")
-)
-
 type LocationRepository interface {
 	Store(c *Location) (err error)
 	Find(countryCode CountryCode, stateCode StateCode, cityCode CityCode) (c *Location, err error)
 	FindAll() (ls []*Location, err error)
+	CountryExists(countryCode CountryCode) (ok bool, err error)
+	StateExists(countryCode CountryCode, stateCode StateCode) (stateOk bool, err error)
+	CityExists(countryCode CountryCode, stateCode StateCode, cityCode CityCode) (cityOk bool, err error)
 }
 
 type CityCode string

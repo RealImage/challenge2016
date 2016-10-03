@@ -1,4 +1,4 @@
-package locationService
+package distributionService
 
 import (
 	"bytes"
@@ -15,29 +15,29 @@ import (
 	kithttp "github.com/go-kit/kit/transport/http"
 )
 
-func MakeHandler(ctx context.Context, ls Service, logger kitlog.Logger) http.Handler {
+func MakeHandler(ctx context.Context, s Service, logger kitlog.Logger) http.Handler {
 	opts := []kithttp.ServerOption{
 		kithttp.ServerErrorLogger(logger),
 		kithttp.ServerErrorEncoder(errorEncoder),
 	}
 
-	addLocationHandler := kithttp.NewServer(
+	addDistributorHandler := kithttp.NewServer(
 		ctx,
-		makeAddLocationEndpoint(ls),
-		decodeAddLocationRequest,
+		makeAddDistributorEndpoint(s),
+		decodeAddDistributorRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	r := mux.NewRouter()
 
-	r.Handle("/api/v1/location", addLocationHandler).Methods(http.MethodPost)
+	r.Handle("/api/v1/distributor", addDistributorHandler).Methods(http.MethodPost)
 
 	return r
 }
 
-func decodeAddLocationRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req addLocationRequest
+func decodeAddDistributorRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req addDistributorRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, err
 	}
@@ -45,11 +45,11 @@ func decodeAddLocationRequest(_ context.Context, r *http.Request) (interface{}, 
 
 }
 
-func DecodeAddLocationResponse(_ context.Context, r *http.Response) (interface{}, error) {
+func DecodeAddDistributorResponse(_ context.Context, r *http.Response) (interface{}, error) {
 	if r.StatusCode != http.StatusOK {
 		return nil, errorDecoder(r)
 	}
-	var resp addLocationResponse
+	var resp addDistributorResponse
 	err := json.NewDecoder(r.Body).Decode(&resp)
 	return resp, err
 }

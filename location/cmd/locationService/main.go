@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -10,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/RealImage/challenge2016/location/distributionService"
 	"github.com/RealImage/challenge2016/location/locationService"
 	"github.com/RealImage/challenge2016/location/repository/inmemory"
 
@@ -28,13 +28,12 @@ func main() {
 
 	ctx := context.Background()
 
-	flag.Parse()
-
 	var logger log.Logger
 	logger = log.NewLogfmtLogger(os.Stderr)
 	logger = log.NewContext(logger).With("ts", log.DefaultTimestampUTC)
 
 	locationRepo := repository.NewLocationRepository()
+	distributorRepo := repository.NewDistributorRepository()
 
 	//TODO remove below block. it's only for testing only. don't have much time to write test cases.
 	go func() {
@@ -43,7 +42,9 @@ func main() {
 			for _, l := range locations {
 				fmt.Printf("%+v\n", l)
 			}
+			distributorRepo.FindAll()
 			time.Sleep(10 * time.Second)
+
 		}
 	}()
 
@@ -66,11 +67,29 @@ func main() {
 			Help:      "Total duration of requests in microseconds.",
 		}, fieldKeys)), locationSvc)
 
+	var distributorSvc distributionService.Service
+	distributorSvc = distributionService.NewService(distributorRepo, locationRepo)
+	distributorSvc = distributionService.NewLoggingService(log.NewContext(logger).With("component", "distributionService"), distributorSvc)
+	distributorSvc = distributionService.NewInstrumentingService(
+		kitprometheus.NewCounter(stdprometheus.CounterOpts{
+			Namespace: "api",
+			Subsystem: "distributor_service",
+			Name:      "request_count",
+			Help:      "Number of requests received.",
+		}, fieldKeys),
+		metrics.NewTimeHistogram(time.Microsecond, kitprometheus.NewSummary(stdprometheus.SummaryOpts{
+			Namespace: "api",
+			Subsystem: "distributor_service",
+			Name:      "request_latency_microseconds",
+			Help:      "Total duration of requests in microseconds.",
+		}, fieldKeys)), distributorSvc)
+
 	httpLogger := log.NewContext(logger).With("component", "http")
 
 	mux := http.NewServeMux()
 
 	mux.Handle("/api/v1/location", locationService.MakeHandler(ctx, locationSvc, httpLogger))
+	mux.Handle("/api/v1/distributor", distributionService.MakeHandler(ctx, distributorSvc, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 	http.Handle("/metrics", stdprometheus.Handler())
