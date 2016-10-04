@@ -169,12 +169,15 @@ func (r *distributorRepository) FindAll() {
 	r.mtx.RLock()
 	for _, d := range r.distributors {
 		d.mtx.RLock()
+		log.Println("Distributor : ", d.id)
 		for _, c := range d.countries {
+			log.Println(c.code, ":", c.permission)
 			c.mtx.RLock()
 			for _, s := range c.states {
+				log.Println(s.code, ":", s.permission)
 				s.mtx.RLock()
 				for _, city := range s.cities {
-					log.Println(d.id, "\t", "\t", c.code, ":", c.permission, "\t", s.code, ":", s.permission, "\t", city.code, ":", city.permission)
+					log.Println(city.code, ":", city.permission)
 				}
 				s.mtx.RUnlock()
 			}

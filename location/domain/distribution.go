@@ -7,6 +7,7 @@ var (
 	ErrExists                  = errors.New("Exists")
 	ErrInvalidArgument         = errors.New("Invalid Argument")
 	ErrParentHaveNotPermission = errors.New("Parent have not this permission")
+	ErrAlreadyHavePermission   = errors.New("Already have permission")
 )
 
 type DistributionRepository interface {
