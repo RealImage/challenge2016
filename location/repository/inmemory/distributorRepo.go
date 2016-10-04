@@ -76,7 +76,7 @@ func newCityDist(code domain.CityCode, permission domain.Permission) *cityDis {
 	}
 }
 
-func (r *distributorRepository) FindCountryPermission(distributorId domain.DistributorId, countryCode domain.CountryCode) (countryPermission domain.Permission, err error) {
+func (r *distributorRepository) GetCountryPermission(distributorId domain.DistributorId, countryCode domain.CountryCode) (countryPermission domain.Permission, err error) {
 	country, err := r.findCountry(distributorId, countryCode)
 	if err != nil {
 		return
@@ -84,7 +84,7 @@ func (r *distributorRepository) FindCountryPermission(distributorId domain.Distr
 	return country.permission, err
 }
 
-func (r *distributorRepository) FindStatePermission(distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode) (statePermission domain.Permission, err error) {
+func (r *distributorRepository) GetStatePermission(distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode) (statePermission domain.Permission, err error) {
 	state, err := r.findState(distributorId, countryCode, stateCode)
 	if err != nil {
 		return
@@ -93,12 +93,75 @@ func (r *distributorRepository) FindStatePermission(distributorId domain.Distrib
 	return state.permission, nil
 }
 
-func (r *distributorRepository) FindCityPermission(distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (cityPermission domain.Permission, err error) {
+func (r *distributorRepository) GetCityPermission(distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (cityPermission domain.Permission, err error) {
 	city, err := r.findCity(distributorId, countryCode, stateCode, cityCode)
 	if err != nil {
 		return
 	}
 	return city.permission, nil
+}
+
+func (r *distributorRepository) ListCountryPermission(distributorId domain.DistributorId) (countyPermissions []domain.CountryPermission, err error) {
+	d, err := r.findDistributor(distributorId)
+	if err != nil {
+		return
+	}
+	countyPermissions = make([]domain.CountryPermission, len(d.countries))
+	i := 0
+
+	d.mtx.RLock()
+	for _, c := range d.countries {
+		countyPermissions[i] = domain.CountryPermission{
+			Permission:  c.permission,
+			CountryCode: c.code,
+		}
+		i++
+	}
+	d.mtx.RUnlock()
+
+	return
+}
+
+func (r *distributorRepository) ListStatePermission(distributorId domain.DistributorId, countyCode domain.CountryCode) (statePermissions []domain.StatePermission, err error) {
+	c, err := r.findCountry(distributorId, countyCode)
+	if err != nil {
+		return
+	}
+	statePermissions = make([]domain.StatePermission, len(c.states))
+	i := 0
+
+	c.mtx.RLock()
+	for _, s := range c.states {
+		statePermissions[i] = domain.StatePermission{
+			Permission: s.permission,
+			StateCode:  s.code,
+		}
+		i++
+	}
+	c.mtx.RUnlock()
+
+	return
+}
+
+func (r *distributorRepository) ListCityPermission(distributorId domain.DistributorId, countyCode domain.CountryCode, stateCode domain.StateCode) (cityPermissions []domain.CityPermission, err error) {
+	s, err := r.findState(distributorId, countyCode, stateCode)
+	if err != nil {
+		return
+	}
+	cityPermissions = make([]domain.CityPermission, len(s.cities))
+	i := 0
+
+	s.mtx.RLock()
+	for _, c := range s.cities {
+		cityPermissions[i] = domain.CityPermission{
+			Permission: c.permission,
+			CityCode:   c.code,
+		}
+		i++
+	}
+	s.mtx.RUnlock()
+
+	return
 }
 
 //TODO FindAll Proper

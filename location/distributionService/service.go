@@ -23,9 +23,7 @@ func NewService(distribustionRepo domain.DistributionRepository, locationRepo do
 }
 
 func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, locationType domain.LocationType, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
-	d := &domain.Distributor{
-		ParentId:     parentDistributorId,
-		Id:           distributorId,
+	d := &domain.DistributorPermission{
 		LocationType: locationType,
 		Permission:   permission,
 		CountryCode:  countryCode,
@@ -38,23 +36,23 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 		return
 	}
 
-	if len(d.ParentId) > 1 {
+	if len(parentDistributorId) > 1 {
 		switch d.LocationType {
 		case domain.Country:
 			if d.Permission == domain.Granted {
-				parentCountryperm, err := s.distribustionRepository.FindCountryPermission(d.ParentId, d.CountryCode)
+				parentCountryperm, err := s.distribustionRepository.GetCountryPermission(parentDistributorId, d.CountryCode)
 				if err != nil {
 					return domain.ErrParentHaveNotPermission
 				}
 
 				if parentCountryperm == domain.Granted {
 					//TODO Copy whole county map insted of assining granted perm
-					s.distribustionRepository.StoreCountry(d.Id, d.CountryCode, domain.Granted)
+					s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, domain.Granted)
 				} else {
 					return domain.ErrParentHaveNotPermission
 				}
 			} else {
-				s.distribustionRepository.StoreCountry(d.Id, d.CountryCode, domain.Denied)
+				s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, domain.Denied)
 			}
 
 		}
@@ -68,21 +66,21 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 			return domain.ErrInvalidArgument
 		}
 
-		s.distribustionRepository.StoreCountry(d.Id, d.CountryCode, d.Permission)
+		s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, d.Permission)
 	case domain.State:
 		ok, _ := s.locationRepository.StateExists(d.CountryCode, d.StateCode)
 		if !ok {
 			return domain.ErrInvalidArgument
 		}
 
-		perm, err := s.distribustionRepository.FindCountryPermission(d.Id, d.CountryCode)
+		perm, err := s.distribustionRepository.GetCountryPermission(distributorId, d.CountryCode)
 		if err != nil {
-			s.distribustionRepository.StoreCountry(d.Id, d.CountryCode, domain.NotDefined)
+			s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, domain.NotDefined)
 		}
 		if perm == domain.Denied {
 			break
 		}
-		s.distribustionRepository.StoreState(d.Id, d.CountryCode, d.StateCode, d.Permission)
+		s.distribustionRepository.StoreState(distributorId, d.CountryCode, d.StateCode, d.Permission)
 
 	case domain.City:
 		ok, _ := s.locationRepository.CityExists(d.CountryCode, d.StateCode, d.CityCode)
@@ -90,25 +88,25 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 			return domain.ErrInvalidArgument
 		}
 
-		perm, err := s.distribustionRepository.FindCountryPermission(d.Id, d.CountryCode)
+		perm, err := s.distribustionRepository.GetCountryPermission(distributorId, d.CountryCode)
 		if err != nil {
-			s.distribustionRepository.StoreCountry(d.Id, d.CountryCode, domain.NotDefined)
+			s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, domain.NotDefined)
 		}
 
 		if perm == domain.Denied {
 			break
 		}
 
-		perm, err = s.distribustionRepository.FindStatePermission(d.Id, d.CountryCode, d.StateCode)
+		perm, err = s.distribustionRepository.GetStatePermission(distributorId, d.CountryCode, d.StateCode)
 		if err != nil {
-			s.distribustionRepository.StoreState(d.Id, d.CountryCode, d.StateCode, domain.NotDefined)
+			s.distribustionRepository.StoreState(distributorId, d.CountryCode, d.StateCode, domain.NotDefined)
 		}
 
 		if perm == domain.Denied {
 			break
 		}
 
-		s.distribustionRepository.StoreCity(d.Id, d.CountryCode, d.StateCode, d.CityCode, d.Permission)
+		s.distribustionRepository.StoreCity(distributorId, d.CountryCode, d.StateCode, d.CityCode, d.Permission)
 	default:
 		return domain.ErrInvalidArgument
 

@@ -10,9 +10,12 @@ var (
 )
 
 type DistributionRepository interface {
-	FindCountryPermission(distributorId DistributorId, countryCode CountryCode) (countryPermission Permission, err error)
-	FindStatePermission(distributorId DistributorId, countryCode CountryCode, stateCode StateCode) (statePermission Permission, err error)
-	FindCityPermission(distributorId DistributorId, countryCode CountryCode, stateCode StateCode, cityCode CityCode) (cityPermission Permission, err error)
+	GetCountryPermission(distributorId DistributorId, countryCode CountryCode) (countryPermission Permission, err error)
+	GetStatePermission(distributorId DistributorId, countryCode CountryCode, stateCode StateCode) (statePermission Permission, err error)
+	GetCityPermission(distributorId DistributorId, countryCode CountryCode, stateCode StateCode, cityCode CityCode) (cityPermission Permission, err error)
+	ListCountryPermission(distributorId DistributorId) (countyPermissions []CountryPermission, err error)
+	ListStatePermission(distributorId DistributorId, countyCode CountryCode) (statePermissions []StatePermission, err error)
+	ListCityPermission(distributorId DistributorId, countyCode CountryCode, stateCode StateCode) (cityPermissions []CityPermission, err error)
 	StoreCountry(distibutionId DistributorId, countryCode CountryCode, countryPermission Permission) (err error)
 	StoreState(distibutionId DistributorId, countryCode CountryCode, stateCode StateCode, statePermission Permission) (err error)
 	StoreCity(distibutionId DistributorId, countryCode CountryCode, stateCode StateCode, cityCode CityCode, cityPermission Permission) (err error)
@@ -40,9 +43,7 @@ const (
 	NotDefined
 )
 
-type Distributor struct {
-	ParentId     DistributorId
-	Id           DistributorId
+type DistributorPermission struct {
 	LocationType LocationType
 	Permission   Permission
 	CountryCode  CountryCode
@@ -50,11 +51,22 @@ type Distributor struct {
 	CityCode     CityCode
 }
 
-func (d *Distributor) Validate() error {
-	if len(d.Id) < 1 {
-		return ErrInvalidArgument
-	}
+type CityPermission struct {
+	Permission Permission
+	CityCode   CityCode
+}
 
+type StatePermission struct {
+	Permission Permission
+	StateCode  StateCode
+}
+
+type CountryPermission struct {
+	Permission  Permission
+	CountryCode CountryCode
+}
+
+func (d *DistributorPermission) Validate() error {
 	switch d.LocationType {
 	case City:
 		if len(d.CityCode) < 1 {
