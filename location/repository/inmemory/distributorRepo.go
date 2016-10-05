@@ -206,6 +206,14 @@ func (r *distributorRepository) StoreCity(distibutionId domain.DistributorId, co
 	return
 }
 
+func (r *distributorRepository) DistributorExits(distributorId domain.DistributorId) (ok bool, err error) {
+	_, err = r.findDistributor(distributorId)
+	if err != nil {
+		return false, nil
+	}
+	return true, nil
+}
+
 //Distributor
 func (r *distributorRepository) storeDistributor(distibutionId domain.DistributorId) (err error) {
 	_, err = r.findDistributor(distibutionId)

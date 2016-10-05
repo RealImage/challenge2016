@@ -22,7 +22,6 @@ func NewService(distribustionRepo domain.DistributionRepository, locationRepo do
 	}
 }
 
-// note: Updating Parent Permission Granted -> Denined will Not Update Permissions to child.
 func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, locationType domain.LocationType, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
 	d := &domain.DistributorPermission{
 		LocationType: locationType,
@@ -37,11 +36,21 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 		return
 	}
 
+	err = s.locationExists(d.LocationType, d.CountryCode, d.StateCode, d.CityCode)
+	if err != nil {
+		return err
+	}
+
 	if len(parentDistributorId) > 1 {
 		switch d.LocationType {
 		case domain.Country:
 			if d.Permission == domain.Granted {
-				err = s.isCountryHasGrantedPermission(distributorId, d.CountryCode)
+				ok, _ := s.distribustionRepository.DistributorExits(distributorId)
+				if !ok {
+					s.copyHirarchi(parentDistributorId, distributorId)
+				}
+
+				err = s.isCountryHasGrantedPermission(parentDistributorId, d.CountryCode)
 				if err != nil {
 					return err
 				}
@@ -49,7 +58,6 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 				childPerm, _ := s.distribustionRepository.GetCountryPermission(distributorId, d.CountryCode)
 				if childPerm != domain.Granted {
 					s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, domain.Granted)
-					s.copyCountyHirarchi(parentDistributorId, distributorId, d.CountryCode)
 				}
 			} else {
 				s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, domain.Denied)
@@ -57,6 +65,11 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 
 		case domain.State:
 			if d.Permission == domain.Granted {
+				ok, _ := s.distribustionRepository.DistributorExits(distributorId)
+				if !ok {
+					s.copyHirarchi(parentDistributorId, distributorId)
+				}
+
 				err = s.isStateHasGrantedPermission(parentDistributorId, d.CountryCode, d.StateCode)
 				if err != nil {
 					return err
@@ -65,7 +78,6 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 				childStatePerm, _ := s.distribustionRepository.GetStatePermission(distributorId, d.CountryCode, d.StateCode)
 				if childStatePerm != domain.Granted {
 					s.storeState(distributorId, d.CountryCode, d.StateCode, domain.Granted)
-					s.copyStateHirarchi(parentDistributorId, distributorId, d.CountryCode, d.StateCode)
 				}
 
 			} else {
@@ -74,6 +86,11 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 
 		case domain.City:
 			if d.Permission == domain.Granted {
+				ok, _ := s.distribustionRepository.DistributorExits(distributorId)
+				if !ok {
+					s.copyHirarchi(parentDistributorId, distributorId)
+				}
+
 				err = s.isCityHasGrantedPermission(parentDistributorId, d.CountryCode, d.StateCode, d.CityCode)
 				if err != nil {
 					return err
@@ -95,25 +112,10 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 
 	switch d.LocationType {
 	case domain.Country:
-		ok, _ := s.locationRepository.CountryExists(d.CountryCode)
-		if !ok {
-			return domain.ErrInvalidArgument
-		}
-
 		s.distribustionRepository.StoreCountry(distributorId, d.CountryCode, d.Permission)
 	case domain.State:
-		ok, _ := s.locationRepository.StateExists(d.CountryCode, d.StateCode)
-		if !ok {
-			return domain.ErrInvalidArgument
-		}
 		s.storeState(distributorId, d.CountryCode, d.StateCode, d.Permission)
-
 	case domain.City:
-		ok, _ := s.locationRepository.CityExists(d.CountryCode, d.StateCode, d.CityCode)
-		if !ok {
-			return domain.ErrInvalidArgument
-		}
-
 		s.storeCity(distributorId, d.CountryCode, d.StateCode, d.CityCode, d.Permission)
 	default:
 		return domain.ErrInvalidArgument
@@ -148,18 +150,57 @@ func (s *service) storeState(distributorId domain.DistributorId, countryCode dom
 	s.distribustionRepository.StoreState(distributorId, countryCode, stateCode, statePermission)
 }
 
+// locationExists checks if location is exists by calling location repo.
+func (s *service) locationExists(locationType domain.LocationType, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
+	switch locationType {
+	case domain.Country:
+		ok, _ := s.locationRepository.CountryExists(countryCode)
+		if !ok {
+			return domain.ErrInvalidLocation
+		}
+	case domain.State:
+		ok, _ := s.locationRepository.StateExists(countryCode, stateCode)
+		if !ok {
+			return domain.ErrInvalidLocation
+		}
+	case domain.City:
+		ok, _ := s.locationRepository.CityExists(countryCode, stateCode, cityCode)
+		if !ok {
+			return domain.ErrInvalidLocation
+		}
+	}
+	return nil
+}
+
+// copyHirarchi copy all country hirarchi(countries, states and cities) from parentDistributor to childDistributor
+// it also takes care of managing child permission.
+// used while parent distributor creates child distributor.
+func (s *service) copyHirarchi(parentDistributorId domain.DistributorId, distributorId domain.DistributorId) {
+	parentCountryPermissions, _ := s.distribustionRepository.ListCountryPermission(parentDistributorId)
+	for _, parentCountryPerm := range parentCountryPermissions {
+		var childPerm domain.Permission
+		if parentCountryPerm.Permission == domain.Granted {
+			childPerm = domain.NotDefined
+		} else {
+			childPerm = parentCountryPerm.Permission
+		}
+		s.distribustionRepository.StoreCountry(distributorId, parentCountryPerm.CountryCode, childPerm)
+		s.copyCountyHirarchi(parentDistributorId, distributorId, parentCountryPerm.CountryCode)
+	}
+}
+
 // copyCountyHirarchi copy country hirarchi(states and cities) from parentDistributor to childDistributor
 // it also takes care of managing child permission. i.e if child have already denided location permission then it skip that location copy.
 func (s *service) copyCountyHirarchi(parentDistributorId domain.DistributorId, distributorId domain.DistributorId, countryCode domain.CountryCode) {
 	perentStatePermissions, _ := s.distribustionRepository.ListStatePermission(parentDistributorId, countryCode)
 	for _, parentStatePerm := range perentStatePermissions {
-		childPerm, _ := s.distribustionRepository.GetStatePermission(distributorId, countryCode, parentStatePerm.StateCode)
-		if childPerm == domain.Denied {
-			continue
+		var childPerm domain.Permission
+		if parentStatePerm.Permission == domain.Granted {
+			childPerm = domain.NotDefined
+		} else {
+			childPerm = parentStatePerm.Permission
 		}
-		if childPerm != parentStatePerm.Permission {
-			s.distribustionRepository.StoreState(distributorId, countryCode, parentStatePerm.StateCode, parentStatePerm.Permission)
-		}
+		s.distribustionRepository.StoreState(distributorId, countryCode, parentStatePerm.StateCode, childPerm)
 
 		s.copyStateHirarchi(parentDistributorId, distributorId, countryCode, parentStatePerm.StateCode)
 	}
@@ -171,14 +212,13 @@ func (s *service) copyStateHirarchi(parentDistributorId domain.DistributorId, di
 	parentCityPermissions, _ := s.distribustionRepository.ListCityPermission(parentDistributorId, countryCode, stateCode)
 
 	for _, parentCityPerm := range parentCityPermissions {
-		childPerm, _ := s.distribustionRepository.GetCityPermission(distributorId, countryCode, stateCode, parentCityPerm.CityCode)
-
-		if childPerm == domain.Denied {
-			continue
+		var childPerm domain.Permission
+		if parentCityPerm.Permission == domain.Granted {
+			childPerm = domain.NotDefined
+		} else {
+			childPerm = parentCityPerm.Permission
 		}
-		if childPerm != parentCityPerm.Permission {
-			s.distribustionRepository.StoreCity(distributorId, countryCode, stateCode, parentCityPerm.CityCode, parentCityPerm.Permission)
-		}
+		s.distribustionRepository.StoreCity(distributorId, countryCode, stateCode, parentCityPerm.CityCode, childPerm)
 
 	}
 }

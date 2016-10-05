@@ -8,9 +8,11 @@ var (
 	ErrInvalidArgument         = errors.New("Invalid Argument")
 	ErrParentHaveNotPermission = errors.New("Parent have not this permission")
 	ErrAlreadyHavePermission   = errors.New("Already have permission")
+	ErrInvalidLocation         = errors.New("Invalid Location")
 )
 
 type DistributionRepository interface {
+	DistributorExits(distributorId DistributorId) (ok bool, err error)
 	GetCountryPermission(distributorId DistributorId, countryCode CountryCode) (countryPermission Permission, err error)
 	GetStatePermission(distributorId DistributorId, countryCode CountryCode, stateCode StateCode) (statePermission Permission, err error)
 	GetCityPermission(distributorId DistributorId, countryCode CountryCode, stateCode StateCode, cityCode CityCode) (cityPermission Permission, err error)
