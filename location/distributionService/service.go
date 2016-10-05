@@ -22,6 +22,22 @@ func NewService(distribustionRepo domain.DistributionRepository, locationRepo do
 	}
 }
 
+// AddDistributor asssigns location to distributor if parent id exists then assign the
+// location from parent distributor.
+//
+// 1. first validate input
+// 2. check location from location repo
+// 3. check if parent id exits
+//  	3.1 	1.	 if parent id empty then add location if location is a lower level then check if
+// 					higer 	level permission exits if not exits then add those location and assign NotDefined
+//					permission
+//		3.2 	1.	if parent id not empty check if distributor is exists. if not then copy all denied
+//					permission to child distributor from parent distributor and assign notdefined permission
+//					if permission is granted or notdefined.
+//				2.	check if parent has permission of given location by traversing lower location level
+//					 to higer location level. if not then return error
+//				3. 	check if child have already have permission if have it then ignor other wise store
+//					permission.
 func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, locationType domain.LocationType, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
 	d := &domain.DistributorPermission{
 		LocationType: locationType,
