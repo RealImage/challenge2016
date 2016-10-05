@@ -29,24 +29,25 @@ func main() {
 	ctx := context.Background()
 
 	var logger log.Logger
-	logger = log.NewLogfmtLogger(os.Stderr)
-	logger = log.NewContext(logger).With("ts", log.DefaultTimestampUTC)
+	//logger = log.NewLogfmtLogger(os.Stderr)
+	//logger = log.NewContext(logger).With("ts", log.DefaultTimestampUTC)
+	logger = log.NewNopLogger()
 
 	locationRepo := repository.NewLocationRepository()
 	distributorRepo := repository.NewDistributorRepository()
 
 	//TODO remove below block. it's only for testing only. don't have much time to write test cases.
-	go func() {
-		for {
-			locations, _ := locationRepo.FindAll()
-			for _, l := range locations {
-				fmt.Printf("%+v\n", l)
-			}
-			distributorRepo.FindAll()
-			time.Sleep(10 * time.Second)
+	//	go func() {
+	//		for {
+	//			locations, _ := locationRepo.FindAll()
+	//			for _, l := range locations {
+	//				fmt.Printf("%+v\n", l)
+	//			}
+	//			distributorRepo.FindAll()
+	//			time.Sleep(10 * time.Second)
 
-		}
-	}()
+	//		}
+	//	}()
 
 	fieldKeys := []string{"method"}
 
