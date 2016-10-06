@@ -31,7 +31,7 @@ func MakeHandler(ctx context.Context, ls Service, logger kitlog.Logger) http.Han
 
 	r := mux.NewRouter()
 
-	r.Handle("/api/v1/location", addLocationHandler).Methods(http.MethodPost)
+	r.Handle("/api/location/v1", addLocationHandler).Methods(http.MethodPost)
 
 	return r
 }

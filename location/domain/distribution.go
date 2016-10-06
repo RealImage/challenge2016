@@ -9,6 +9,7 @@ var (
 	ErrParentHaveNotPermission = errors.New("Parent have not this permission")
 	ErrAlreadyHavePermission   = errors.New("Already have permission")
 	ErrInvalidLocation         = errors.New("Invalid Location")
+	ErrDistributorNotFound     = errors.New("Distributor Not Found")
 )
 
 type DistributionRepository interface {

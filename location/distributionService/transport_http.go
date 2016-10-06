@@ -8,7 +8,9 @@ import (
 	"net/http"
 
 	"github.com/RealImage/challenge2016/location/domain"
+	"github.com/google/go-querystring/query"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
 	"golang.org/x/net/context"
 
 	kitlog "github.com/go-kit/kit/log"
@@ -29,9 +31,18 @@ func MakeHandler(ctx context.Context, s Service, logger kitlog.Logger) http.Hand
 		opts...,
 	)
 
+	checkLocationPermissionHandler := kithttp.NewServer(
+		ctx,
+		makeCheckLocationPermissionEndpoint(s),
+		decodeCheckLocationPermissionRequest,
+		encodeResponse,
+		opts...,
+	)
+
 	r := mux.NewRouter()
 
-	r.Handle("/api/v1/distributor", addDistributorHandler).Methods(http.MethodPost)
+	r.Handle("/api/distributor/v1", addDistributorHandler).Methods(http.MethodPost)
+	r.Handle("/api/distributor/v1/permission", checkLocationPermissionHandler).Methods(http.MethodGet)
 
 	return r
 }
@@ -54,12 +65,40 @@ func DecodeAddDistributorResponse(_ context.Context, r *http.Response) (interfac
 	return resp, err
 }
 
+func decodeCheckLocationPermissionRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req checkLocationPermissionRequest
+	dec := schema.NewDecoder()
+	if err := dec.Decode(&req, r.URL.Query()); err != nil {
+		return nil, err
+	}
+	return req, nil
+
+}
+
+func DecodeCheckLocationPermissionResponse(_ context.Context, r *http.Response) (interface{}, error) {
+	if r.StatusCode != http.StatusOK {
+		return nil, errorDecoder(r)
+	}
+	var resp checkLocationPermissionResponse
+	err := json.NewDecoder(r.Body).Decode(&resp)
+	return resp, err
+}
+
 func EncodeHTTPGenericRequest(_ context.Context, r *http.Request, request interface{}) error {
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(request); err != nil {
 		return err
 	}
 	r.Body = ioutil.NopCloser(&buf)
+	return nil
+}
+
+func EncodeHTTPGenericGetRequest(_ context.Context, r *http.Request, request interface{}) error {
+	val, err := query.Values(request)
+	if err != nil {
+		return err
+	}
+	r.URL.RawQuery = val.Encode()
 	return nil
 }
 
@@ -89,7 +128,21 @@ func errorEncoder(_ context.Context, err error, w http.ResponseWriter) {
 		case kithttp.DomainDo:
 			switch e.Err {
 			case domain.ErrInvalidArgument:
+				fallthrough
+			case domain.ErrParentHaveNotPermission:
+				fallthrough
+			case domain.ErrInvalidLocation:
+				fallthrough
+			case domain.ErrDistributorNotFound:
+				fallthrough
+			case domain.ErrAlreadyHavePermission:
 				code = http.StatusBadRequest
+				break
+			case domain.ErrExists:
+				fallthrough
+			case domain.ErrNotFound:
+				code = http.StatusInternalServerError
+				break
 			}
 		}
 	}

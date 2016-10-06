@@ -8,6 +8,7 @@ import (
 
 type Service interface {
 	AddDistributor(ctx context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, locationType domain.LocationType, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error)
+	CheckLocationPermission(ctx context.Context, distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (ok bool, err error)
 }
 
 type service struct {
@@ -139,6 +140,33 @@ func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.D
 	}
 
 	return
+}
+
+// CheckLocationPermission checks permission for given distributorid and location
+//
+// 1. start from lowest level location (cities).
+// 2. get location permission
+// 3. 1.	if permission is denied then return false
+//    2.	if result is not found in repo or permission is NotDefined then goto step 2 with
+// 	  	 	higher location. if highest level location not found or permission is denied then
+//			return false else return true.
+//	  3. 	if permission is granted then return true.
+func (s *service) CheckLocationPermission(ctx context.Context, distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (ok bool, err error) {
+	ok, _ = s.distribustionRepository.DistributorExits(distributorId)
+	if !ok {
+		return false, domain.ErrDistributorNotFound
+	}
+
+	ok, _ = s.locationRepository.CityExists(countryCode, stateCode, cityCode)
+	if !ok {
+		return false, domain.ErrInvalidLocation
+	}
+
+	err = s.isCityHasGrantedPermission(distributorId, countryCode, stateCode, cityCode)
+	if err != nil {
+		return false, nil
+	}
+	return true, nil
 }
 
 //storeCity stores city and if intermediate location(county and state) not exists then it adds those location with permission domain.NotDefined

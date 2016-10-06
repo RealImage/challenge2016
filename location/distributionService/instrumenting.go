@@ -33,3 +33,13 @@ func (s *instrumentingService) AddDistributor(ctx context.Context, parentDistrib
 
 	return s.Service.AddDistributor(ctx, parentDistributorId, distributorId, locationType, permission, countryCode, stateCode, cityCode)
 }
+
+func (s *instrumentingService) CheckLocationPermission(ctx context.Context, distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (ok bool, err error) {
+	defer func(begin time.Time) {
+		methodField := metrics.Field{Key: "method", Value: "CheckLocationPermission"}
+		s.requestCount.With(methodField).Add(1)
+		s.requestLatency.With(methodField).Observe(time.Since(begin))
+	}(time.Now())
+
+	return s.Service.CheckLocationPermission(ctx, distributorId, countryCode, stateCode, cityCode)
+}

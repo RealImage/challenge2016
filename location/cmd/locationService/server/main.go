@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -20,34 +21,28 @@ import (
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 )
 
-const (
-	httpPort = ":8080"
-)
+var httpPort string
+var logging bool
+
+func init() {
+	flag.StringVar(&httpPort, "p", "8080", "Location Service http port(:port)")
+	flag.BoolVar(&logging, "l", false, "Is logging enable.")
+}
 
 func main() {
-
+	flag.Parse()
 	ctx := context.Background()
 
 	var logger log.Logger
-	//logger = log.NewLogfmtLogger(os.Stderr)
-	//logger = log.NewContext(logger).With("ts", log.DefaultTimestampUTC)
-	logger = log.NewNopLogger()
+	if logging {
+		logger = log.NewLogfmtLogger(os.Stderr)
+		logger = log.NewContext(logger).With("ts", log.DefaultTimestampUTC)
+	} else {
+		logger = log.NewNopLogger()
+	}
 
 	locationRepo := repository.NewLocationRepository()
 	distributorRepo := repository.NewDistributorRepository()
-
-	//TODO remove below block. it's only for testing only. don't have much time to write test cases.
-	//	go func() {
-	//		for {
-	//			locations, _ := locationRepo.FindAll()
-	//			for _, l := range locations {
-	//				fmt.Printf("%+v\n", l)
-	//			}
-	//			distributorRepo.FindAll()
-	//			time.Sleep(10 * time.Second)
-
-	//		}
-	//	}()
 
 	fieldKeys := []string{"method"}
 
@@ -89,16 +84,16 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.Handle("/api/v1/location", locationService.MakeHandler(ctx, locationSvc, httpLogger))
-	mux.Handle("/api/v1/distributor", distributionService.MakeHandler(ctx, distributorSvc, httpLogger))
+	mux.Handle("/api/location/", locationService.MakeHandler(ctx, locationSvc, httpLogger))
+	mux.Handle("/api/distributor/", distributionService.MakeHandler(ctx, distributorSvc, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 	http.Handle("/metrics", stdprometheus.Handler())
 
 	errs := make(chan error, 2)
 	go func() {
-		logger.Log("transport", "http", "address", httpPort, "msg", "listening")
-		errs <- http.ListenAndServe(httpPort, nil)
+		logger.Log("transport", "http", "address", ":"+httpPort, "msg", "listening")
+		errs <- http.ListenAndServe(":"+httpPort, nil)
 	}()
 	go func() {
 		c := make(chan os.Signal)

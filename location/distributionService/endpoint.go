@@ -8,7 +8,8 @@ import (
 )
 
 type Endpoints struct {
-	AddDistributorEndpoint endpoint.Endpoint
+	AddDistributorEndpoint          endpoint.Endpoint
+	CheckLocationPermissionEndpoint endpoint.Endpoint
 }
 
 type addDistributorRequest struct {
@@ -50,4 +51,40 @@ func (e Endpoints) AddDistributor(ctx context.Context, parentDistributorId domai
 		return err
 	}
 	return response.(addDistributorResponse).Err
+}
+
+type checkLocationPermissionRequest struct {
+	DistributorId domain.DistributorId `schema:"id" url:"id"`
+	CountryCode   domain.CountryCode   `schema:"country_code" url:"country_code"`
+	StateCode     domain.StateCode     `schema:"state_code" url:"state_code"`
+	CityCode      domain.CityCode      `schema:"city_code" url:"city_code"`
+}
+
+type checkLocationPermissionResponse struct {
+	Ok  bool  `json:"ok"`
+	Err error `json:"error,omitempty"`
+}
+
+func (r checkLocationPermissionResponse) error() error { return r.Err }
+
+func makeCheckLocationPermissionEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(checkLocationPermissionRequest)
+		ok, err := s.CheckLocationPermission(ctx, req.DistributorId, req.CountryCode, req.StateCode, req.CityCode)
+		return checkLocationPermissionResponse{Ok: ok, Err: err}, nil
+	}
+}
+
+func (e Endpoints) CheckLocationPermission(ctx context.Context, distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (ok bool, err error) {
+	request := checkLocationPermissionRequest{
+		DistributorId: distributorId,
+		CountryCode:   countryCode,
+		StateCode:     stateCode,
+		CityCode:      cityCode,
+	}
+	response, err := e.CheckLocationPermissionEndpoint(ctx, request)
+	if err != nil {
+		return
+	}
+	return response.(checkLocationPermissionResponse).Ok, response.(checkLocationPermissionResponse).Err
 }

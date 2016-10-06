@@ -35,3 +35,19 @@ func (s *loggingService) AddDistributor(ctx context.Context, parentDistributorId
 	}(time.Now())
 	return s.Service.AddDistributor(ctx, parentDistributorId, distributorId, locationType, permission, countryCode, stateCode, cityCode)
 }
+
+func (s *loggingService) CheckLocationPermission(ctx context.Context, distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (ok bool, err error) {
+	defer func(begin time.Time) {
+		s.logger.Log(
+			"method", "CheckLocationPermission",
+			"distributor_id", distributorId,
+			"country_code", countryCode,
+			"state_code", stateCode,
+			"city_code", cityCode,
+			"took", time.Since(begin),
+			"ok", ok,
+			"err", err,
+		)
+	}(time.Now())
+	return s.Service.CheckLocationPermission(ctx, distributorId, countryCode, stateCode, cityCode)
+}

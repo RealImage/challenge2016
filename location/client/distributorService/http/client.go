@@ -31,8 +31,18 @@ func New(instance string, tracer stdopentracing.Tracer, logger log.Logger) (dist
 	).Endpoint()
 	addDistributorEndpoint = opentracing.TraceClient(tracer, "AddDistributor")(addDistributorEndpoint)
 
+	checkLocationPermissionEndpoint := httptransport.NewClient(
+		http.MethodGet,
+		copyURL(u, "/api/v1/distributor/permission"),
+		distributionService.EncodeHTTPGenericGetRequest,
+		distributionService.DecodeCheckLocationPermissionResponse,
+		httptransport.ClientBefore(opentracing.FromHTTPRequest(tracer, "CheckLocationPermission", logger)),
+	).Endpoint()
+	checkLocationPermissionEndpoint = opentracing.TraceClient(tracer, "CheckLocationPermission")(checkLocationPermissionEndpoint)
+
 	return distributionService.Endpoints{
-		AddDistributorEndpoint: addDistributorEndpoint,
+		AddDistributorEndpoint:          addDistributorEndpoint,
+		CheckLocationPermissionEndpoint: checkLocationPermissionEndpoint,
 	}, nil
 }
 
