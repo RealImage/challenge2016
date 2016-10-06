@@ -7,7 +7,7 @@ import (
 )
 
 type Service interface {
-	AddDistributor(ctx context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, locationType domain.LocationType, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error)
+	AddDistributor(ctx context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error)
 	CheckLocationPermission(ctx context.Context, distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (ok bool, err error)
 }
 
@@ -39,14 +39,8 @@ func NewService(distribustionRepo domain.DistributionRepository, locationRepo do
 //					 to higer location level. if not then return error
 //				3. 	check if child have already have permission if have it then ignor other wise store
 //					permission.
-func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, locationType domain.LocationType, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
-	d := &domain.DistributorPermission{
-		LocationType: locationType,
-		Permission:   permission,
-		CountryCode:  countryCode,
-		StateCode:    stateCode,
-		CityCode:     cityCode,
-	}
+func (s *service) AddDistributor(_ context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
+	d := domain.NewDistributorPermission(permission, countryCode, stateCode, cityCode)
 
 	err = d.Validate()
 	if err != nil {

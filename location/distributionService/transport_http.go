@@ -76,11 +76,13 @@ func decodeCheckLocationPermissionRequest(_ context.Context, r *http.Request) (i
 }
 
 func DecodeCheckLocationPermissionResponse(_ context.Context, r *http.Response) (interface{}, error) {
+
 	if r.StatusCode != http.StatusOK {
 		return nil, errorDecoder(r)
 	}
 	var resp checkLocationPermissionResponse
 	err := json.NewDecoder(r.Body).Decode(&resp)
+
 	return resp, err
 }
 

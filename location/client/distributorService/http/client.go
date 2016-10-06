@@ -24,7 +24,7 @@ func New(instance string, tracer stdopentracing.Tracer, logger log.Logger) (dist
 
 	addDistributorEndpoint := httptransport.NewClient(
 		http.MethodPost,
-		copyURL(u, "/api/v1/distributor"),
+		copyURL(u, "/api/distributor/v1"),
 		distributionService.EncodeHTTPGenericRequest,
 		distributionService.DecodeAddDistributorResponse,
 		httptransport.ClientBefore(opentracing.FromHTTPRequest(tracer, "AddDistributor", logger)),
@@ -33,7 +33,7 @@ func New(instance string, tracer stdopentracing.Tracer, logger log.Logger) (dist
 
 	checkLocationPermissionEndpoint := httptransport.NewClient(
 		http.MethodGet,
-		copyURL(u, "/api/v1/distributor/permission"),
+		copyURL(u, "/api/distributor/permission/v1"),
 		distributionService.EncodeHTTPGenericGetRequest,
 		distributionService.DecodeCheckLocationPermissionResponse,
 		httptransport.ClientBefore(opentracing.FromHTTPRequest(tracer, "CheckLocationPermission", logger)),

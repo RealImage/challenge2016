@@ -55,6 +55,28 @@ type DistributorPermission struct {
 	CityCode     CityCode
 }
 
+func NewDistributorPermission(permission Permission, countryCode CountryCode, stateCode StateCode, cityCode CityCode) *DistributorPermission {
+	var locationType LocationType
+	if len(cityCode) < 1 {
+		if len(stateCode) < 1 {
+			locationType = Country
+		} else {
+			locationType = State
+		}
+	} else {
+		locationType = City
+	}
+
+	return &DistributorPermission{
+		LocationType: locationType,
+		Permission:   permission,
+		CountryCode:  countryCode,
+		StateCode:    stateCode,
+		CityCode:     cityCode,
+	}
+
+}
+
 type CityPermission struct {
 	Permission Permission
 	CityCode   CityCode
@@ -73,12 +95,12 @@ type CountryPermission struct {
 func (d *DistributorPermission) Validate() error {
 	switch d.LocationType {
 	case City:
-		if len(d.CityCode) < 1 {
+		if len(d.CityCode) < 1 || len(d.StateCode) < 1 || len(d.CountryCode) < 1 {
 			return ErrInvalidArgument
 		}
 		fallthrough
 	case State:
-		if len(d.StateCode) < 1 {
+		if len(d.StateCode) < 1 || len(d.CountryCode) < 1 {
 			return ErrInvalidArgument
 		}
 		fallthrough

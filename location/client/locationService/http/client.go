@@ -24,7 +24,7 @@ func New(instance string, tracer stdopentracing.Tracer, logger log.Logger) (loca
 
 	addLocationEndpoint := httptransport.NewClient(
 		http.MethodPost,
-		copyURL(u, "/api/v1/location"),
+		copyURL(u, "/api/location/v1"),
 		locationService.EncodeHTTPGenericRequest,
 		locationService.DecodeAddLocationResponse,
 		httptransport.ClientBefore(opentracing.FromHTTPRequest(tracer, "AddLocation", logger)),

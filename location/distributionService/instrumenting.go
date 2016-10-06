@@ -24,14 +24,14 @@ func NewInstrumentingService(requestCount metrics.Counter, requestLatency metric
 	}
 }
 
-func (s *instrumentingService) AddDistributor(ctx context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, locationType domain.LocationType, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
+func (s *instrumentingService) AddDistributor(ctx context.Context, parentDistributorId domain.DistributorId, distributorId domain.DistributorId, permission domain.Permission, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (err error) {
 	defer func(begin time.Time) {
 		methodField := metrics.Field{Key: "method", Value: "AddDistributor"}
 		s.requestCount.With(methodField).Add(1)
 		s.requestLatency.With(methodField).Observe(time.Since(begin))
 	}(time.Now())
 
-	return s.Service.AddDistributor(ctx, parentDistributorId, distributorId, locationType, permission, countryCode, stateCode, cityCode)
+	return s.Service.AddDistributor(ctx, parentDistributorId, distributorId, permission, countryCode, stateCode, cityCode)
 }
 
 func (s *instrumentingService) CheckLocationPermission(ctx context.Context, distributorId domain.DistributorId, countryCode domain.CountryCode, stateCode domain.StateCode, cityCode domain.CityCode) (ok bool, err error) {
