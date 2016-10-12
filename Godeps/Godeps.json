@@ -1,0 +1,134 @@
+{
+	"ImportPath": "github.com/RealImage/challenge2016",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v74",
+	"Packages": [
+		".\\..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/beorn7/perks/quantile",
+			"Rev": "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/endpoint",
+			"Comment": "v0.2.0",
+			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/log",
+			"Comment": "v0.2.0",
+			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/metrics",
+			"Comment": "v0.2.0",
+			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/metrics/prometheus",
+			"Comment": "v0.2.0",
+			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/tracing/opentracing",
+			"Comment": "v0.2.0",
+			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/transport/http",
+			"Comment": "v0.2.0",
+			"Rev": "6fb874ce59bb45b2f60ee3d289829db02142ecc6"
+		},
+		{
+			"ImportPath": "github.com/go-logfmt/logfmt",
+			"Comment": "v0.2.0-9-gd432719",
+			"Rev": "d4327190ff838312623b09bfeb50d7c93c8d9c1d"
+		},
+		{
+			"ImportPath": "github.com/go-stack/stack",
+			"Comment": "v1.5.2",
+			"Rev": "100eb0c0a9c5b306ca2fb4f165df21d80ada4b82"
+		},
+		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "df1d3ca07d2d07bba352d5b73c4313b4e2a6203e"
+		},
+		{
+			"ImportPath": "github.com/google/go-querystring/query",
+			"Rev": "9235644dd9e52eeae6fa48efd539fdc351a0af53"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.1-27-g757bef9",
+			"Rev": "757bef944d0f21880861c2dd9c871ca543023cba"
+		},
+		{
+			"ImportPath": "github.com/gorilla/schema",
+			"Rev": "0164a00ab4cd01d814d8cd5bf63fd9fcea30e23b"
+		},
+		{
+			"ImportPath": "github.com/kr/logfmt",
+			"Rev": "b84e30acd515aadc4b783ad4ff83aff3299bdfe0"
+		},
+		{
+			"ImportPath": "github.com/matttproud/golang_protobuf_extensions/pbutil",
+			"Comment": "v1.0.0-2-gc12348c",
+			"Rev": "c12348ce28de40eed0136aa2b644d0ee0650e56c"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go",
+			"Comment": "v1.0.0-2-g30dda93",
+			"Rev": "30dda9350627161ff15581c0bdc504e32ec9a536"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go/ext",
+			"Comment": "v1.0.0-2-g30dda93",
+			"Rev": "30dda9350627161ff15581c0bdc504e32ec9a536"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go/log",
+			"Comment": "v1.0.0-2-g30dda93",
+			"Rev": "30dda9350627161ff15581c0bdc504e32ec9a536"
+		},
+		{
+			"ImportPath": "github.com/prometheus/client_golang/prometheus",
+			"Comment": "v0.8.0-7-g5636dc6",
+			"Rev": "5636dc67ae776adf5590da7349e70fbb9559972d"
+		},
+		{
+			"ImportPath": "github.com/prometheus/client_model/go",
+			"Comment": "model-0.0.2-12-gfa8ad6f",
+			"Rev": "fa8ad6fec33561be4280a8f0514318c79d7f6cb6"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/expfmt",
+			"Rev": "e35a2e33a50a7d756c7afdfaf609f93905a0c111"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg",
+			"Rev": "e35a2e33a50a7d756c7afdfaf609f93905a0c111"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/model",
+			"Rev": "e35a2e33a50a7d756c7afdfaf609f93905a0c111"
+		},
+		{
+			"ImportPath": "github.com/prometheus/procfs",
+			"Rev": "abf152e5f3e97f2fafac028d2cc06c1feb87ffa5"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "cd95c68ba21fc7ee16ee38cc420473e3d8c4afd8"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context/ctxhttp",
+			"Rev": "cd95c68ba21fc7ee16ee38cc420473e3d8c4afd8"
+		},
+		{
+			"ImportPath": "google.golang.org/grpc/metadata",
+			"Comment": "v1.0.1-GA-79-gc2983be",
+			"Rev": "c2983be903f6966c83c6ea86ba74df0b7cc882cd"
+		}
+	]
+}
