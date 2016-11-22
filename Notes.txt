@@ -1,0 +1,36 @@
+I attended GopherCon India 2016 out of curiosity and I have plans
+to catch up on Go programming language in this year.
+
+I would need more time to go through Go and write some program using it. So, I wrote the code
+in Ruby. Even though problem description stressed on Go (for GopherCon India attendees),
+I hope you are looking for logic more than the language syntax.
+
+Files
+*****
+
+* inputs/cities.csv - Your original file
+* inputs/distributors.txt - input file with the rules for distributors. City, Province, Country
+names should match the text in cities.csv and they must be hyphen separated as described in the
+problem description. Associated codes are not used. Input  is not case sensitive.
+* inputs/test_cases.txt - some sample test cases to verify the program. Even though I'm familiar
+with testing frameworks, I didn't use any testing framework. I tried to keep things very simple.
+main.rb will automatically feed the lines in this file and print the results.
+
+Usage
+*****
+
+$ ruby -v
+ruby 2.0.0p643 (2015-02-25 revision 49749) [x86_64-darwin14.1.0]
+
+$ ruby main.rb
+Loading Repo... Done
+19 Test Cases. 19 Passed. 0 Failed.
+
+Assumptions
+***********
+
+Input, test cases are in valid format as described in problem description / as seen in
+included files.
+
+Thanks!
+
