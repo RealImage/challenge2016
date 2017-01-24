@@ -1,0 +1,99 @@
+.page{
+    background-color: #fff;
+    font-size: 1.6rem;
+    font-family: "DomaineText",Georgia,serif;
+    letter-spacing: 0.1rem;
+    color: #654a4e;
+}
+.page input[type="text"] {
+    height: 32px;
+    padding: 6px 12px;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.page button{
+    background-color: #fff;
+    border: 0.1rem solid #654a4e;
+    font-size: 1.6rem;
+}
+.page select{
+    width: 100%;
+    border-radius: 0.4rem;
+}
+.page-head{
+    background-color: #654a4e;
+    color: antiquewhite;
+    padding-top: 2rem;
+    padding-bottom: 7rem;
+    margin-bottom: 3rem;
+}
+.common-container{
+    border: 0.1rem solid #654a4e;
+    border-radius: 0.4rem;
+    min-height: 20rem; 
+}
+.home-container{
+    display:flex;
+    align-items: center;
+    margin-top: 8%;
+}
+.full-width{
+    width: 100%;
+}
+.status-mtop{
+    margin-top: 7%;
+}
+.status-mbtm{
+    margin-bottom: 2rem;
+}
+.status-margin{
+    margin-top: 3rem;
+    margin-left: 3rem;
+}
+.status-label{
+    margin-top: 1rem;
+    margin-left: 3rem;
+    margin-bottom: 2rem;
+}
+.select-margin-left{
+    margin-left: 1.5rem;
+}
+.input-disabled{
+    background-color: #F5F5F5!important;
+    pointer-events: none;
+    cursor: none;
+}
+.required label:after{ 
+    content: " *"; 
+    color: red;
+}
+.header-img{
+    height: 5rem;
+}
+.header-label{
+    font-size: 2.4rem;
+    padding-left: 0;
+    padding-top: 0.7rem;
+}
+.header-home{
+    margin-top: 3rem;
+    padding-left: 6rem;
+    font-size: 1.4rem;
+    font-weight: 100;
+}
+.header-home a{
+    color:antiquewhite;
+    text-decoration: none;
+}
+.header-home img{
+    height: 3rem;
+}
+.header-home span{
+    cursor: pointer;
+}
+.statusFont{
+    color: chocolate;
+}

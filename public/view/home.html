@@ -1,0 +1,22 @@
+<div class="page-head">
+    <div class="col-xs-1">
+        <img src="/img/logo.jpg" class="header-img">
+    </div>
+    <div class="col-xs-3 header-label">
+        <label>Distribute Your Movie</label>
+    </div>
+</div>
+<div class="container">
+	<div class="row home-container common-container">
+        <div class="col-xs-offset-3 full-width">
+            <div class="col-xs-4">
+                <label>Select Your Distribution</label>
+            </div>
+            <div class="col-xs-4">
+                <select ng-model="dNameList" ng-change="renderCheck()">
+                    <option ng-repeat="x in dNames">{{x}}</option>
+                </select>
+            </div>
+        </div>
+	</div>
+</div>

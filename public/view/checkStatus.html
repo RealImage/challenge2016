@@ -1,0 +1,57 @@
+<div class="page-head">
+    <div class="col-xs-1">
+        <img src="/img/logo.jpg" class="header-img">
+    </div>
+    <div class="col-xs-3 header-label">
+        <label>Distribute Your Movie</label>
+    </div>
+    <div class="col-xs-offset-5 col-xs-3 header-home">
+        <img src="/img/home.png">
+        <a ui-sref="home">Home</a>
+        <label>|</label>
+        <span ng-click="openTab()">Available Country List</span>
+    </div>
+</div>
+<div class="container" ng-class="isChildAvailable?'':'status-mtop'">
+	<form class="common-container" name="statusForm">
+		<div class="row status-margin">
+			<strong>
+                <label ng-bind=status class="statusFont"></label>
+            </strong>
+		</div>
+		<div class="row status-margin required">
+            <div class="col-xs-2"><label>Country Name</label></div>
+            <div class="col-xs-2"><span><input type="text" ng-model="country"></span></div>
+		</div>
+		<div class="row status-margin">
+			<div class="col-xs-2"><label>Province Name</label></div>
+            <div class="col-xs-2"><span><input type="text" ng-model="province" ng-class="country?'':'input-disabled'"></span></div>
+		</div>
+		<div class="row status-margin">
+			<div class="col-xs-2"><label>City Name</label></div>
+            <div class="col-xs-2"><span><input type="text" ng-model="city" ng-class="province?'':'input-disabled'"></span></div>
+		</div>
+		<div class="row status-margin" ng-class="dataAdded?'':'status-mbtm'">
+			<div class="col-xs-6">
+				<button class="btn" type="submit" ng-click="submit()">Get Status</button>
+			</div>
+			<div class="col-xs-6">
+				<div class="row col-xs-offset-2">
+					<button class="btn" type="submit" ng-click="createDistributor()">Create New Distributor</button>
+				</div>
+			</div>
+		</div>
+		<div class="row status-margin" ng-if=isChildAvailable>
+            <label>Distributions created by you :</label>
+			<div class="row">
+                <label class="status-label" ng-repeat="item in myDistribution">
+                    <input name ="childGroup" type="radio" ng-model="statusForm.selectedChild" value={{item}}>{{item}}   
+                </label>
+            </div>
+            <div class="row">
+                <button class="btn status-label" type="submit" ng-click="Edit(statusForm.selectedChild)">Edit Distributions</button>
+            </div>
+		</div>
+	</form>
+</div>
+
