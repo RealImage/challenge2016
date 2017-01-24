@@ -1,0 +1,79 @@
+<div class="page-head">
+    <div class="col-xs-1">
+        <img src="/img/logo.jpg" class="header-img">
+    </div>
+    <div class="col-xs-3 header-label">
+        <label>Distribute Your Movie</label>
+    </div>
+    <div class="col-xs-offset-5 col-xs-3 header-home">
+        <img src="/img/home.png">
+        <a ui-sref="home">Home</a>
+        <label>|</label>
+        <span ng-click="openTab()">Available Country List</span>
+    </div>
+</div>
+<div class="container" ng-class="dataAdded?'':'status-mtop'">
+	<div class="row common-container">
+		<div class="row status-margin">
+            <label ng-bind=status class="statusFont"></label>
+		</div>
+		<div class="row status-margin required">
+            <div class="col-xs-3"><label>Name Your Distributor</label></div>
+            <div class="col-xs-3"><span><input type="text" ng-model="newDistribution" ng-change="disableText = false" ng-class="fileToEdit?'input-disabled':''"></span></div>
+		</div>
+        <div class="row status-margin">
+            <div class='col-xs-3'>
+                <label>Select Country</label>
+                <div class="row">
+                    <select class="select-margin-left" ng-model="countryList" ng-click="clear('country')" ng-change="onCountrySelect()">
+                        <option ng-repeat="x in countries">{{x}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class='col-xs-offset-1 col-xs-3'>
+                <label>Select Province</label>
+                <div class="row">
+                    <select class="select-margin-left" ng-model="provinceList" ng-click="clear('province')" ng-change="onProvinceSelect()">
+                        <option ng-repeat="x in provinces">{{x}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class='col-xs-offset-1 col-xs-3'>
+                <label>Select City</label>
+                <div class="row">
+                    <select class="select-margin-left" ng-model="cityList">
+                        <option ng-repeat="x in cities">{{x}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row status-margin">
+            <div class='col-xs-offset-3 col-xs-1'>
+                <button class="btn" type="submit" ng-click="add()">Add</button>
+            </div>
+            <div class='col-xs-offset-3 col-xs-1'>
+                <button class="btn" type="submit" ng-click="remove()">Remove</button>
+            </div>
+        </div>
+        <div ng-if="dataAdded" class="row status-margin">
+            <div class="row">
+                <div class="col-xs-offset-2 col-xs-3"><label>City Name</label></div>
+                <div class="col-xs-3"><label>Province Name</label></div>
+                <div class="col-xs-3"><label>Country Name</label></div>
+            </div>
+            <div class="row" ng-repeat="item in addDistributor track by $index">
+                <div class="col-xs-offset-2 col-xs-3"><span>{{item['City Name']}}</span></div>
+                <div class="col-xs-3"><span>{{item['Province Name']}}</span></div>
+                <div class="col-xs-3"><span>{{item['Country Name']}}</span></div>
+            </div>
+        </div>
+        <div ng-if="dataAdded" class="row status-margin">
+            <div class="col-xs-offset-5">
+                <button class="btn status-label" ng-class="disableText?'input-disabled':''" type="submit" ng-click="submit()">Submit</button>
+            </div>
+        </div>
+        <div class="row status-label">
+            <button class="btn" type="submit" ng-click="back()">Back</button>
+        </div>
+    </div>
+</div>
