@@ -1,8 +1,15 @@
-# Real Image Challenge 2016
+# Real Image Challenge 2016 - Solution
 
 In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
 
 Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
+
+
+### Generating Rules Using app/distributors/Permissions.csv
+```
+POST: http://localhost:9000/rules
+```
+
 ```
 Permissions for DISTRIBUTOR1
 INCLUDE: INDIA
@@ -10,11 +17,64 @@ INCLUDE: UNITEDSTATES
 EXCLUDE: KARNATAKA-INDIA
 EXCLUDE: CHENNAI-TAMILNADU-INDIA
 ```
+
 This allows `DISTRIBUTOR1` to distribute in any city inside the United States and India, *except* cities in the state of Karnataka (in India) and the city of Chennai (in Tamil Nadu, India).
 
 At this point, asking your program if `DISTRIBUTOR1` has permission to distribute in `CHICAGO-ILLINOIS-UNITEDSTATES` should get `YES` as the answer, and asking if distribution can happen in `CHENNAI-TAMILNADU-INDIA` should of course be `NO`. Asking if distribution is possible in `BANGALORE-KARNATAKA-INDIA` should also be `NO`, because the whole state of Karnataka has been excluded.
 
 Sometimes, a distributor might split the work of distribution amount smaller sub-distiributors inside their authorized geographies. For instance, `DISTRIBUTOR1` might assign the following permissions to `DISTRIBUTOR2`:
+
+## Test 1 - Existing location
+
+```
+POST: http://localhost:9000/getDistributionStatus
+countryName:India
+distributorName:DISTRIBUTOR1
+```
+
+### Response
+```json
+{
+  "message": "Yes,you are allowed to Distribute In This Country ===>India"
+}
+```
+
+## Test 2: Location not exist
+
+```
+POST: http://localhost:9000/getDistributionStatus
+countryName:India1
+distributorName:DISTRIBUTOR1
+```
+
+```json
+{
+  "message": "No, You are Not allowed to Distribute In This Country ===>India1"
+}
+```
+
+## Other Test Cases Payload Data:
+
+```
+countryName:India
+stateName:Andra
+cityName:Vizag
+distributorName:DISTRIBUTOR3
+```
+
+```
+countryName:India
+stateName:Andra
+distributorName:DISTRIBUTOR3
+```
+
+```
+countryName:India
+stateName:Karnataka
+cityName:Hubli
+distributorName:DISTRIBUTOR3
+```
+
 
 ```
 Permissions for DISTRIBUTOR2 < DISTRIBUTOR1

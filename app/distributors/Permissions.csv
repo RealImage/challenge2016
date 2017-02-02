@@ -1,0 +1,4 @@
+Distrubutor ,INCLUDE,EXCLUDE,PARENT-ID
+DISTRIBUTOR1,"India,United States","Karnataka-India,Chennai-Tamil Nadu-India",
+DISTRIBUTOR2 ,India,Tamil Nadu-India,DISTRIBUTOR1
+DISTRIBUTOR3,Hubli-Karnataka-India,,DISTRIBUTOR2 
