@@ -1,0 +1,52 @@
+{
+    "permisions": [
+        {
+            "parent_id": "",
+            "id": "DISTRIBUTOR1",
+            "permission": "NO",
+            "country_name": "India",
+            "state_name": "Karnataka"
+        },
+        {
+            "parent_id": "",
+            "id": "DISTRIBUTOR1",
+            "permission": "NO",
+            "city_name": "Chennai",
+            "state_name": "Tamil Nadu",
+            "country_name": "India"
+        },
+        {
+            "parent_id": "",
+            "id": "DISTRIBUTOR1",
+            "permission": "Yes",
+            "country_name": "India"
+        },
+        {
+            "parent_id": "",
+            "id": "DISTRIBUTOR1",
+            "permission": "Yes",
+            "country_name": "United States"
+        },
+        {
+            "parent_id": "DISTRIBUTOR1",
+            "id": "DISTRIBUTOR2",
+            "permission": "NO",
+            "country_name": "India",
+            "state_name": "Tamil Nadu"
+        },
+        {
+            "parent_id": "DISTRIBUTOR1",
+            "id": "DISTRIBUTOR2",
+            "permission": "Yes",
+            "country_name": "India"
+        },
+        {
+            "parent_id": "DISTRIBUTOR2",
+            "id": "DISTRIBUTOR3",
+            "permission": "YES",
+            "city_name": "Hubli",
+            "state_name": "Karnataka",
+            "country_name": "India"
+        }
+    ]
+}
