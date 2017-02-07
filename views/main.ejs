@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html ng-app="realImgApp">
+	<head>
+		<title>Real Image Application</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.9.0/ui-bootstrap-tpls.min.js"></script>
+		<link rel="stylesheet" href="app/app.css">
+		<script src="app/app.js"></script>
+	</head>
+	<body ng-controller="realImgAppCtrl">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="well well-lg text-center">
+						<h2>Real Image Application</h2>
+					</div>
+				</div>
+			</div>
+	  	<div class="row">
+				<div class="col-md-12">
+						<button typ="button" class="btn btn-success pull-left" ng-click="addDistributor();">
+								<span class='fa fa-plus'></span> Distributor
+						</button>
+						<button typ="button" class="btn btn-info pull-right" ng-click="checkPermission();">
+								<span class="fa fa-check"></span> Check
+						</button>
+				</div>
+			</div>
+			<div class="row" style="margin-top:25px;">
+				<div class="col-md-12" ng-repeat="item in distributors">
+					<div class="col-md-8 col-md-offst-2" ng-click="openDistributor(item);">
+						<div class="panel panel-default">
+	  					<div class="panel-body">{{item.distributorName}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type='text/ng-template' id='distributorModal.html'>
+			<div class="modal-header">
+				<h4><span class="fa fa-id-card"></span> Distributor Details</h4>
+			</div>
+			<div class="modal-body" ng-form name="appForm">
+				<div class='row' id="modal">
+					<div class='col-md-8 col-md-offset-2 form-group'>
+					  	<label for="distributorName">Name</label>
+							<input type="text" class="form-control" ng-model="resource.distributorName" required />
+					</div>
+					<div class='col-md-8 col-md-offset-2 form-group'>
+					  	<label for="superDistributorId">Super Distributor</label>
+							<select class="form-control" ng-options="item.id as item.distributorName for item in distributors" ng-model="resource.superDistributorId" ng-change="distributorOnChange();"><option></option></select>
+					</div>
+					<div class='col-md-12'>
+						<table class="table table-bordered">
+							<caption>
+								<div class="well well-sm">
+									<span class="fa fa-bars"></span> Rules
+									<button type='button' class='btn btn-xs btn-primary pull-right' ng-click='addRule();'>
+										<span class='fa fa-plus'></span> Rule
+									</button>
+								</div>
+							</caption>
+							<thead>
+								<th class="text-center" width='5%'>No</th>
+								<th class="text-center" width='25%'>Country</th>
+								<th class="text-center" width='25%'>Province</th>
+								<th class="text-center" width='20%'>City</th>
+								<th class="text-center" width='20%'>Permission</th>
+								<th width='5%'></th>
+							</thead>
+							<tbody>
+									<tr ng-repeat="item in resource.rules">
+										<td>{{$index+1}}</td>
+										<td>
+											<select class="form-control" ng-options="key as value for (key,value) in countries" required ng-change="countryOnChange(item)" ng-model="item.countryCode"><option></option>	</select>
+										</td>
+										<td>
+											<select class="form-control" ng-options="key as value for (key,value) in provinces" ng-change="provinceOnChange(item)" ng-model="item.provinceCode"><option></option>	</select>
+										</td>
+										<td>
+											<select class="form-control" ng-options="key as value for (key,value) in cities" ng-model="item.cityCode"><option></option>	</select>
+										</td>
+										<td>
+											<select class="form-control" ng-options="item for item in ['INCLUDE','EXCLUDE']" ng-model="item.permissionType" required>
+												<option></option>
+											</select>
+										</td>
+										<td>
+											<button type='button' class='btn btn-danger btn-xs' ng-click='deleteRule($index);'><span class='fa fa-trash-o'></span></button>
+										</td>
+									</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer" ng-if='!hide'>
+				<div class='col-md-12 col-sm-12 col-xs-12'>
+					<p class='text-center'>
+						<button type='button' class='btn btn-sm btn-info' ng-click='close()'>
+							<span class='fa fa-times'></span> Close
+						</button>
+						<button type='button' class='btn btn-sm btn-success' ng-click='distributorOperation("Save")' ng-disabled='appForm.$invalid'>
+							<span class='fa fa-floppy-o'></span> Save
+						</button>
+						<button type='button' class='btn btn-sm btn-danger' ng-click='distributorOperation("Delete")' ng-if='resource.id'>
+							<span class='fa fa-trash-o'></span> Delete
+						</button>
+					</p>
+				</div>
+			</div>
+		</script>
+		<script type='text/ng-template' id='checkPermissionModal.html'>
+			<div class="modal-header">
+				<h4><span class="fa fa-id-card"></span> Check Permission</h4>
+			</div>
+			<div class="modal-body" ng-form name="appForm">
+				<div class='row' id="modal">
+					<div class='col-md-8 col-md-offset-2 form-group'>
+					  	<label for="distributorName">Name</label>
+							<select class="form-control" ng-options="item.distributorName as item.distributorName for item in distributors" ng-model="resource.distributorName" required><option></option></select>
+					</div>
+					<div class='col-md-8 col-md-offset-2 form-group'>
+					  	<label for="countryCode">Country</label>
+							<select class="form-control" ng-options="key as value for (key,value) in countries" required ng-change="countryOnChange();" ng-model="resource.countryCode"><option></option></select>
+					</div>
+					<div class='col-md-8 col-md-offset-2 form-group'>
+					  	<label for="provinceCode">Province</label>
+							<select class="form-control" ng-options="key as value for (key,value) in provinces" ng-change="provinceOnChange();" ng-model="resource.provinceCode"><option></option></select>
+					</div>
+					<div class='col-md-8 col-md-offset-2 form-group'>
+					  	<label for="cityCode">City</label>
+							<select class="form-control" ng-options="key as value for (key,value) in cities" ng-model="resource.cityCode"><option></option></select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer" ng-if='!hide'>
+				<div class='col-md-12 col-sm-12 col-xs-12'>
+					<p class='text-center'>
+						<button type='button' class='btn btn-sm btn-info' ng-click='close()'>
+							<span class='fa fa-times'></span> Close
+						</button>
+						<button type='button' class='btn btn-sm btn-success' ng-click='checkPermission()' ng-disabled='appForm.$invalid'>
+							<span class='fa fa-check'></span> Check
+						</button>
+					</p>
+				</div>
+			</div>
+		</script>
+	</body>
+</html>
