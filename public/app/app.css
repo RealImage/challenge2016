@@ -1,0 +1,3 @@
+/** Required Field border color **/
+#modal .ng-dirty.ng-invalid { border:1px solid Red !important; }
+#modal .ng-pristine.ng-invalid  { border:1px solid Red !important; }
