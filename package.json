@@ -1,0 +1,26 @@
+{
+  "name": "challenge2016",
+  "version": "1.0.0",
+  "description": "challenge\\ for\\ qube\\ cinimas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gokultp/challenge2016.git"
+  },
+  "author": "gokultp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gokultp/challenge2016/issues"
+  },
+  "homepage": "https://github.com/gokultp/challenge2016#readme",
+  "devDependencies": {
+    "bower": "^1.8.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "express": "^4.14.1"
+  }
+}
