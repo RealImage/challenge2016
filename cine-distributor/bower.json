@@ -1,0 +1,10 @@
+{
+  "name": "cine-distributor",
+  "dependencies": {
+    "ember": "~2.8.0",
+    "ember-cli-shims": "0.1.1",
+    "semantic-ui": "^2.2.9",
+    "hammer.js": "^2.0.8",
+    "matchMedia": "0.2.0"
+  }
+}

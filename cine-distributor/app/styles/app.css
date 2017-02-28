@@ -1,0 +1,18 @@
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.logo-div{
+	float: left;
+	width: 100%;
+	background-color: #FFFFFF;
+}
+
+.demo-navigation{
+	padding: 0px;
+	margin: 0px;
+}
+
+.demo-navigation .demo-list-three{
+	color: #FFFFFF;
+}

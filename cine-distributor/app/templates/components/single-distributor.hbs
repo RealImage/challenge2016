@@ -1,0 +1,9 @@
+<li class="mdl-button mdl-js-button mdl-js-ripple-effect single-distributor-div {{if distributor.isActive "active"}}" {{action 'goToDistributor' distributor.id on="click"}} data-upgraded=",MaterialButton,MaterialRipple">
+  <span class="mdl-list__item-primary-content">
+    <span class="distributor-name">{{distributor.name}}</span>
+    <span class="distributor-regions">{{distributor.formattedIncludes}}</span>
+  </span>
+  <span class="selected-distributor-arrow">
+  	<i class="material-icons">&#xE315;</i>
+  </span>
+</li>

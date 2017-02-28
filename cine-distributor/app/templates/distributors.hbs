@@ -1,0 +1,67 @@
+<ul class="distributors-content-list">	
+	{{#each childDistributors as |distributors index|}}
+		<li class="distributor-section">
+			<div class="distributor-detail">
+				<div class="distributor-name {{index}}">
+					{{index-of-value currentDistributors index "name"}}
+				</div>
+			</div>
+
+			{{#if (if-length distributors '==' 0)}}
+				<div class="distributors-not-available">
+					No distributors available
+				</div>
+			{{else}}
+				<div class="level-two-distributors">
+					Sub Distributors
+				</div>
+				<ul class="demo-list-three mdl-list">
+					{{#each distributors as |distributor|}}
+						{{#if distributor.id}}
+							{{single-distributor distributor=distributor}}
+						{{/if}}
+					{{/each}}
+				</ul>
+			{{/if}}
+
+			<div class="add-distributor-button">
+				<button {{action "showDistributorDialog" currentDistributors index on="click"}} class="dialog-button mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+					<i class="material-icons">person_add</i>
+					Add Distributor
+				</button>
+			</div>
+
+			<div class="allowed-distribution-areas areas-list">
+				<div class="level-two-distributors">
+					Allowed
+					<span class="add-place-button">
+						<button class="dialog-button mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect" {{action "showPlaceDialog" currentDistributors index "include" on="click"}}>
+							<i class="material-icons">add_box</i>
+						</button>
+					</span>
+				</div>
+				<ul class="demo-list-item mdl-list">					
+					{{#each (index-of-value currentDistributors index "formattedIncludes") as |includes|}}
+						{{{show-place includes}}}
+					{{/each}}
+				</ul>
+			</div>
+
+			<div class="restricted-distribution-areas areas-list">
+				<div class="level-two-distributors">
+					Restricted
+					<span class="restrict-place-button">
+						<button class="dialog-button mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect" {{action "showPlaceDialog" currentDistributors index "exclude" on="click"}}>
+							<i class="material-icons">add_box</i>
+						</button>
+					</span>
+				</div>
+				<ul class="demo-list-item mdl-list">
+					{{#each (index-of-value currentDistributors index "formattedExcludes") as |includes|}}
+						{{{show-place includes}}}
+					{{/each}}
+				</ul>
+			</div>
+		</li>
+	{{/each}}
+</ul>
