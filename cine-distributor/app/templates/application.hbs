@@ -1,0 +1,433 @@
+{{#each flashMessages.queue as |flash|}}
+  {{#flash-message flash=flash as |component flash|}}
+    {{#if flash.componentName}}
+      {{component flash.componentName content=flash.content}}
+    {{else}}
+      <h6>{{component.flashType}}</h6>
+      <p>{{flash.message}}</p>
+    {{/if}}
+  {{/flash-message}}
+{{/each}}
+
+<div class="mdl-layout__container">
+  <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header has-drawer is-upgraded" data-upgraded=",MaterialLayout">
+    <div class="demo-drawer mdl-layout__drawer  mdl-color-text--blue-grey" aria-hidden="true">
+      <header class="logo-div">
+        <center>
+          <img src="images/logo.gif" class="company-logo">
+        </center>
+      </header>
+      <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+        <h5 class="level-one-distributors">Distributors</h5>
+        <ul class="demo-list-three mdl-list">
+          {{#each distributors as |distributor|}}
+            {{#if (if-cond distributor.parentDistributorId '==' 0)}}
+              {{single-distributor distributor=distributor}}
+            {{/if}}
+          {{/each}}
+        </ul>
+        <div class="add-distributor-button">
+          <button {{action "showDistributorDialog" 0 on="click"}} class="mdl-button mdl-button--colored mdl-button--raised mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons">person_add</i>
+            Add Distributor
+          </button>
+        </div>
+      </nav>
+    </div>
+    <main class="mdl-layout__content mdl-color--grey-100">
+      {{outlet}}
+    </main>
+    <div class="mdl-layout__obfuscator">
+
+    </div>
+  </div> 
+</div> 
+
+
+<dialog id="distributorDialog" class="mdl-dialog">
+  <div action="#">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      {{input type="text" value=distributor.name class="mdl-textfield__input" placeholder="Distributor Name" }}
+    </div>    
+
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button mdl-js-button mdl-button--raised " {{action "hideDistributorDialog" on="click"}}>Cancel</button>
+      <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored close" {{action "saveDistributor" distributor on="click"}}>Save</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="placeDialog" class="mdl-dialog">
+  <div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label city-field">
+      <button id="demo-menu-lower-left" {{action "showPlaceTypeDropdown" on="click"}} class="place-dropdown-button mdl-button mdl-js-button mdl-button mdl-js-button mdl-button--raised ">
+        {{searchType}} <i class="material-icons">arrow_drop_down</i>
+      </button>
+
+      <ul class="custom-menu searchTypeMenu hide">
+        <li {{action "setSearchType" "City" on="click"}} class="custom-menu-li">City</li>
+        <li {{action "setSearchType" "Province" on="click"}} class="custom-menu-li">Province</li>
+        <li {{action "setSearchType" "Country" on="click"}} class="custom-menu-li">Country</li>
+      </ul>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label autocomplete-field">
+      {{input placeholder="Start typing..." class="mdl-textfield__input placeTypeInputBox" key-up="searchPlaces"}}
+      <ul class="custom-menu placesAutocomplete">
+        {{#each places as |place|}}
+          {{#if place.id}}
+            <li {{action "addPlace" place.formattedCode place.formattedName on="click"}} class="custom-menu-li">{{place.formattedName}}</li>
+          {{/if}}
+        {{/each}}
+      </ul>
+    </div>    
+
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button mdl-js-button mdl-button--raised " {{action "hidePlaceDialog" on="click"}}>Cancel</button>
+      <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored close" {{action "savePlace" distributor on="click"}}>Save</button>
+    </div>
+  </div>
+</dialog>
+
+
+<style type="text/css">
+  .logo-div{
+    float: left;
+    width: 100%;
+    background-color: #FFFFFF;
+  }
+
+  .demo-list-three.mdl-list{
+    padding: 0px;
+    margin: 0px;
+    background-color: #37474f;
+    max-height: 60%;
+    overflow-y: scroll;
+    float: left;
+    width: 100%;
+  }
+
+  .distributor-section{
+    width: 240px;
+    height: 100%;
+    background-color: #37474f;
+    /*float: left;*/
+    position: relative;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+    display: inline-block;
+    padding: 0px;
+    margin: 0px;
+    margin-left: -4px;
+    overflow-y: scroll;
+  }
+
+  .demo-navigation.mdl-navigation{
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .mdl-list__item-primary-content, .mdl-list__item-primary-content .mdl-list__item-text-body{
+    color: #FFFFFF;
+  }
+
+  .mdl-list__item--three-line .mdl-list__item-primary-content{
+    height: 40px;
+  }
+
+  .single-distributor-div{
+    height: 60px;
+    padding: 10px;
+    /*border-bottom: 1px solid #666;*/
+    text-transform: none;
+    width: 100%;
+    line-height: 1;
+    float: left;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .distributor-regions, .distributor-name{
+    width: 100%;
+    float: left;
+    text-align: center;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-word;
+    white-space: nowrap;
+  }
+
+  .distributor-regions{
+    margin-top: 10px;
+  }
+
+  .mdl-layout--fixed-drawer>.mdl-layout__drawer{
+    background-color: #37474f;
+    border-right: 0px;
+  }
+
+  .level-one-distributors{
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 20px;
+    margin: 10px 0px 0px 0px;
+  }
+
+  .level-two-distributors{
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 14px;
+    margin: 5px 0px 0px 0px;
+    float: left;
+    text-align: center;
+    width: 100%;
+    color: #607d8b;
+    box-sizing: border-box;
+  }
+
+  .mdl-layout__content.mdl-color--grey-100{
+    height: 100%;
+  }
+
+  .distributor-detail{
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 13px;
+    margin: 10px 0px 0px 0px;
+    color: #FFF;
+    background-color: #de5858;
+    padding: 10px;
+    margin: 0px;
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .selected-distributor-arrow i{
+    color: #de5858; 
+    display: none;
+  }
+
+  .single-distributor-div.active{
+    background-color: rgba(158,158,158,.4);
+  }
+
+  .single-distributor-div.active .selected-distributor-arrow i{
+    display: block;
+    position: absolute;
+    right: 0px;
+    top: 20px;
+  }
+
+  .distributors-content-list{
+    width: 100%;
+    float: left;
+    height: 100%;
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .distributors-not-available{
+    float: left;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #FFF;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .add-distributor-button{
+    float: left;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .add-distributor-button button{
+    width: 100%;
+  }
+
+  .alert {
+    position: absolute;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    right: 20px;
+    top: 20px;
+    width: 300px;
+    /* height: auto; */
+    z-index: 1000;
+    padding: 10px;
+  }
+
+  .alert h6, .alert p{
+    margin: 0px;
+  }
+
+  .alert-success {
+    background-color: #E8F5E9;
+    color: #4CAF50;
+  }
+
+  .alert-danger{
+    color: #F44336;
+    background-color: #FFEBEE;
+  }
+
+  .areas-list{
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0px;
+    height: 20%;
+    overflow-y: scroll;
+  }
+
+  .areas-list.allowed-distribution-areas{
+    bottom: 20%;
+  }
+
+  .areas-list .mdl-list__item--two-line{
+    height: 39px;
+    padding: 10px;
+    color: #000;
+  }
+
+  .place-item{
+    float: left;
+    width: 100px;
+  }
+
+  .areas-list .mdl-list__item--two-line .mdl-list__item-primary-content .mdl-list__item-sub-title{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background-color: rgba(0,0,0,0.15);
+    padding: 3px 7px;
+  }
+
+  .allowed-distribution-areas{
+    background-color: #69F0AE;
+  }
+
+  .restricted-distribution-areas{
+    background-color: #FF8A65;
+  }
+
+  .areas-list ul{
+    display: block;
+    padding: 8px 0;
+    list-style: none;
+    /* background-color: green; */
+    float: left;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .areas-list .level-two-distributors{
+    text-align: left;
+    color: #333;
+  }
+
+  .areas-list .mdl-list__item--two-line .mdl-list__item-primary-content{
+    padding-left: 5px;
+    height: 20px;
+    line-height: 1.9;
+    display: block;
+    color: rgba(0,0,0,.87);
+    float: left;
+    position: relative;    
+  }
+
+  .place-name{
+    width: 150px;    
+    font-size: 13px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    float: left;
+  }
+
+  .level-two-distributors button{
+    float: right;
+    margin-top: -8px;
+    background-color: rgba(0,0,0,0.2) !important;
+    background: none;
+  }
+  
+  #placeDialog{
+    width: 370px;
+  }
+
+  #placeDialog .place-dropdown-button.mdl-button{
+    float: left;
+    width: 115%;
+    position: relative;
+    margin-top: 10px;
+  }
+
+  #placeDialog .mdl-textfield__input{
+    width: 90%;
+    float: right;
+    position: relative;
+  }
+
+  #placeDialog .autocomplete-field{
+    width: 70%;
+  }
+
+  #placeDialog .city-field{
+    width: 30%;
+  }
+
+  #placeDialog .autocomplete-field, #placeDialog .city-field{
+    float: left;
+    position: relative;
+  }
+
+  .hide{
+    display: none;
+  }
+
+  .custom-menu-li{
+    padding: 7px 10px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    height: 38px;
+    white-space: pre;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .custom-menu-li:hover{
+    background-color: #DDD;
+  }
+
+  .custom-menu{
+    position: absolute;
+    list-style: none;
+    padding: 0px;
+    margin: 27px 0px 0px 0px;
+    width: 100%;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+  }
+
+  .custom-menu.placesAutocomplete{
+    width: 90%;
+    right: 0px;
+    z-index: 200;
+  }
+</style>
