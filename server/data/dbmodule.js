@@ -4,7 +4,8 @@ var Data 			= JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 
 var CsvParser 		= require('csv-to-json');
 
-console.log('dir',process.cwd());
+const OBJECT		= 'object';
+
 
 var writeToFile		= function (data) {
 
@@ -22,6 +23,18 @@ var writeToFile		= function (data) {
 	});
 }
 
+var nextId = function () {
+	if(Data.id){
+		a = parseInt(Data.id, 16) + 1;
+		a = a.toString(16)
+		Data.id = a;
+		writeToFile(Data);
+		return a;
+	}
+	Data.id = '111111111';
+	writeToFile(Data);
+	return '111111111';
+}
 
 /**
  * makes find query on model
@@ -35,7 +48,28 @@ exports.find	= function (model, objQuery, skip, limit) {
 		var foundData	= Data[model].filter(function (objData) {
 			var blStatus = true;
 			for(key in objQuery){
-				blStatus = blStatus && objQuery[key] == objData[key];
+				if(typeof(objQuery[key]) == OBJECT){
+					for(subKey in objQuery[key]){
+						if(subKey == '$in'){
+							if(!isArray(objQuery[key][subKey])){
+								return reject(new Error('Type error expected array at $.'+ key +'.'+subKey));
+							}
+							blStatus = blStatus && objQuery[key][subKey].indexOf(objData[key]) != -1;
+						}
+						else if(subKey == '$nin'){
+							if(!isArray(objQuery[key][subKey])){
+								return reject(new Error('Type error expected array at $.'+ key +'.'+subKey));
+							}
+							blStatus = blStatus && objQuery[key][subKey].indexOf(objData[key]) == -1;
+						}
+						else {
+							blStatus = false
+						}
+					}
+				}
+				else {
+					blStatus = blStatus && objQuery[key] == objData[key];
+				}
 			}
 			return blStatus;
 		});
@@ -59,6 +93,7 @@ exports.insert	= function (model, objData) {
 	if(!Data[model]){
 		Data[model] = []
 	}
+	objData._id = nextId();
 	Data[model].push(objData);
 	return writeToFile(Data);
 }
@@ -71,20 +106,24 @@ exports.insert	= function (model, objData) {
  * @param {Object} objUpdate update document
  */
 exports.update	= function (model, objQuery, objUpdate) {
-	var updatedData	= Data[model].map(function (objData) {
+	Data[model]	= Data[model].map(function (objData) {
 		var blStatus = true;
 		for(key in objQuery){
 			blStatus = blStatus && objQuery[key] == objData[key];
 		}
 		if(blStatus){
-			for(key in objData['$set']){
-				objData[key] = objUpdate[key];
+			for(key in objUpdate['$set']){
+				objData[key] = objUpdate['$set'][key];
 			}
-			for(key in objData['$push']){
-				objData[key].push(objUpdate[key]);
+			for(key in objUpdate['$push']){
+				objData[key].push(objUpdate['$push'][key]);
 			}
 		}
 		return objData
 	});
-	return writeToFile(updatedData);
+	return writeToFile(Data);
+}
+
+var isArray = function (obj) {
+	return !!obj.push;
 }

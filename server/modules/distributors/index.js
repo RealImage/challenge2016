@@ -7,7 +7,15 @@ var Proxy = require('./distributors.server.proxy.js');
 router.get('/api/distributors/getAllDistributors/',  Proxy.getAllDistributors);
 
 // adds distributor
-router.get('/api/distributors/addDistributor/',  Proxy.addDistributor);
+router.post('/api/distributors/addDistributor/',  Proxy.addDistributor);
+
+// updates distributor
+router.post('/api/distributors/updateDistributor/',  Proxy.updateDistributor);
+
+router.get('/api/distributors/getDistributorById/:id',  Proxy.getDistributorById);
+
+router.post('/api/distributors/saveSharedLocations',  Proxy.saveSharedLocations);
+
 
 
 module.exports = router;

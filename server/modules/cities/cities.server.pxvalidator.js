@@ -10,8 +10,7 @@ const ERR_NO_COUNTRY_CODE	= 'No country code provided'
 */
 exports.validateGetCities = function (data) {
 	//Country_Code is mandatory
-
-	if(!data.Country_Code){
+	if(!data.countries[0] || !data.countries[0].Country_Code){
 		return Promise.reject(new Error(ERR_NO_COUNTRY_CODE))
 	}
 	return Promise.resolve(data)

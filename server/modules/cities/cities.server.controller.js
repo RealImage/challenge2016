@@ -10,13 +10,12 @@ const COUNTRY_MODEL = 'countries'
 * @author gokul
 */
 exports.getCities = function (data) {
-	var objQuery = new Object();
-	objQuery.Country_Code = data.Country_Code;
+	var countryCodes = data.countries.map(function (objCountry) {
+		return objCountry.Country_Code;
+	});
 
-	if(data.Province_Code){
-		objQuery.Province_Code	= data.Province_Code;
-	}
 
+	objQuery = {Country_Code : {$in: countryCodes}};
 	return DB.find(CITY_MODEL, objQuery);
 
 };

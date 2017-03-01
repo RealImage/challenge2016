@@ -1,0 +1,85 @@
+<md-dialog aria-label="Mango (Fruit)" >
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools" style="color: #fff !important;">
+        <h2>Add distributor</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-font-icon="fa-plus" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="max-width:800px;max-height:810px; ">
+      <md-tabs md-dynamic-height >
+        <md-tab label="Basic Info" style="background-color: #fff">
+			<md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+
+				<md-input-container class="md-block">
+					<label>Name</label>
+					<input  required  name="name" ng-model="distributorName">
+					<div ng-messages="infoForm.name.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
+				</md-input-container>
+			</md-content>
+
+        </md-tab>
+        <md-tab label="Included Region" ng-disabled ="!!!distributorName">
+			<md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+				<div layout="row">
+					<md-contact-chips
+				        ng-model="selectedCountries"
+				        md-contacts="countySearch($query)"
+				        md-contact-name="Country_Name"
+				        md-require-match="true"
+				        md-highlight-flags="i"
+				        filter-selected="filterSelected"
+				        placeholder="Countries">
+				    </md-contact-chips>
+				</div>
+			</md-content>
+        </md-tab>
+
+		<md-tab label="Excluded Region" ng-disabled ="!!!distributorName || !selectedCountries.length">
+			<md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+				<div layout="row">
+					<md-contact-chips
+				        ng-model="removedProvinces"
+				        md-contacts="provinceSearch($query)"
+				        md-contact-name="Province_Name"
+				        md-require-match="true"
+				        md-highlight-flags="i"
+				        filter-selected="filterSelected"
+				        placeholder="Removed Provinces">
+				    </md-contact-chips>
+				</div>
+
+				<div layout="row">
+					<md-contact-chips
+				        ng-model="removedCities"
+				        md-contacts="citySearch($query)"
+				        md-contact-name="City_Name"
+				        md-require-match="true"
+				        md-highlight-flags="i"
+				        filter-selected="filterSelected"
+				        placeholder="Removed cities">
+				    </md-contact-chips>
+				</div>
+			</md-content>
+        </md-tab>
+
+
+      </md-tabs>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+
+
+		<md-button
+				ng-click="saveDistributor(distributorName, selectedCountries, removedProvinces, removedCities)"
+				style="margin-right:20px;" >
+			Save
+		</md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

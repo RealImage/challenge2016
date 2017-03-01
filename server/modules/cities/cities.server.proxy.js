@@ -13,7 +13,7 @@ var ResponseHandler	= require('../../helpers/responseHandler');
 exports.getCities = function (req,res) {
 
 	// call controller function
-	ProxyValidator.validateGetCities(req.query)
+	ProxyValidator.validateGetCities(req.body)
 		.then(Controller.getCities)
 		.then(ResponseHandler.sendSuccessResponse.bind(null, res))
 		.catch(ResponseHandler.sendErrorResponse.bind(null, res))
