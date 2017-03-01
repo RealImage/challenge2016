@@ -1,0 +1,24 @@
+<div class="padding-inner">
+
+  <div layout="row" layout-wrap layout-align="start center">
+    <div flex="33" flex-sm="50" flex-xs="100" ng-repeat="distributor in Admin.distributors">
+      <md-card>
+        <md-card-title layout="row" layout-align="space-between-center" layout-wrap>
+          <md-card-title-text>
+            <span class="md-title">{{ distributor.name }}</span>
+          </md-card-title-text>
+          <md-button class="md-icon-button"  href="{{'/app/editDistributor/'+ distributor._id }}" aria-label="Edit Distributor">
+            <md-icon md-font-icon="fa-external-link" class="md-menu-text-color fa s24"></md-icon>
+          </md-button>
+        </md-card-title>
+      </md-card>
+    </div>
+  </div>
+
+  <md-button class="md-fab md-primary md-fab-bottom-right" aria-label="New"  style="position:fixed !important;" ng-click="Admin.showTabDialog($event)">
+  	<md-tooltip md-direction="top">New</md-tooltip>
+  	<md-icon md-font-icon="fa-plus" class="md-menu-text-color fa s24"></md-icon>
+  </md-button>
+
+
+</div>

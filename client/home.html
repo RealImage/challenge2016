@@ -1,0 +1,30 @@
+<div class="padding-inner" >
+	<div layout-align-md layout="column" layout-align="center center">
+
+		<md-card >
+			<md-card-title>
+				<md-card-title-text>
+					<span class="md-headline">Login</span>
+				</md-card-title-text>
+			</md-card-title>
+			<md-card-content layout="row" layout-align="space-between">
+				<div layout-align-md layout="column" style="padding-top: 80px;">
+					<md-button flex-xs="100" class="md-raised md-primary" href= '/app/admin'>Login as Admin</md-button>
+				</div>
+				<div layout-align-md layout="column" >
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Distributors</label>
+						<md-select ng-model="selectedDistributor">
+							<md-option ng-repeat="distributor in App.distributors" value="{{distributor._id}}">
+								{{distributor.name}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+					<md-button flex-xs="100" class="md-raised md-primary" href= "{{'/app/distributor/'+selectedDistributor}}">Login as Distributor</md-button>
+				</div>
+			</md-card-content>
+		</md-card>
+	</div>
+
+
+</div>

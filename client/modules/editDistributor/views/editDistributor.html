@@ -1,0 +1,65 @@
+
+<div class="">
+	<h3>Distributor Name :{{EditDistributor.data.name}}</h3>
+	<md-tabs md-dynamic-height >
+
+	  <md-tab label="Included Region" ng-disabled ="!!!EditDistributor.data.name" ng-click ="EditDistributor.getCities()">
+		  <md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+			  <div layout="row" ng-repeat ="countryList in EditDistributor.data.selectedCountries">
+				  <div flex>Countries assigned by {{countryList.assignedBy}}</div>
+				  <div flex>
+					  <md-contact-chips
+					  	ng-model="countryList.countries"
+					  	md-contacts="EditDistributor.countySearch($query)"
+					  	md-contact-name="Country_Name"
+					  	md-require-match="true"
+					  	md-highlight-flags="i"
+					  	filter-selected="filterSelected"
+					  	placeholder="Countries">
+					  </md-contact-chips>
+				  </div>
+
+			  </div>
+		  </md-content>
+	  </md-tab>
+
+	  <md-tab label="Excluded Region" ng-disabled ="!!!EditDistributor.data.name" ng-click ="EditDistributor.getCities()">
+		  <md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+			 
+			  <div layout="row" ng-repeat ="provinceList in EditDistributor.data.removedProvinces">
+				  <div flex>Province assigned by {{provinceList.assignedBy}}</div>
+				  <div flex>
+					  <md-contact-chips
+						  ng-model="provinceList.provinces"
+						  md-contacts="EditDistributor.provinceSearch($query)"
+						  md-contact-name="Province_Name"
+						  md-require-match="true"
+						  md-highlight-flags="i"
+						  filter-selected="filterSelected"
+						  placeholder="Removed Provinces">
+					  </md-contact-chips>
+				  </div>
+
+			  </div>
+
+			  <div layout="row" ng-repeat ="cityList in EditDistributor.data.removedCities">
+				  <div flex>City assigned by {{cityList.assignedBy}}</div>
+				  <div flex>
+					<md-contact-chips
+						ng-model="cityList.cities"
+						md-contacts="EditDistributor.citySearch($query)"
+						md-contact-name="City_Name"
+						md-require-match="true"
+						md-highlight-flags="i"
+						filter-selected="filterSelected"
+						placeholder="Removed cities">
+					</md-contact-chips>
+				  </div>
+
+			  </div>
+		  </md-content>
+	  </md-tab>
+	</md-tabs>
+	<md-button class="md-raised md-primary" style="float:right" ng-click="EditDistributor.update(EditDistributor.data)">Save</md-button>
+
+</div>

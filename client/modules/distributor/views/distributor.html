@@ -1,0 +1,106 @@
+
+<div class="">
+	<h3>Distributor Name :{{Distributor.data.name}}</h3>
+	<md-tabs md-dynamic-height >
+
+	  <md-tab label="Included Region" ng-disabled ="!!!Distributor.data.name" ng-click ="Distributor.getCities()">
+		  <md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+			  <div layout="row" ng-repeat ="countryList in Distributor.data.selectedCountries">
+				  <div flex>Countries assigned by: <b>{{countryList.assignedBy}}</b></div>
+				  <div flex>
+					  <span ng-repeat= "country in countryList.countries" class="list"> {{country.Country_Name}}</span>
+				  </div>
+
+			  </div>
+			  <br><br><br>
+			  <div layout="row" ng-repeat ="list in Distributor.data.includedRegions" layout-wrap>
+				  <div flex = "100" style="padding: 10px">Assigned by: <b>{{list.assignedBy}}</b></div>
+				  <br><br><br>
+				  <div flex = "20" style="padding: 10px">Provinces</div>
+				  <div flex= "80" style="padding: 10px">
+					  <span ng-repeat= "province in list.provinces" class="list"> {{province.Province_Name}}</span>
+				  </div style="padding: 10px">
+				  <div flex = "20" style="padding: 10px">Cities</div>
+				  <div flex= "80" style="padding: 10px">
+					  <span ng-repeat= "city in list.cities" class="list"> {{city.City_Name}}</span>
+				  </div>
+
+			  </div>
+		  </md-content>
+	  </md-tab>
+
+	  <md-tab label="Excluded Region" ng-disabled ="!!!Distributor.data.name" ng-click ="Distributor.getCities()">
+		  <md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+			  <div layout="row" ng-repeat ="provinceList in Distributor.data.removedProvinces">
+				  <div flex>Province assigned by {{provinceList.assignedBy}}</div>
+				  <div flex>
+					  <span ng-repeat= "province in provinceList.provinces" class="list"> {{province.Province_Name}}</span>
+				  </div>
+
+			  </div>
+			  <br><br><br>
+			  <div layout="row" ng-repeat ="cityList in Distributor.data.removedCities">
+				  <div flex>City assigned by {{cityList.assignedBy}}</div>
+				  <div flex>
+					  <span ng-repeat= "city in cityList.cities" class="list"> {{city.City_Name}}</span>
+				  </div>
+
+			  </div>
+		  </md-content>
+	  </md-tab>
+
+	  <md-tab label="Assigned To Others" ng-disabled ="!!!Distributor.data.name" ng-click ="Distributor.getCities()">
+		  <md-content class="md-padding" style="min-width: 600px; min-height:100px;">
+			  <md-button class="md-fab md-mini md-primary md-fab-bottom-left" aria-label="New"  style="position:fixed !important;" ng-click= "Distributor.addSharedLocation(Distributor.data)">
+				  +
+			  </md-button>
+
+			  <div layout="row" ng-if =" Distributor.data.shared" ng-repeat ="list in Distributor.data.shared" layout-wrap>
+					  <div flex = "20" style="padding: 10px">
+						  <md-input-container class="md-block">
+	  						<label>Assigned to</label>
+							<md-select ng-model="list.assignedTo">
+								<md-option ng-repeat="distributor in Distributor.distributors" value="{{distributor.name}}">
+									{{distributor.name}}
+								</md-option>
+							</md-select>
+	  					</md-input-container>
+					  </div>
+
+					  <div flex style="padding: 10px">
+    					  <md-contact-chips
+    						 ng-model="list.provinces"
+    						 md-contacts="Distributor.provinceSearch($query)"
+    						 md-contact-name="Province_Name"
+    						 md-require-match="true"
+    						 md-highlight-flags="i"
+    						 filter-selected="filterSelected"
+    						 placeholder="Add Provinces">
+    					 </md-contact-chips>
+
+    			  	</div>
+
+					  <div flex style="padding: 10px">
+						 <md-contact-chips
+						   ng-model="list.cities"
+						   md-contacts="Distributor.citySearch($query)"
+						   md-contact-name="City_Name"
+						   md-require-match="true"
+						   md-highlight-flags="i"
+						   filter-selected="filterSelected"
+						   placeholder="Add cities">
+					   </md-contact-chips>
+					 </div>
+
+
+
+			  </div>
+			  <div layout="row" layout-align="end end">
+				  <md-button flex-xs="100" class="md-raised md-primary" ng-click="Distributor.saveSharedLocations(Distributor.data)">Save</md-button>
+			  </div>
+
+		  </md-content>
+	  </md-tab>
+	</md-tabs>
+
+</div>

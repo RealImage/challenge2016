@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Distributors Portal</title>
+
+  <base href="/" />
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:400,700'>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="/bower_components/angular-material/angular-material.min.css"/>
+  <link rel="stylesheet" href="app.css"/>
+
+  <style>
+    h1,h2,h3,h4,h5,h6,p,span  {
+        font-family: "Open Sans", Helvetica;
+        color: rgb(90,90,90);
+    }
+    h1,h2,h3,h4,h5,h6 {
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+    .padding-inner {
+        padding: 30px 5%;
+    }
+    /* Overwrite Defaults */
+    md-toolbar.toolbar h1, md-toolbar.md-toolbar-tools h3, md-tabs md-tabs-wrapper md-tab-item span, md-tabs md-tabs-wrapper md-icon, .md-primary span {
+        color: white;
+    }
+    .md-icon-button {
+        font-size: 20px;
+    }
+    md-tabs md-tabs-wrapper {
+        background: #2196F3;
+    }
+    .md-button {
+        padding: 0 12px;
+    }
+</style>
+</head>
+
+<body ng-app="materialApp" layout="row" ng-controller="appCtrl as app">
+
+
+
+
+<div style="width:100%" class="ng-cloak">
+    <md-toolbar class="toolbar">
+
+
+        <div layout="row" layout-align="center center" layout-wrap>
+            <h1 flex="90" class="md-headline">{{title}}</h1>
+        </div>
+
+    </md-toolbar>
+
+    <div ui-view></div>
+
+</div>
+
+<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="/bower_components/angular-aria/angular-aria.min.js"></script>
+<script src="/bower_components/angular-material/angular-material.min.js"></script>
+<script src="/bower_components/angular-messages/angular-messages.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+<script src="modules/admin/controllers/adminCtrl.js"></script>
+<script src="services/adminService.js"></script>
+
+
+
+<script src="app.controller.js"></script>
+
+<script src="app.js"></script>
+<script src="app.routes.js"></script>
+
+</body>
+</html>
