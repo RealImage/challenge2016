@@ -4,7 +4,9 @@
   "description": "challenge\\ for\\ qube\\ cinimas",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+	"postinstall": "bower cache clean && bower install"
+
   },
   "repository": {
     "type": "git",
