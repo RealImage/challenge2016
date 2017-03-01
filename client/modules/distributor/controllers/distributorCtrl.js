@@ -106,23 +106,47 @@ angular.module('distributorCtrl', ['adminService'])
 
 			}).then(function (result) {
 				if(result.data.status){
-					self.cities = result.data.data.filter(function (city) {
+					var cities = result.data.data.filter(function (city) {
 						return city.Province_Name && self.removedProvinceNames.indexOf(city.Province_Name) == -1
 									&& city.City_Name && self.removedCityNames.indexOf(city.City_Name) == -1
 					}).map(function (city) {
 						city.searchName = angular.lowercase(city.City_Name)
 						return city;
 					})
-					var provinvceMap = new Object()
-					self.cities.forEach(function (city) {
+					var provinvceMap = new Object();
+					var cityMap = new Object()
+
+					cities.forEach(function (city) {
+						cityMap[city.City_Name] = city;
+						cityMap[city.City_Name].searchName = angular.lowercase(city.City_Name);
 						provinvceMap[city.Province_Code] ={
 							Province_Code : city.Province_Code,
 							Province_Name : city.Province_Name,
 							searchName	  : angular.lowercase(city.Province_Name)
 						};
 					})
+					self.data.includedRegions.forEach(function (regions) {
+						regions.provinces.forEach(function (data) {
+							provinvceMap[data.Province_Code] ={
+								Province_Code : data.Province_Code,
+								Province_Name : data.Province_Name,
+								searchName	  : angular.lowercase(data.Province_Name)
+							};
+						})
+					});
+
+					self.data.includedRegions.forEach(function (regions) {
+						regions.cities.forEach(function (city) {
+							cityMap[city.City_Name] = city;
+							cityMap[city.City_Name].searchName = angular.lowercase(city.City_Name);
+						})
+					});
+
 					self.provinces = Object.keys(provinvceMap).map(function (key) {
 						return provinvceMap[key];
+					})
+					self.cities = Object.keys(cityMap).map(function (key) {
+						return cityMap[key];
 					})
 				}
 				else {
