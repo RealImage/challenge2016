@@ -1,0 +1,241 @@
+{
+	"id": "efdb1404-3b02-78af-f77a-5aafb29fbe59",
+	"name": "challenge",
+	"description": "",
+	"order": [
+		"9be22be3-7a8a-6109-4b87-7c90063b8dd4",
+		"46d4f70d-8a39-1bf5-fd3b-f5f7fc3e3f23",
+		"ed9d4771-9c7d-29c9-c77b-6142137a8c50",
+		"fae8216a-f1d8-5f91-e275-b35513ee007a",
+		"2c84877f-cc64-72b3-ab18-f3b78188cebc",
+		"a939ce56-48dd-4efb-6e6e-430e69d7add7"
+	],
+	"folders": [],
+	"timestamp": 1488724669227,
+	"owner": "828681",
+	"public": false,
+	"requests": [
+		{
+			"id": "2c84877f-cc64-72b3-ab18-f3b78188cebc",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"url": "http://localhost:3000/authorization/update",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "efdb1404-3b02-78af-f77a-5aafb29fbe59",
+			"data": [
+				{
+					"key": "id",
+					"value": "f8a197d0-01a9-11e7-980c-a12347598358",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "include_countries",
+					"value": "IN,CH",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "exclude_provinces",
+					"value": "AR",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "exclude_cities",
+					"value": "YELUR",
+					"type": "text",
+					"enabled": false
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "update-authorization",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1488724764257,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "46d4f70d-8a39-1bf5-fd3b-f5f7fc3e3f23",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"url": "http://localhost:3000/distributor/verify_auth?id=4e35d410-01ad-11e7-b552-1f652a336b01&province=KA&country=IN",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "efdb1404-3b02-78af-f77a-5aafb29fbe59",
+			"data": [
+				{
+					"key": "id",
+					"value": "b431a600-017a-11e7-8718-37d035706ae9",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "include_countries",
+					"value": "IN",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "verify-authorization",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1488724683346,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "9be22be3-7a8a-6109-4b87-7c90063b8dd4",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"url": "http://localhost:3000/distributor/add",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "efdb1404-3b02-78af-f77a-5aafb29fbe59",
+			"data": [
+				{
+					"key": "name",
+					"value": "Distributor3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "parent",
+					"value": "9161d500-01ac-11e7-b552-1f652a336b01",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "add-distributor",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1488724669227,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "a939ce56-48dd-4efb-6e6e-430e69d7add7",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"url": "http://localhost:3000/authorization/add",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "efdb1404-3b02-78af-f77a-5aafb29fbe59",
+			"data": [
+				{
+					"key": "id",
+					"value": "a1bc5840-01ab-11e7-a981-ffcae7a0a27a",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "include_countries",
+					"value": "CH,IN,US",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "exclude_provinces",
+					"value": "AR",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "exclude_cities",
+					"value": "YELUR",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "add-authorization",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1488724826856,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "ed9d4771-9c7d-29c9-c77b-6142137a8c50",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"url": "http://localhost:3000/distributor/all",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "efdb1404-3b02-78af-f77a-5aafb29fbe59",
+			"data": [
+				{
+					"key": "id",
+					"value": "b431a600-017a-11e7-8718-37d035706ae9",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "include_countries",
+					"value": "IN",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "view-distributors",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1488724747456,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "fae8216a-f1d8-5f91-e275-b35513ee007a",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"url": "http://localhost:3000/authorization/all",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "efdb1404-3b02-78af-f77a-5aafb29fbe59",
+			"data": [
+				{
+					"key": "id",
+					"value": "b431a600-017a-11e7-8718-37d035706ae9",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "include_countries",
+					"value": "IN",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "view-authorizations",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1488724758748,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		}
+	]
+}

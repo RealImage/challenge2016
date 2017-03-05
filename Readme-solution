@@ -1,0 +1,270 @@
+
+It provides four APIs
+
+1. /distributor/add : use to add a new distributor
+
+request : http://localhost:3000/distributor/add
+method : post
+
+x-www-form-urlencoded body params
+
+name : optional, not used as an identifier, multiple distributors allowed with same name
+parent : optional, id of parent distributor (unique id generated while creating the distributor)
+
+sample :
+
+name : Distributor3
+parent : 9161d500-01ac-11e7-b552-1f652a336b01
+
+sample response
+
+{
+  "distributor": {
+    "4e35d410-01ad-11e7-b552-1f652a336b01": {
+      "name": "Distributor3",
+      "auth": [],
+      "parent_auth": [
+        "6cf1ad30-01ac-11e7-b552-1f652a336b01",
+        "b6ee1b30-01ac-11e7-b552-1f652a336b01"
+      ]
+    }
+  },
+  "result": "Added successfully, Please add authorization for the distributor"
+}
+
+Note :parent_auth includes all inherited authorizations, while creating distributor if parent info is passed it inherits the authorizations.
+
+once the user is created he has to be added with authorizations by using API 2
+
+2. /authorization/add
+method : post
+
+x-www-form-urlencoded body params
+
+id : manadatory, 
+
+x-www-form-urlencoded body params
+
+All are optional, empty means it inherits from its parent and allow the bigger set of data.
+
+All are comma seperated values
+
+include_countries 
+include_provinces
+include_cities
+exclude_countries
+exclude_provinces
+exclude_cities
+
+sample body
+
+id : 4e35d410-01ad-11e7-b552-1f652a336b01
+
+include_countries : IN,CH
+
+exclude_provinces : AR
+
+exclude_cities : YELUR 
+
+sample response 
+{
+  "distributor": {
+    "4e35d410-01ad-11e7-b552-1f652a336b01": {
+      "name": "Distributor3",
+      "auth": [
+        "6be4dba0-01ad-11e7-b552-1f652a336b01"
+      ],
+      "parent_auth": [
+        "6cf1ad30-01ac-11e7-b552-1f652a336b01",
+        "b6ee1b30-01ac-11e7-b552-1f652a336b01"
+      ]
+    }
+  },
+  "result": "Added authorzation successfully"
+}
+
+Once the authorization is created, city, province or country can be validated using API 3.
+
+3. '/distributor/verify_auth
+method : get
+
+sample request : http://localhost:3000/distributor/verify_auth?id=4e35d410-01ad-11e7-b552-1f652a336b01&city=YELUR&province=KA
+
+id : distributor_id, mandatory
+country : optional for city search
+province : can be passed for province search as well as city search
+city : for specific city, has to be passed with province
+
+sample responses : 
+{
+  "allowed": "No",
+  "queried_for": {
+    "city_code": "YELUR-KA",
+    "details": {
+      "city_code": "YELUR",
+      "province_code": "KA",
+      "province_name": "Karnataka",
+      "country_code": "IN",
+      "country_name": "India",
+      "city_name": "Yellapur"
+    }
+  }
+}
+
+http://localhost:3000/distributor/verify_auth?id=4e35d410-01ad-11e7-b552-1f652a336b01&province=KA&country=IN
+{
+  "allowed": "Yes",
+  "queried_for": {
+    "province_code": "KA-IN",
+    "details": {
+      "province_code": "KA",
+      "province_name": "Karnataka",
+      "country_code": "IN",
+      "country_name": "India"
+    }
+  }
+}
+
+allowed will be 'Yes' or 'No'
+
+4. /distributor/all, to view all distributors
+
+method : get
+
+http://localhost:3000/distributor/all
+
+Here Distributor1 > Distributor2 > Distributor3
+
+{
+  "results": {
+    "6523b0d0-01ac-11e7-b552-1f652a336b01": {
+      "name": "Distributor1",
+      "auth": [
+        "6cf1ad30-01ac-11e7-b552-1f652a336b01"
+      ],
+      "parent_auth": []
+    },
+    "9161d500-01ac-11e7-b552-1f652a336b01": {
+      "name": "Distributor2",
+      "auth": [
+        "b6ee1b30-01ac-11e7-b552-1f652a336b01"
+      ],
+      "parent_auth": [
+        "6cf1ad30-01ac-11e7-b552-1f652a336b01"
+      ]
+    },
+    "4e35d410-01ad-11e7-b552-1f652a336b01": {
+      "name": "Distributor3",
+      "auth": [
+        "6be4dba0-01ad-11e7-b552-1f652a336b01"
+      ],
+      "parent_auth": [
+        "6cf1ad30-01ac-11e7-b552-1f652a336b01",
+        "b6ee1b30-01ac-11e7-b552-1f652a336b01"
+      ]
+    }
+  }
+}
+
+5. http://localhost:3000/authorization/all
+method : get
+
+
+to view all authorizations
+
+sample response
+
+{
+  "results": {
+    "6cf1ad30-01ac-11e7-b552-1f652a336b01": {
+      "includes": {
+        "countries": [
+          "CH",
+          "IN",
+          "US"
+        ],
+        "provinces": [],
+        "cities": []
+      },
+      "excludes": {
+        "countries": [],
+        "provinces": [],
+        "cities": "YELUR"
+      }
+    },
+    "b6ee1b30-01ac-11e7-b552-1f652a336b01": {
+      "includes": {
+        "countries": [
+          "CH",
+          "IN"
+        ],
+        "provinces": [],
+        "cities": []
+      },
+      "excludes": {
+        "countries": [],
+        "provinces": [],
+        "cities": []
+      }
+    },
+    "6be4dba0-01ad-11e7-b552-1f652a336b01": {
+      "includes": {
+        "countries": [
+          "IN"
+        ],
+        "provinces": [],
+        "cities": []
+      },
+      "excludes": {
+        "countries": [],
+        "provinces": [],
+        "cities": []
+      }
+    }
+  }
+}
+
+
+6. /authorization/update
+
+method : post
+
+To update existing authorization
+
+sample request
+
+http://localhost:3000/authorization/update
+
+id : f8a197d0-01a9-11e7-980c-a12347598358 -- id of authorization, will get this once auth is created as well as from authorization/all api or from distributor/all api
+
+include_countries : IN,CH
+
+exclude_provinces : KA
+
+A post an project for sample request is checked in at /misc directory. 
+
+
+How to run the project
+
+Please install the dependancies by npm install
+
+run node app | bunyan
+
+(bunyan for structured logs optional)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
