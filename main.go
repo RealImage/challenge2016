@@ -32,24 +32,25 @@ type ruleArea struct {
 
 func (ra *ruleArea) String() string {
 	area := toInput(ra.Name) + "-" + toInput(ra.ProvinceName) + "-" + toInput(ra.CountryName)
-	for i, c := range area {
-		if c != '-' {
-			return area[i:]
-		}
-	}
 
-	return area
+	return strings.TrimPrefix(area, "-")
 }
 
 func subAreas(d *distributor) []*ruleArea {
 	var sas []*ruleArea
-
 	tcities := cities
 
-	for d != nil {
-		tcities = filter(tcities, d.Include, d.Exclude)
+	var chain []*distributor
+	currentNode := d
 
-		d = d.Parent
+	for currentNode != nil {
+		chain = append(chain, currentNode)
+		currentNode = currentNode.Parent
+	}
+
+	for i := len(chain) - 1; i >= 0; i-- {
+		tempDistributor := chain[i]
+		tcities = filter(tcities, tempDistributor.Include, tempDistributor.Exclude)
 	}
 
 	for _, c := range tcities {
@@ -95,7 +96,8 @@ type distributor struct {
 	Include []string
 	Exclude []string
 
-	Parent *distributor
+	Parent   *distributor
+	Children []*distributor
 }
 
 func (d *distributor) Allow(r *ruleArea) bool {
@@ -143,15 +145,18 @@ func main() {
 		Parent:  d1,
 	}
 
+	d1.Children = append(d1.Children, d2)
+
 	d3 := &distributor{
 		Name:    "DISTRIBUTOR3",
-		Include: []string{"BENGALURU-KARNATAKA-INDIA"},
+		Include: []string{"ANDHRAPRADESH-INDIA", "BENGALURU-KARNATAKA-INDIA"},
 		Parent:  d2,
 	}
 
+	d2.Children = append(d2.Children, d3)
+
 	area := &ruleArea{
-		Name:         "BENGALURU",
-		ProvinceName: "KARNATAKA",
+		ProvinceName: "ANDHRAPRADESH",
 		CountryName:  "India",
 	}
 
