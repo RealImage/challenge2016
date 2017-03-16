@@ -16,6 +16,13 @@ type city struct {
 	CountryName  string
 }
 
+type node struct {
+	Name string
+	Code string
+
+	Nodes []*node
+}
+
 func (c *city) RuleArea() *ruleArea {
 	return &ruleArea{
 		Name:         c.Name,
@@ -36,9 +43,9 @@ func (ra *ruleArea) String() string {
 	return strings.TrimPrefix(area, "-")
 }
 
-func subAreas(d *distributor) []*ruleArea {
-	var sas []*ruleArea
-	tcities := cities
+func subAreas(d *distributor) []string {
+	var sas []string
+	tnodes := topNodes
 
 	var chain []*distributor
 	currentNode := d
@@ -49,23 +56,31 @@ func subAreas(d *distributor) []*ruleArea {
 	}
 
 	for i := len(chain) - 1; i >= 0; i-- {
+		bnodes := []*node{}
 		tempDistributor := chain[i]
-		tcities = filter(tcities, tempDistributor.Include, tempDistributor.Exclude)
+		tnodes = filter(tnodes, tempDistributor.Include, tempDistributor.Exclude)
+		for _, tnode := range tnodes {
+			bnodes = append(bnodes, tnode.Nodes...)
+		}
+
+		if len(bnodes) > 0 {
+			tnodes = bnodes
+		}
 	}
 
-	for _, c := range tcities {
-		sas = append(sas, c.RuleArea())
+	for _, c := range tnodes {
+		sas = append(sas, c.Code)
 	}
 
 	return sas
 }
 
-func filter(tc []*city, includes, excludes []string) []*city {
-	var fc, cc []*city
+func filter(tc []*node, includes, excludes []string) []*node {
+	var fc, cc []*node
 	for _, c := range tc {
 		ok := false
 		for _, allowed := range includes {
-			if strings.HasSuffix(c.RuleArea().String(), allowed) {
+			if strings.HasSuffix(c.Code, allowed) {
 				ok = true
 				break
 			}
@@ -78,7 +93,7 @@ func filter(tc []*city, includes, excludes []string) []*city {
 	for _, c := range cc {
 		ok := false
 		for _, exclude := range excludes {
-			if strings.HasSuffix(c.RuleArea().String(), exclude) {
+			if strings.HasSuffix(c.Code, exclude) {
 				ok = true
 				break
 			}
@@ -103,7 +118,7 @@ type distributor struct {
 func (d *distributor) Allow(r *ruleArea) bool {
 	sas := subAreas(d)
 	for _, sa := range sas {
-		if strings.HasSuffix(sa.String(), r.String()) {
+		if strings.HasSuffix(sa, r.String()) {
 			return true
 		}
 	}
@@ -111,7 +126,7 @@ func (d *distributor) Allow(r *ruleArea) bool {
 	return false
 }
 
-var cities []*city
+var topNodes []*node
 
 func main() {
 	file, err := os.Open("cities.csv")
@@ -129,7 +144,9 @@ func main() {
 		} else if err != nil {
 			panic("oh no")
 		}
-		cities = append(cities, &city{Code: record[0], ProvinceCode: record[1], CountryCode: record[2], Name: toInput(record[3]), ProvinceName: toInput(record[4]), CountryName: toInput(record[5])})
+		c := &city{Code: record[0], ProvinceCode: record[1], CountryCode: record[2], Name: toInput(record[3]), ProvinceName: toInput(record[4]), CountryName: toInput(record[5])}
+
+		putCityInTree(c)
 	}
 
 	d1 := &distributor{
@@ -156,7 +173,8 @@ func main() {
 	d2.Children = append(d2.Children, d3)
 
 	area := &ruleArea{
-		ProvinceName: "ANDHRAPRADESH",
+		Name:         "Ayakudi",
+		ProvinceName: "TAMILNADU",
 		CountryName:  "India",
 	}
 
@@ -166,6 +184,67 @@ func main() {
 	} else {
 		println("NO")
 	}
+}
+
+func putCityInTree(c *city) {
+	var cityCountry *node
+	var cityState *node
+	var cityArea *node
+
+	cName := toInput(c.CountryName)
+	var has bool
+	for _, c := range topNodes {
+		if c.Name == cName {
+			cityCountry = c
+			has = true
+			break
+		}
+	}
+
+	if !has {
+		cityCountry = &node{
+			Name: cName,
+			Code: cName,
+		}
+		topNodes = append(topNodes, cityCountry)
+	} else {
+		has = false
+		cState := toInput(c.ProvinceName)
+		for _, s := range cityCountry.Nodes {
+			if s.Name == cState {
+				cityState = s
+				has = true
+				break
+			}
+		}
+		if !has {
+			cityState = &node{
+				Name: cState,
+				Code: cState + "-" + cityCountry.Code,
+			}
+			cityCountry.Nodes = append(cityCountry.Nodes, cityState)
+		} else {
+			has = false
+			cArea := toInput(c.Name)
+			for _, a := range cityState.Nodes {
+				if a.Name == cArea {
+					cityArea = a
+					has = true
+					break
+				}
+			}
+			if !has {
+				cityArea = &node{
+					Name: cArea,
+					Code: cArea + "-" + cityState.Code,
+				}
+				cityState.Nodes = append(cityState.Nodes, cityArea)
+			}
+		}
+
+		cityCountry.Nodes = append(cityCountry.Nodes, cityState)
+	}
+
 }
 
 func parseRule(r string) *ruleArea {
