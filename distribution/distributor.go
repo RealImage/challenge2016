@@ -5,16 +5,16 @@ import (
 )
 
 type Distributor struct {
-	name        string
+	Name        string
 	permissions PermissionMatrix
 	parent      *Distributor
 }
 
 // initialize the distributor
 func (distributor *Distributor) Initialize(name string, parent *Distributor) errors.ApplicationError {
-	distributor.name = name
+	distributor.Name = name
 	distributor.parent = parent
-	distributor.permissions = basePermissions
+	distributor.permissions = loadBasePermissions()
 	return nil
 }
 
@@ -51,6 +51,6 @@ func (distributor *Distributor) CanDistribute(location string) bool {
 }
 
 // TODO(ilayaraja): Do not expose
-func (distributor *Distributor) Permissions() PermissionMatrix {
-	return distributor.permissions
-}
+// func (distributor *Distributor) Permissions() PermissionMatrix {
+// 	return distributor.permissions
+// }
