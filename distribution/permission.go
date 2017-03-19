@@ -1,29 +1,33 @@
 package distribution
 
 import (
+	"flag"
 	"strings"
 )
 
 type PermissionMatrix map[string]map[string]map[string]bool
 
-// load the base permissions from the file
-func (permissions *PermissionMatrix) Initialize(filePath string) ApplicationError {
+var basePermissions PermissionMatrix
+var filePath string
+
+func init() {
+	flag.StringVar(&filePath, "file", "cities.csv", "Cities list file")
 	cities, err := LoadCitiesFromCSV(filePath)
 	if err != nil {
-		return err
+		panic(err)
 	}
+	basePermissions = make(PermissionMatrix)
 	for _, city := range cities {
-		_, isCountryThere := permissions[city.Country.Code]
+		_, isCountryThere := basePermissions[city.Country.Code]
 		if !isCountryThere {
-			permissions[city.Country.Code] = make(map[string]map[string]bool)
+			basePermissions[city.Country.Code] = make(map[string]map[string]bool)
 		}
-		_, isProvinceThere := permissions[city.Country.Code][city.Provide.Code]
+		_, isProvinceThere := basePermissions[city.Country.Code][city.Provide.Code]
 		if !isProvinceThere {
-			permissions[city.Country.Code][city.Provide.Code] = make(map[string]bool)
+			basePermissions[city.Country.Code][city.Provide.Code] = make(map[string]bool)
 		}
-		permissions[city.Country.Code][city.Provide.Code][city.Code] = false
+		basePermissions[city.Country.Code][city.Provide.Code][city.Code] = false
 	}
-	return nil
 }
 
 // check whether the location is permitted
@@ -95,8 +99,7 @@ func (permissions *PermissionMatrix) Update(location string, flag bool) Applicat
 				permissions[country][province][city] = flag
 			}
 		}
-	}
-	if len(parts) == 2 {
+	} else if len(parts) == 2 {
 		country, province := parts[0], parts[1]
 		if len(permissions[country]) == 0 || len(permissions[country][province]) == 0 {
 			return nil //TODO: Raise error if necessary
@@ -104,11 +107,11 @@ func (permissions *PermissionMatrix) Update(location string, flag bool) Applicat
 		for city, _ := range permissions[country][province] {
 			permissions[country][province][city] = flag
 		}
-	}
-	if len(parts) == 3 {
+	} else if len(parts) == 3 {
 		country, province, city := parts[0], parts[1], parts[2]
 		permissions[country][province][city] = flag
 	}
+	return nil
 }
 
 // include the location in the permissions
