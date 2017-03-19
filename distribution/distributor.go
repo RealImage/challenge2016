@@ -1,5 +1,9 @@
 package distribution
 
+import (
+	"../errors"
+)
+
 type Distributor struct {
 	name        string
 	permissions PermissionMatrix
@@ -7,7 +11,7 @@ type Distributor struct {
 }
 
 // initialize the distributor
-func (distributor *Distributor) Initialize(name string, parent *Distributor) ApplicationError {
+func (distributor *Distributor) Initialize(name string, parent *Distributor) errors.ApplicationError {
 	distributor.name = name
 	distributor.parent = parent
 	distributor.permissions = basePermissions
@@ -25,7 +29,7 @@ func (distributor *Distributor) HasScope(location string) bool {
 }
 
 // include the location to the distributor permissions
-func (distributor *Distributor) Include(location string) ApplicationError {
+func (distributor *Distributor) Include(location string) errors.ApplicationError {
 	// if the distributor has location in its scope, include the location
 	if distributor.HasScope(location) {
 		return distributor.permissions.Include(location)
@@ -35,7 +39,7 @@ func (distributor *Distributor) Include(location string) ApplicationError {
 }
 
 // exclude the location to the distributor permissions
-func (distributor *Distributor) Exclude(location string) ApplicationError {
+func (distributor *Distributor) Exclude(location string) errors.ApplicationError {
 	// no need to check the scope for exclude
 	return distributor.permissions.Exclude(location)
 }
