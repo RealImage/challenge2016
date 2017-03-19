@@ -39,10 +39,12 @@ func LoadCitiesFromCSV(filePath string) ([]*City, ApplicationError) {
 
 // Load the cities information from JSON file
 func LoadCitiesFromJSON(filePath string) ([]*City, ApplicationError) {
+	// TODO(ilayaraja): Implement if necessary
 	return nil, nil
 }
 
 // Load the cities information from XML file
 func LoadCitiesFromXML(filePath string) ([]*City, ApplicationError) {
+	// TODO(ilayaraja): Implement if necessary
 	return nil, nil
 }
