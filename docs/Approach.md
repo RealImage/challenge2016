@@ -1,7 +1,7 @@
 ### Technical approach
 
 1. Parse the cities CSV and build the base permission object as follows:
-```json
+```
 {
 	...
 	...

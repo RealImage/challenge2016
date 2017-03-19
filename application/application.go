@@ -1,35 +1,11 @@
 package application
 
 import (
-	//"../distribution"
-
 	"fmt"
 	"os"
 )
 
 func RunApplication() {
-	/*
-		1. Create Distributor
-		2. Include/Exclude locations
-		3. Verify Distribution location
-		4. Exit
-		Choose an action:
-
-		1. Create Distributor
-		Distributor name:
-		Is he a sub-distributor? (yes/no):
-		What is the name of parent distributor?
-
-		2. Include/Exclude locations:
-		Distributor name:
-		Include/Exclude? (i/e):
-		Location Code (Ex: IN, TN-IN, CENAI-TN-IN):
-
-		3. Verify Distribution Area
-		Distributor name:
-		Location Code (Ex: IN, TN-IN, CENAI-TN-IN):
-	*/
-
 	for {
 		action := getAction()
 		switch action {
