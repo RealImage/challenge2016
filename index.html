@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html ng-app="distributorApp">
+
+<head>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link data-require="bootstrap-glyphicons@*" data-semver="3.2.1" rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png" />
+  <script data-require="angular.js@1.3.20" data-semver="1.3.20" src="https://code.angularjs.org/1.3.20/angular.js"></script>
+  <script data-require="bootstrap.js@*" data-semver="3.3.6" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js"></script>
+  <script src="services.js"></script>
+  <script src="permissionsCtrl.js"></script>
+  <script src="checkCtrl.js"></script>
+</head>
+
+<body>
+
+  <h1>Distributor</h1>
+
+  <div ng-controller="permissionsCtrl">
+    <label >Distributor Name</label>: <input type="text" ng-model="distributorName" />
+    <br/><label >Operation Type</label>:<select ng-model="operationType" ng-change="operationChange()" >
+      <option  value="include">Include</option>
+      <option value="exclude">Exclude</option>
+    </select>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-3">
+          <label for="multipleSelect"> Select Country: </label>
+          <br>
+          <select class="selectClass" name="multipleSelect"  ng-options="item as item.countryName for item in finalDataSet| orderBy:'countryName'" id="multipleSelect" ng-change="changeCountry()" ng-model="selectedCountryArray" multiple>
+            
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="multipleSelect"> Select State/Province: </label>
+          <br>
+          <select class="selectClass" name="multipleSelect" ng-change="changeState()" ng-options="item as item.provinceName for item in stateDisplay|orderBy:'provinceName'" id="multipleSelect" ng-model="selectedStateArray" multiple>
+          </select>
+        </div>
+        <div class="col-md-3">
+           <label for="multipleSelect"> Select City: </label>
+          <br>
+          <select class="selectClass" name="multipleSelect" ng-options="item as item.cityName for item in cityDisplay|orderBy:'cityName'" id="multipleSelect" ng-model="selectedCityArray" multiple>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <button type="button" ng-show="includeButton" class="btn btn-primary" ng-click="includeRegion()" > Include</button>
+          <button type="button" ng-show="excludeButton" class="btn btn-primary" ng-click="excludeRegion()" > Exclude</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
