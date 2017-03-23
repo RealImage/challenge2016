@@ -39,3 +39,75 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
 
+_______________________________________________________________________________________________
+
+Solution By \
+Ramvinoth K
+Software Developer
+official Email:ramvinothk@teezle.com,
+personel Email:ram16vinoth@gmail.com
+Mobile: +91 9488985812
+
+
+To run the server
+
+node server.js
+
+To Create DISTRIBUTOR
+url:0.0.0.0:8207/create
+method:POST
+
+-----------------------------------****************************------------------------------------------
+INPUT:
+if you create an new distributor then enter parentDistributor is false
+
+{
+distributorName:RAM1
+parentDistributor:false
+include:['INDIA',UNITEDSTATES]
+exclude:['KARNATAKA-INDIA','CHENNAI-TAMILNADU-INDIA']
+}
+
+********
+OUT PUT:
+---------
+
+{
+  "status": true,
+  "data": [
+    {
+      "distributorName": "RAM1",
+      "parentDistributor": "false",
+      "include": [
+        "INDIA",
+        "UNITEDSTATES"
+      ],
+      "exclude": [
+        "KARNATAKA-INDIA",
+        "CHENNAI-TAMILNADU-INDIA"
+      ],
+      "path": "RAM1"
+    }
+  ],
+  "message": "CREATED SUCCESSFULLY"
+}
+
+*---------------------------------------------------------------------*
+if you create sub-distributor the te input is
+
+Input:
+
+{
+distributorName:RAM2
+parentDistributor:RAM1
+include:['INDIA','CHENNAI-TAMILNADU-INDIA']
+exclude:['KARNATAKA-INDIA','UNITEDSTATES']
+}
+
+OutPut
+-------
+{
+  "status": false,
+  "message": "CITY: CHENNAI Not Avilable For This Distributor"
+}
+
