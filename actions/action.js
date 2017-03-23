@@ -338,3 +338,8 @@ APIAction.prototype.getInclude=function (input) {
 
 
 }
+
+APIAction.prototype.list=function (req,res) {
+    var self=this
+    res.send(self.conf.distributor)
+}

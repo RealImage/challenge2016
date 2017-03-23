@@ -25,5 +25,10 @@ APIRouts.prototype.init = function(){
             self.action.create(req,res)
 
     })
+    self.app.get('/list', function (req, res) {
+        req.query=req.body ?req.body : (req.payload ? req.payload : req.query)
+            self.action.list(req,res)
+
+    })
 
 }
