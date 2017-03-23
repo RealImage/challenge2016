@@ -55,6 +55,7 @@ To Create DISTRIBUTOR
 url:0.0.0.0:8207/create
 method:POST
 
+-----------------------------------****************************------------------------------------------
 INPUT:
 if you create an new distributor then enter parentDistributor is false
 
@@ -65,7 +66,9 @@ include:['INDIA',UNITEDSTATES]
 exclude:['KARNATAKA-INDIA','CHENNAI-TAMILNADU-INDIA']
 }
 
+********
 OUT PUT:
+---------
 
 {
   "status": true,
@@ -89,6 +92,9 @@ OUT PUT:
 
 *---------------------------------------------------------------------*
 if you create sub-distributor the te input is
+
+Input:
+
 {
 distributorName:RAM2
 parentDistributor:RAM1
@@ -96,6 +102,8 @@ include:['INDIA','CHENNAI-TAMILNADU-INDIA']
 exclude:['KARNATAKA-INDIA','UNITEDSTATES']
 }
 
+OutPut
+-------
 {
   "status": false,
   "message": "CITY: CHENNAI Not Avilable For This Distributor"
