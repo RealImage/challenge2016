@@ -1,0 +1,67 @@
+[
+  {
+    "distributorId": "DIS0003",
+    "parentDistributorId": "DIS0001",
+    "distributorName": "Distributor 3",
+    "includeData": [
+      {
+        "countryCode": "IN",
+        "countryName": "India",
+        "provinceCode": "TN",
+        "provinceName": "Tamil Nadu",
+        "cityCode": "ERODE",
+        "cityName": "Erode"
+      },
+      {
+        "countryCode": "IN",
+        "countryName": "India",
+        "provinceCode": "TN",
+        "provinceName": "Tamil Nadu",
+        "cityCode": "COBTE",
+        "cityName": "Coimbatore"
+      },
+      {
+        "countryCode": "US",
+        "countryName": "United States",
+        "provinceCode": "CA",
+        "provinceName": "California",
+        "cityCode": "ALL",
+        "cityName": null
+      }
+    ],
+    "excludeData": [
+      {
+        "countryCode": "IN",
+        "countryName": "India",
+        "provinceCode": "TN",
+        "provinceName": "Tamil Nadu",
+        "cityCode": "NMAKL",
+        "cityName": "Namakkal"
+      },
+      {
+        "countryCode": "US",
+        "countryName": "United States",
+        "provinceCode": "CO",
+        "provinceName": "Colorado",
+        "cityCode": "ALL",
+        "cityName": null
+      }
+    ]
+  },
+  {
+    "distributorId": "DIS0004",
+    "parentDistributorId": "DIS0002",
+    "distributorName": "Distributor 4",
+    "includeData": [
+      {
+        "countryCode": "GB",
+        "countryName": "GB",
+        "provinceCode": "ALL",
+        "provinceName": null,
+        "cityCode": "ALL",
+        "cityName": null
+      }
+    ],
+    "excludeData": []
+  }
+]

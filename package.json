@@ -1,0 +1,16 @@
+{
+  "name": "realimagechallenge",
+  "version": "1.0.0",
+  "description": "challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Rajeshwaran",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.1.5",
+    "hapi": "^16.1.0",
+    "underscore": "^1.8.3"
+  }
+}
