@@ -10,6 +10,7 @@ type DataExtractController struct {
 	BaseController
 }
 
+
 func (c *DataExtractController) ExtractCities() {
 	fmt.Println("hihihi")
 	allCities, err := ioutil.ReadFile("./cities.csv")
