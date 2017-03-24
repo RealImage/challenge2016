@@ -1,0 +1,30 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;challenge2016&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../Untitled Folder" />
+      <root url="file://$PROJECT_DIR$/../app" />
+      <root url="file://$PROJECT_DIR$/../labix.org" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../gplus-quickstart-go" />
+      <root url="file://$PROJECT_DIR$/../golang.org" />
+      <root url="file://$PROJECT_DIR$/../google.golang.org" />
+      <root url="file://$PROJECT_DIR$/../googlemaps.github.io" />
+      <root url="file://$PROJECT_DIR$/../gopkg.in" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../Untitled Folder" />
+      <root url="file://$PROJECT_DIR$/../app" />
+      <root url="file://$PROJECT_DIR$/../labix.org" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../gplus-quickstart-go" />
+      <root url="file://$PROJECT_DIR$/../golang.org" />
+      <root url="file://$PROJECT_DIR$/../google.golang.org" />
+      <root url="file://$PROJECT_DIR$/../googlemaps.github.io" />
+      <root url="file://$PROJECT_DIR$/../gopkg.in" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>
