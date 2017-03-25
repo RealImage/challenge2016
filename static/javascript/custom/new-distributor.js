@@ -1,8 +1,15 @@
 myApp.controller('AppCtrl', ['$scope', function($scope) {
   var allPlaces = vm.AllCities;
-  //console.log(vm);
   $scope.countries = vm.UniqueCountries;
-  var uniqueProvinces = vm.UniqueProvinces
+  var uniqueProvinces = vm.UniqueProvinces;
+  $scope.existingDistributors = [];
+
+  if (vm.DistributorCities != null) {
+    $scope.existingDistributors = Object.keys(vm.DistributorCities);
+  }
+
+  $scope.superDistributor = "";
+  $scope.name = "";
 
   var allCountryFlag = false;
   var allProvinceFlag = false;
@@ -18,17 +25,6 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   $scope.selectedProvinces = [];
   $scope.selectedCities = [];
 
-  $scope.selectAllCountries = function() {
-    if (allCountryFlag == false) {
-      $scope.selectedCountries = [];
-      $scope.selectedCountries = vm.UniqueCountries;
-      allCountryFlag = true;
-    } else {
-      $scope.selectedCountries = [];
-      allCountryFlag = false;
-    }
-  }
-
   $scope.countryChecked = function(country) {
     var index = $scope.selectedCountries.indexOf(country);
     if(index === -1) {
@@ -42,23 +38,28 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     $scope.countryButton = false;
     $scope.countrySelection = false;
     $scope.provinceSelection = true;
-    for (var i = 0; i < $scope.selectedCountries.length; i++) {
-      for (var j = 0; j < uniqueProvinces.length; j++) {
-        if (uniqueProvinces[j][1] == $scope.selectedCountries[i]) {
-          $scope.provincesByCountry.push(uniqueProvinces[j][0]);
+    if($scope.superDistributor == "") {
+      for (var i = 0; i < $scope.selectedCountries.length; i++) {
+        for (var j = 0; j < uniqueProvinces.length; j++) {
+          if (uniqueProvinces[j][1] == $scope.selectedCountries[i]) {
+            $scope.provincesByCountry.push(uniqueProvinces[j][0]);
+          }
         }
       }
-    }
-  }
-
-  $scope.selectAllProvinces = function() {
-    if (allProvinceFlag == false) {
-      $scope.selectedProvinces = [];
-      $scope.selectedProvinces = $scope.provincesByCountry;
-      allProvinceFlag = true;
     } else {
-      $scope.selectedProvinces = [];
-      allProvinceFlag = false;
+      var distributorPlaces = vm.DistributorCities[$scope.superDistributor];
+      var tempArray = [];
+      for (var i = 0; i < distributorPlaces.length; i++) {
+        for (var j = 0; j < $scope.selectedCountries.length; j++) {
+          if(distributorPlaces[i][5] == $scope.selectedCountries[j]) {
+            var index = tempArray.indexOf(distributorPlaces[i][4]);
+            if(index == -1) {
+              tempArray.push(distributorPlaces[i][4]);
+            }
+          }
+        }
+      }
+      $scope.provincesByCountry = tempArray;
     }
   }
 
@@ -72,27 +73,53 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   }
 
 
+  // $scope.gotoCity = function() {
+  //   console.log("hi");
+  //   $scope.provinceButton = false;
+  //   $scope.provinceSelection = false;
+  //   $scope.citySelection = true;
+  //   for (var i = 0; i < $scope.selectedProvinces.length; i++) {
+  //     for (var j = 0; j < allPlaces.length; j++) {
+  //       if (allPlaces[j][4] == $scope.selectedProvinces[i]) {
+  //         var index = $scope.citiesByProvince.indexOf(allPlaces[j][3]);
+  //         if(index == -1){
+  //           $scope.citiesByProvince.push(allPlaces[j][3]);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+
   $scope.gotoCity = function() {
     $scope.provinceButton = false;
     $scope.provinceSelection = false;
     $scope.citySelection = true;
-    for (var i = 0; i < $scope.selectedProvinces.length; i++) {
-      for (var j = 0; j < allPlaces.length; j++) {
-        if (allPlaces[j][4] == $scope.selectedProvinces[i]) {
-          $scope.citiesByProvince.push(allPlaces[j][3]);
+    if($scope.superDistributor == "") {
+      for (var i = 0; i < $scope.selectedProvinces.length; i++) {
+        for (var j = 0; j < allPlaces.length; j++) {
+          if (allPlaces[j][4] == $scope.selectedProvinces[i]) {
+            var index = $scope.citiesByProvince.indexOf(allPlaces[j][3]);
+            if(index == -1){
+              $scope.citiesByProvince.push(allPlaces[j][3]);
+            }
+          }
         }
       }
-    }
-  }
-
-  $scope.selectAllCities = function() {
-    if (allCityFlag == false) {
-      $scope.selectedCities = [];
-      $scope.selectedCities = $scope.citiesByProvince;
-      allCityFlag = true;
     } else {
-      $scope.selectedCities = [];
-      allCityFlag = false;
+      var distributorPlaces = vm.DistributorCities[$scope.superDistributor];
+      var tempArray = [];
+      for (var i = 0; i < distributorPlaces.length; i++) {
+        for (var j = 0; j < $scope.selectedProvinces.length; j++) {
+          if(distributorPlaces[i][4] == $scope.selectedProvinces[j]) {
+            var index = tempArray.indexOf(distributorPlaces[i][3]);
+            if(index == -1) {
+              tempArray.push(distributorPlaces[i][3]);
+            }
+          }
+        }
+      }
+      $scope.citiesByProvince = tempArray;
     }
   }
 
@@ -103,7 +130,40 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     } else {
       $scope.selectedCities.splice(index, 1);
     }
-    console.log($scope.selectedCities);
+  }
+
+  $scope.saveDetails = function() {
+    var citiesToServer = "";
+    for (var i = 0; i < $scope.selectedCities.length; i++) {
+      citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedCities[i];
+      console.log(citiesToServer);
+    }
+    $.ajax({
+                    url: '/new',
+                    type: 'POST',
+                    dataType: 'json',
+                    data : "name=" + $scope.name + citiesToServer,
+                    success : function(data) {
+
+                        window.location = "/";
+                      
+                    }
+                });
+  }
+
+
+  $scope.selectDistributor = function(){
+    if($scope.superDistributor != ""){
+      var distributorPlaces = vm.DistributorCities[$scope.superDistributor];
+      $scope.countries = [];
+      for (var i = 0; i < distributorPlaces.length; i++) {
+        var index = $scope.countries.indexOf(distributorPlaces[i][5]);
+        if(index == -1) {
+          $scope.countries.push(distributorPlaces[i][5]);
+        }
+      }
+    }
+
   }
 
 }]);

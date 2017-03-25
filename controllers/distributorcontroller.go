@@ -4,24 +4,129 @@ import (
 	"challenge2016/helpers"
 	"log"
 	"challenge2016/viewmodels"
+	"strings"
+	"bytes"
+	"io/ioutil"
 )
 
 type DistributorController struct {
 	BaseController
 }
 
+
+func (c *DistributorController) ListDistributor() {
+
+
+	view := viewmodels.ListDistributorVM{}
+	allFiles, err := ioutil.ReadDir("./datafiles/distributors/")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var fileNameSlice []string
+
+	for _, file := range allFiles {
+		fileName := file.Name()
+		if fileName != "readme.txt" {
+			last := len(fileName) - len(".csv")
+			fileName = fileName[:last]
+			fileNameSlice = append(fileNameSlice, fileName)
+		}
+	}
+
+	view.List = fileNameSlice
+	view.PageTitle = "List"
+	c.Data["vm"] = view
+
+	c.TplName = "templates/list-distributor.html"
+
+
+
+
+}
+
+
+
 func (c *DistributorController) NewDistributor() {
+
+
+	allCities, err := helpers.DataFromFile("./datafiles/data/cities.csv")
+	if err != nil {
+		log.Println(err)
+	}
+
 	r := c.Ctx.Request
 	if(r.Method == "POST"){
+		selectedCities := c.GetStrings("selectedCities")
+		name := c.GetString("name")
+
+		var buffer bytes.Buffer
+		buffer.WriteString("City Code,Province Code,Country Code,City Name,Province Name,Country Name")
+		buffer.WriteString("\n")
+
+		for i := 0; i < len(selectedCities); i++ {
+			for j := 0; j < len(allCities); j++ {
+				if strings.Compare(selectedCities[i], allCities[j][3]) == 0 {
+					for k := 0; k < len(allCities[j]); k++ {
+						buffer.WriteString(allCities[j][k])
+						if k != len(allCities[j]) - 1 {
+							buffer.WriteString(",")
+						}
+					}
+					if i != len(selectedCities) - 1 {
+						buffer.WriteString("\n")
+					}
+				}
+			}
+		}
+
+		var fileLocation bytes.Buffer
+		fileLocation.WriteString("./datafiles/distributors/")
+		fileLocation.WriteString(name)
+		fileLocation.WriteString(".csv")
+
+		helpers.DataToFile(fileLocation.String(), buffer.String())
+
+		c.Ctx.ResponseWriter.Write([]byte("true"))
 
 	} else {
 		view := viewmodels.NewDistributorVM{}
 		view.PageTitle = "New Distributor"
-		allCities, err := helpers.DataFromFile("./cities.csv")
-		if err != nil {
-			log.Println(err)
-		}
 		view.AllCities = allCities
+
+		allFiles, err := ioutil.ReadDir("./datafiles/distributors/")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var fileNameSlice []string
+
+		for _, file := range allFiles {
+			fileName := file.Name()
+			if fileName != "readme.txt" {
+				last := len(fileName) - len(".csv")
+				fileName = fileName[:last]
+				fileNameSlice = append(fileNameSlice, fileName)
+			}
+		}
+
+		distributorCitiesMap := make(map[string][][]string)
+		for i := 0; i < len(fileNameSlice); i++ {
+			var fileLocation bytes.Buffer
+			fileLocation.WriteString("./datafiles/distributors/")
+			fileLocation.WriteString(fileNameSlice[i])
+			fileLocation.WriteString(".csv")
+			distributorCities, err := helpers.DataFromFile(fileLocation.String())
+			if err != nil {
+				log.Println(err)
+			}
+
+			distributorCitiesMap[fileNameSlice[i]] = distributorCities
+		}
+
+		view.DistributorCities = distributorCitiesMap
+
+
 
 		//var uniqueCountries, uniqueProvinces, uniqueCities []string
 		var uniqueCountries, tempUniqueProvinces []string

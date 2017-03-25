@@ -10,6 +10,7 @@
       <root url="file://$PROJECT_DIR$/../google.golang.org" />
       <root url="file://$PROJECT_DIR$/../googlemaps.github.io" />
       <root url="file://$PROJECT_DIR$/../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../.git" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
@@ -22,6 +23,7 @@
       <root url="file://$PROJECT_DIR$/../google.golang.org" />
       <root url="file://$PROJECT_DIR$/../googlemaps.github.io" />
       <root url="file://$PROJECT_DIR$/../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../.git" />
     </SOURCES>
     <excluded>
       <root url="file://$PROJECT_DIR$" />

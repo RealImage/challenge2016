@@ -5,4 +5,11 @@ type NewDistributorVM struct {
 	UniqueCountries		[]string
 	UniqueProvinces		[][]string
 	AllCities		[][]string
+	DistributorCities	map[string][][]string
+}
+
+
+type ListDistributorVM struct {
+	PageTitle		string
+	List			[]string
 }

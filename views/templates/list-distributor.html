@@ -1,0 +1,17 @@
+<<< template "layout/layout.html" . >>>
+<<< define "content" >>>
+  <div ng-controller="AppCtrl">
+    <a href="/new">Add new distributors</a>
+    <h3>List of Distributors</h3>
+    <div class="newDiv" ng-repeat="item in list | orderBy">
+        <label ng-bind="item"></label>
+    </div>
+  </div>
+<<< end >>>
+
+<<< define "scripts" >>>
+    <script src = "/static/javascript/custom/list-distributor.js"></script>
+    <script type="text/javascript">
+        var vm = <<< .vm>>>;
+    </script>
+<<< end >>>
