@@ -7,5 +7,6 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.MainController{})
-	beego.Router("/extract", &controllers.DataExtractController{}, "*:ExtractCities")
+	beego.Router("/new", &controllers.DistributorController{}, "*:NewDistributor")
 }
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><<< .vm.PageTitle >>></title>
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE, NO-STORE, must-revalidate">
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="EXPIRES" CONTENT=0>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet/css" href="/static/stylesheet/bootstrap.min.css">
+    <link rel="stylesheet/less" type="text/css" href="/static/css/style.css">
+    <link rel="stylesheet/less" type="text/css" href="/static/bootstrap/bootstrap.less">
+    <script src="/static/javascript/less.js"></script>
+    <script src="/static/javascript/jquery.min.js"></script>
+    <script src="/static/javascript/bootstrap.min.js"></script>
+    <script src="/static/javascript/output.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.7/angular.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script> -->
+    <script src="/static/javascript/custom/app.js"></script>
+    <<< block "scripts" . >>><<< end >>>
+</head>
+<body ng-app="myApp">
+    <<< block "content" . >>><<< end >>>
+</body>
+</html>

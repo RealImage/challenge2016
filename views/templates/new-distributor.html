@@ -1,0 +1,52 @@
+<<< template "layout/layout.html" . >>>
+<<< define "content" >>>
+  <div ng-controller="AppCtrl">
+      <form>
+          <h3>New Distributor</h3>
+          <div class="newDiv">
+              <label>Name: </label>
+              <input type="text">
+          </div>
+          <div class="newDiv" ng-if="countrySelection == true">
+              <label>Countries: </label>
+              <label><input type="checkbox" ng-model="allCountriesChecked" ng-click="selectAllCountries()">Select All</label>
+              <button type="button" ng-click="gotoProvince()" ng-if="selectedCountries.length > 0" ng-disabled="countryButton == false">Done here</button>
+              <div>
+                <span ng-repeat="country in countries | orderBy">
+                    <label><input  type="checkbox" ng-click="countryChecked(country)" ng-checked="allCountriesChecked">{{country}}</label>
+                </span>
+              </div>
+          </div>
+
+          <div class="newDiv" ng-if="provinceSelection == true">
+              <label>Provinces: </label>
+              <label><input type="checkbox" ng-model="allProvincesChecked" ng-click="selectAllProvinces()">Select All</label>
+              <button type="button" ng-click="gotoCity()" ng-if="selectedProvinces.length > 0" ng-disabled="provinceButton == false">Done here</button>
+              <div>
+                <span ng-repeat="province in provincesByCountry | orderBy">
+                    <label><input type="checkbox" ng-click="provinceChecked(province)" ng-checked="allProvincesChecked">{{province}}</label>
+                </span>
+              </div>
+          </div>
+
+          <div class="newDiv" ng-if="citySelection == true">
+              <label>Cities: </label>
+              <label><input type="checkbox" ng-model="allCitiesChecked" ng-click="selectAllCities()">Select All</label>
+
+              <div>
+                <span ng-repeat="city in citiesByProvince | orderBy">
+                    <label><input type="checkbox" ng-click="cityChecked(city)" ng-checked="allCitiesChecked">{{city}}</label>
+                </span>
+              </div>
+          </div>
+
+      </form>
+  </div>
+<<< end >>>
+
+<<< define "scripts" >>>
+    <script src = "/static/javascript/custom/new-distributor.js"></script>
+    <script type="text/javascript">
+        var vm = <<< .vm>>>;
+    </script>
+<<< end >>>

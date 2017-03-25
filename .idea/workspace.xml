@@ -1,7 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ae93a0a-317b-4392-9ea7-8fada1885fcd" name="Default" comment="" />
+    <list default="true" id="4ae93a0a-317b-4392-9ea7-8fada1885fcd" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/controllers/distributorcontroller.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpers/datafromfilehelper.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpers/stringinslicehelper.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/.csscomb.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/.csslintrc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_alerts.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_badges.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_breadcrumbs.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_button-groups.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_buttons.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_carousel.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_close.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_code.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_component-animations.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_dropdowns.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_forms.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_glyphicons.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_grid.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_input-groups.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_jumbotron.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_labels.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_list-group.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_media.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_mixins.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_modals.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_navbar.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_navs.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_normalize.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_pager.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_pagination.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_panels.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_popovers.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_print.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_progress-bars.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_responsive-embed.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_responsive-utilities.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_scaffolding.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_tables.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_theme.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_thumbnails.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_tooltip.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_type.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_utilities.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_variables.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/_wells.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/alerts.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/badges.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/bootstrap.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/breadcrumbs.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/button-groups.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/buttons.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/carousel.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/close.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/code.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/component-animations.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/dropdowns.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/forms.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/glyphicons.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/googlebootstrap.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/grid.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/input-groups.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/jumbotron.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/labels.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/list-group.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/media.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_alerts.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_background-variant.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_border-radius.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_buttons.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_center-block.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_clearfix.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_forms.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_gradients.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_grid-framework.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_grid.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_hide-text.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_image.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_labels.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_list-group.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_nav-divider.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_nav-vertical-align.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_opacity.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_pagination.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_panels.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_progress-bar.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_reset-filter.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_reset-text.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_resize.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_responsive-visibility.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_size.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_tab-focus.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_table-row.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_text-emphasis.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_text-overflow.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/mixins/_vendor-prefixes.scss" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/modals.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/navbar.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/navs.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/normalize.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/pager.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/pagination.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/panels.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/popovers.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/print.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/progress-bars.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/responsive-utilities.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/scaffolding.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/tables.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/theme.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/thumbnails.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/tooltip.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/type.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/utilities.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/variables.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/bootstrap/wells.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/css/style.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/javascript/bootstrap.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/javascript/jquery-migrate.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/javascript/jquery.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/javascript/less.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/javascript/output.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/less/style.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/less/styles.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/stylesheet/bootstrap.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/stylesheet/bootstrap.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/viewmodels/distributorviewmodel.go" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/templates/new-distributor.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/controllers/dataextractcontroller.go" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/app.conf" afterPath="$PROJECT_DIR$/conf/app.conf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/default.go" afterPath="$PROJECT_DIR$/controllers/default.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routers/router.go" afterPath="$PROJECT_DIR$/routers/router.go" />
+    </list>
     <ignored path="challenge2016.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -21,49 +155,99 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.conf" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/conf/app.conf">
+      <file leaf-file-name="default.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controllers/default.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state relative-caret-position="216">
+              <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="basecontroller.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controllers/basecontroller.go">
+      <file leaf-file-name="datafromfilehelper.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpers/datafromfilehelper.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="default_test.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/default_test.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="18" column="36" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="36" />
+            <state relative-caret-position="349">
+              <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
               <folding>
-                <marker date="1490376535794" expanded="false" signature="24:201" ph="..." />
+                <element signature="e#17#60#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dataextractcontroller.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/controllers/dataextractcontroller.go">
+      <file leaf-file-name="router.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routers/router.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="8" column="56" selection-start-line="8" selection-start-column="56" selection-end-line="8" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="distributorcontroller.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/controllers/distributorcontroller.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="40" column="54" selection-start-line="40" selection-start-column="54" selection-end-line="40" selection-end-column="54" />
+              <folding>
+                <element signature="e#21#91#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="distributorviewmodel.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/viewmodels/distributorviewmodel.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="5" column="23" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_grid.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/bootstrap/mixins/_grid.scss">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="less.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/javascript/less.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="stringinslicehelper.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/helpers/stringinslicehelper.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -77,6 +261,18 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/tests/default_test.go" />
+        <option value="$PROJECT_DIR$/controllers/default.go" />
+        <option value="$PROJECT_DIR$/views/templates/home.html" />
+        <option value="$PROJECT_DIR$/views/templates/new-distributor.html" />
+        <option value="$PROJECT_DIR$/controllers/dataextractcontroller.go" />
+        <option value="$PROJECT_DIR$/helpers/datafromfile.go" />
+        <option value="$PROJECT_DIR$/helpers/stringtoslicehelper.go" />
+        <option value="$PROJECT_DIR$/helpers/datafromfilehelper.go" />
+        <option value="$PROJECT_DIR$/routers/router.go" />
+        <option value="$PROJECT_DIR$/helpers/stringinslicehelper.go" />
+        <option value="$PROJECT_DIR$/conf/app.conf" />
+        <option value="$PROJECT_DIR$/viewmodels/distributorviewmodel.go" />
+        <option value="$PROJECT_DIR$/controllers/distributorcontroller.go" />
       </list>
     </option>
   </component>
@@ -144,6 +340,148 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="viewmodels" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="less" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javascript" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="routers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="helpers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="challenge2016" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -169,9 +507,12 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GO_FMT" value="false" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="DefaultGoTemplateProperty" value="Go File" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -466,7 +807,14 @@
       <option name="project" value="LOCAL" />
       <updated>1490376538725</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Beego integration">
+      <created>1490377236813</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1490377236813</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -515,26 +863,12 @@
     <option name="LAST_COMMIT_MESSAGE" value="Beego integration" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/conf/app.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/basecontroller.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/conf/app.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -561,11 +895,111 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/dataextractcontroller.go">
+    <entry file="file://$PROJECT_DIR$/controllers/basecontroller.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/templates/new-distributor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/dataextractcontroller.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/stringtoslicehelper.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routers/router.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="8" column="56" selection-start-line="8" selection-start-column="56" selection-end-line="8" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/stringinslicehelper.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/bootstrap/mixins/_grid.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/javascript/less.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/app.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/default.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helpers/datafromfilehelper.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+          <folding>
+            <element signature="e#17#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/viewmodels/distributorviewmodel.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="23" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/distributorcontroller.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="40" column="54" selection-start-line="40" selection-start-column="54" selection-end-line="40" selection-end-column="54" />
+          <folding>
+            <element signature="e#21#91#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
