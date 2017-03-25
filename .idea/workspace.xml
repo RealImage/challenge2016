@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae93a0a-317b-4392-9ea7-8fada1885fcd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/helpers/datatofilehelper.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/templates/list-distributor.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cities.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/controllers/default.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/views/index.tpl" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/GOPATH__challenge2016_.xml" afterPath="$PROJECT_DIR$/.idea/libraries/GOPATH__challenge2016_.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ReadMe.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/challenge2016" afterPath="$PROJECT_DIR$/challenge2016" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/distributorcontroller.go" afterPath="$PROJECT_DIR$/controllers/distributorcontroller.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routers/router.go" afterPath="$PROJECT_DIR$/routers/router.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/javascript/custom/new-distributor.js" afterPath="$PROJECT_DIR$/static/javascript/custom/new-distributor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viewmodels/distributorviewmodel.go" afterPath="$PROJECT_DIR$/viewmodels/distributorviewmodel.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/templates/new-distributor.html" afterPath="$PROJECT_DIR$/views/templates/new-distributor.html" />
     </list>
     <ignored path="challenge2016.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,7 +36,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="distributorcontroller.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="distributorcontroller.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/distributorcontroller.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="342">
@@ -55,6 +44,16 @@
               <folding>
                 <element signature="e#21#124#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReadMe.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ReadMe.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -137,6 +136,7 @@
         <option value="$PROJECT_DIR$/views/templates/list-distributor.html" />
         <option value="$PROJECT_DIR$/viewmodels/distributorviewmodel.go" />
         <option value="$PROJECT_DIR$/controllers/distributorcontroller.go" />
+        <option value="$PROJECT_DIR$/ReadMe.txt" />
       </list>
     </option>
   </component>
@@ -913,6 +913,14 @@
           <folding>
             <element signature="e#21#124#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ReadMe.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
