@@ -1,0 +1,46 @@
+[{
+	"id" : "distone",
+	"include" : [
+		{
+			"countryname" : "India",
+			"provision" : "Andhra pradesh",
+			"city" : ""
+		},
+		{
+			"countryname" : "India",
+			"provision" : "Karnataka",
+			"city" : ""
+		}
+	],
+	"exclude" : [
+		{
+			"countryname" : "India",
+			"provision" : "Andhra pradesh",
+			"city" : "Vijayawada"
+		},
+		{
+			"countryname" : "India",
+			"provision" : "Andhra pradesh",
+			"city" : "Mysore"
+		}
+	],
+	"sub-dest" : [
+		{
+			"id" : "disttwo",
+			"include" : [
+				{
+					"countryname" : "India",
+					"provision" : "Andhra pradesh",
+					"city" : "srikakulam"
+				}
+			],
+			"exclude" : [
+				{
+					"countryname" : "India",
+					"provision" : "Andhra pradesh",
+					"city" : "Vijayanagaram"
+				}
+			]
+		}		
+	]
+}]
