@@ -1,0 +1,19 @@
+{
+  "name": "task",
+  "version": "1.0.0",
+  "description": "distributers permissions based on authrization",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jagadeeswara rao patta",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "fast-csv": "^2.4.0",
+    "fs": "0.0.1-security",
+    "jsonfile": "^2.4.0",
+    "nodemon": "^1.11.0"
+  }
+}
