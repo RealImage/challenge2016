@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+/* Func for extracting the data from the file and store it in a slice of slice */
 func DataFromFile(fileLocation string) ([][]string, error) {
 
 	file, err := os.Open(fileLocation)

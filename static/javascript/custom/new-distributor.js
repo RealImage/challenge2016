@@ -4,6 +4,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   var uniqueProvinces = vm.UniqueProvinces;
   $scope.existingDistributors = [];
 
+  /*Condition for checking whether there are any already created distributors*/
   if (vm.DistributorCities != null) {
     $scope.existingDistributors = Object.keys(vm.DistributorCities);
   }
@@ -25,6 +26,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   $scope.selectedProvinces = [];
   $scope.selectedCities = [];
 
+  /*Function for selecting and deselecting a country*/
   $scope.countryChecked = function(country) {
     var index = $scope.selectedCountries.indexOf(country);
     if(index === -1) {
@@ -34,6 +36,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     }
   }
 
+  /*Function for creating and displaying province array*/
   $scope.gotoProvince = function() {
     $scope.countryButton = false;
     $scope.countrySelection = false;
@@ -63,6 +66,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     }
   }
 
+  /*Function for selecting and deselecting provinces*/
   $scope.provinceChecked = function(province) {
     var index = $scope.selectedProvinces.indexOf(province);
     if(index === -1) {
@@ -72,25 +76,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     }
   }
 
-
-  // $scope.gotoCity = function() {
-  //   console.log("hi");
-  //   $scope.provinceButton = false;
-  //   $scope.provinceSelection = false;
-  //   $scope.citySelection = true;
-  //   for (var i = 0; i < $scope.selectedProvinces.length; i++) {
-  //     for (var j = 0; j < allPlaces.length; j++) {
-  //       if (allPlaces[j][4] == $scope.selectedProvinces[i]) {
-  //         var index = $scope.citiesByProvince.indexOf(allPlaces[j][3]);
-  //         if(index == -1){
-  //           $scope.citiesByProvince.push(allPlaces[j][3]);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-
+  /*Function for creating and displaying city array*/
   $scope.gotoCity = function() {
     $scope.provinceButton = false;
     $scope.provinceSelection = false;
@@ -123,6 +109,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     }
   }
 
+  /*Function for selecting and deselecting cities*/
   $scope.cityChecked = function(city) {
     var index = $scope.selectedCities.indexOf(city);
     if(index === -1) {
@@ -132,6 +119,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     }
   }
 
+  /*Function for collecting filled data and save them*/
   $scope.saveDetails = function() {
     var citiesToServer = "";
     for (var i = 0; i < $scope.selectedCities.length; i++) {
@@ -146,12 +134,12 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
                     success : function(data) {
 
                         window.location = "/";
-                      
+
                     }
                 });
   }
 
-
+  /*Function for selecting existing distributors and adding them as super distributors fro newly creating distributors*/
   $scope.selectDistributor = function(){
     if($scope.superDistributor != ""){
       var distributorPlaces = vm.DistributorCities[$scope.superDistributor];

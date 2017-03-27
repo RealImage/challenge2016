@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+/* Writing data to the file*/
 func DataToFile(fileLocation, dataString string) {
 
 	file, err := os.Create(fileLocation)

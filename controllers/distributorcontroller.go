@@ -14,6 +14,7 @@ type DistributorController struct {
 }
 
 
+/*Func to display the list page*/
 func (c *DistributorController) ListDistributor() {
 
 
@@ -46,17 +47,17 @@ func (c *DistributorController) ListDistributor() {
 }
 
 
-
+/*Func to display the new page*/
 func (c *DistributorController) NewDistributor() {
 
-
+	// Collecting all places from file
 	allCities, err := helpers.DataFromFile("./datafiles/data/cities.csv")
 	if err != nil {
 		log.Println(err)
 	}
 
 	r := c.Ctx.Request
-	if(r.Method == "POST"){
+	if(r.Method == "POST"){ // Add new Distributor
 		selectedCities := c.GetStrings("selectedCities")
 		name := c.GetString("name")
 
@@ -80,6 +81,7 @@ func (c *DistributorController) NewDistributor() {
 			}
 		}
 
+		// Write the details to file
 		var fileLocation bytes.Buffer
 		fileLocation.WriteString("./datafiles/distributors/")
 		fileLocation.WriteString(name)
@@ -89,7 +91,7 @@ func (c *DistributorController) NewDistributor() {
 
 		c.Ctx.ResponseWriter.Write([]byte("true"))
 
-	} else {
+	} else { // Display the Add page
 		view := viewmodels.NewDistributorVM{}
 		view.PageTitle = "New Distributor"
 		view.AllCities = allCities
@@ -99,6 +101,7 @@ func (c *DistributorController) NewDistributor() {
 			log.Fatal(err)
 		}
 
+		// Reading existing distributor details
 		var fileNameSlice []string
 
 		for _, file := range allFiles {
@@ -126,9 +129,7 @@ func (c *DistributorController) NewDistributor() {
 
 		view.DistributorCities = distributorCitiesMap
 
-
-
-		//var uniqueCountries, uniqueProvinces, uniqueCities []string
+		// Collecting Details for add page
 		var uniqueCountries, tempUniqueProvinces []string
 		var uniqueProvinces [][]string
 		for i := 0; i < len(allCities); i++ {
