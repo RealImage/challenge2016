@@ -24,12 +24,12 @@ func (permissions PermissionMatrix) IsAllowed(location string) bool {
 		}
 		for _, cities := range permissions[country] {
 			for _, isAllowed := range cities {
-				if !isAllowed {
-					return false
+				if isAllowed {
+					return true
 				}
 			}
 		}
-		return true
+		return false
 
 	} else if len(parts) == 2 {
 		province, country := parts[0], parts[1]
@@ -37,11 +37,11 @@ func (permissions PermissionMatrix) IsAllowed(location string) bool {
 			return false
 		}
 		for _, isAllowed := range permissions[country][province] {
-			if !isAllowed {
-				return false
+			if isAllowed {
+				return true
 			}
 		}
-		return true
+		return false
 
 	} else if len(parts) == 3 {
 		city, province, country := parts[0], parts[1], parts[2]
@@ -93,6 +93,36 @@ func (permissions PermissionMatrix) Update(location string, flag bool) errors.Ap
 			return nil
 		}
 		permissions[country][province][city] = flag
+	}
+	return nil
+}
+
+// copy the location permissions from another(parent) permissions object
+func (permissions PermissionMatrix) Copy(location string, parent PermissionMatrix) errors.ApplicationError {
+	location = strings.TrimSpace(location)
+	if len(location) == 0 {
+		return nil
+	}
+	parts := strings.Split(location, "-")
+	if len(parts) > 3 {
+		return nil
+	}
+
+	if len(parts) == 1 {
+		country := parts[0]
+		for province, cities := range parent[country] {
+			for city, isAllowed := range cities {
+				permissions[country][province][city] = isAllowed
+			}
+		}
+	} else if len(parts) == 2 {
+		province, country := parts[0], parts[1]
+		for city, isAllowed := range parent[country][province] {
+			permissions[country][province][city] = isAllowed
+		}
+	} else if len(parts) == 3 {
+		city, province, country := parts[0], parts[1], parts[2]
+		permissions[country][province][city] = parent[country][province][city]
 	}
 	return nil
 }

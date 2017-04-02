@@ -18,23 +18,17 @@ func (distributor *Distributor) Initialize(name string, parent *Distributor) err
 	return nil
 }
 
-// check whether the location is in the scope of the distributor
-func (distributor *Distributor) HasScope(location string) bool {
-	// if it is NOT a sub-distributor, then it has scope to all locations
-	if distributor.parent == nil {
-		return true
-	} else { // otherwise, the scope is limited to scope of the parent distributor
-		return distributor.parent.permissions.IsAllowed(location)
-	}
-}
-
 // include the location to the distributor permissions
 func (distributor *Distributor) Include(location string) errors.ApplicationError {
-	// if the distributor has location in its scope, include the location
-	if distributor.HasScope(location) {
+	// if it is NOT a sub-distributor, then it has scope to all locations
+	if distributor.parent == nil {
 		return distributor.permissions.Include(location)
-	} else { // otherwise, raise error
-		return DistributionScopeError(location)
+	} else { // otherwise, the scope is limited to scope of the parent distributor
+		if distributor.parent.permissions.IsAllowed(location) {
+			return distributor.permissions.Copy(location, distributor.parent.permissions)
+		} else {
+			return DistributionScopeError(location)
+		}
 	}
 }
 
