@@ -15,6 +15,20 @@ class DistributorsController < ApplicationController
     @distributor = Hash.new
   end
 
+  def check
+    @distributor = Hash.new
+
+    unless params["distributor"].nil? || params["distributor"].empty?
+      unless params["country"].nil? || params["country"].empty?
+        @message = check_permission
+      else
+        @message = "Please enter a location to check permission!"
+      end
+    else
+      @message = "Please select a distributor to check for permissions!"
+    end
+  end
+
   # GET /distributors/1/edit
   def edit
   end
@@ -71,6 +85,10 @@ class DistributorsController < ApplicationController
 
     def set_locations
       @locations = CSV.read(Rails.root.join('db', 'cities.csv'), :headers=>true)
+    end
+
+    def check_permission
+      return "The distributor has/doesn't have permissions to ditribute in this location!"
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
