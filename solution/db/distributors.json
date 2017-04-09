@@ -1,0 +1,14 @@
+{
+  "1": {
+    "name": "one",
+    "parent_id": "2",
+    "include": [],
+    "exclude": []
+  },
+  "2": {
+    "name": "two",
+    "parent_id": "",
+    "include": [],
+    "exclude": []
+  }
+}

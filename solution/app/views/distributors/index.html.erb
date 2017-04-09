@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Distributors</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Parent Distributor</th>
+      <th> </th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <% @distributors.each do |id, data| %>
+      <tr>
+        <td> <%= id %> </td>
+        <td> <%= data["name"] %> </td>
+        <td> <%= data["parent_id"] %> </td>
+        <td> <%= link_to 'edit', edit_distributor_path(id) %> | <%= link_to 'delete', "#" %> </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Distributor', new_distributor_path %>

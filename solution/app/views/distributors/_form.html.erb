@@ -1,0 +1,17 @@
+<%= form_tag(form_data[0]) do %>
+  <%= label_tag "Name:"  %>
+  <%= text_field_tag(:q, '', class: 'form-control', style: 'width: 200px') %>
+  <%= label_tag "Super_Distributor:"  %>
+  <%= select_tag "parent_distributor", options_for_select(@distributors.values.collect{|data| data["name"]}), include_blank: true, prompt: "-Distributor-" %>
+  <%= label_tag "Permitted Locations:"  %>
+    <%= select_tag "permitted_country", options_for_select(@locations["Country Name"].uniq), id: "Country", include_blank: true, prompt: "-All-" %>
+    <%= select_tag "permitted_province", options_for_select(@locations["Province Name"].uniq), include_blank: true, prompt: "-All-" %>
+    <%= select_tag "permitted_city", options_for_select(@locations["City Name"].uniq), include_blank: true, prompt: "-All-" %>
+  <%= label_tag "Restricted Locations:"  %>
+    <%= select_tag "restricted_country", options_for_select(@locations["Country Name"].uniq), include_blank: true, prompt: "-All-" %>
+    <%= select_tag "restricted_province", options_for_select(@locations["Province Name"].uniq), include_blank: true, prompt: "-All-" %>
+    <%= select_tag "restricted_city", options_for_select(@locations["City Name"].uniq), include_blank: true, prompt: "-All-" %>
+  <div class="actions">
+    <%= submit_tag yield(:button_text) %>
+  </div>
+<% end %>

@@ -1,0 +1,7 @@
+<% provide(:button_text, 'Save changes') %>
+
+<h1>Editing Distributor</h1>
+
+<%= render 'form', form_data: [{controller: "distributors", action: "update"}, method: 'patch'] %>
+
+<%= link_to 'Back', distributors_path %>
