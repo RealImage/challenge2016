@@ -8,7 +8,7 @@
   "2": {
     "name": "two",
     "parent_id": "1",
-    "include": ["IN"],
+    "include": ["IN", "CN"],
     "exclude": ["TN_IN"]
   },
   "3": {
