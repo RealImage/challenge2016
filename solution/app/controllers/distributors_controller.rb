@@ -1,11 +1,13 @@
 class DistributorsController < ApplicationController
+  before_action :set_distributors, except: [:destroy]
   before_action :set_distributor, only: [:edit, :update, :destroy]
+  before_action :set_locations, except: [:index, :destroy]
+
   require 'json'
   require 'csv'
   # GET /distributors
   # GET /distributors.json
   def index
-    @distributors = JSON.parse(File.read(Rails.root.join('db', 'distributors.json')))
   end
 
   # GET /distributors/new
@@ -15,7 +17,6 @@ class DistributorsController < ApplicationController
 
   # GET /distributors/1/edit
   def edit
-    @locations = CSV.read(Rails.root.join('db', 'cities.csv'), :headers=>true)
   end
 
   # POST /distributors
@@ -61,8 +62,15 @@ class DistributorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_distributor
-      @distributors = JSON.parse(File.read(Rails.root.join('db', 'distributors.json')))
       @distributor = @distributors[params[:id]]
+    end
+
+    def set_distributors
+      @distributors = JSON.parse(File.read(Rails.root.join('db', 'distributors.json')))
+    end
+
+    def set_locations
+      @locations = CSV.read(Rails.root.join('db', 'cities.csv'), :headers=>true)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
