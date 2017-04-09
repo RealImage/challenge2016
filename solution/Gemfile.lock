@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     actioncable (5.0.2)
       actionpack (= 5.0.2)
@@ -75,6 +75,8 @@ GEM
     nio4r (2.0.0)
     nokogiri (1.7.1-x64-mingw32)
       mini_portile2 (~> 2.1.0)
+    nokogiri (1.7.1-x86-mingw32)
+      mini_portile2 (~> 2.1.0)
     puma (3.8.2)
     rack (2.0.1)
     rack-test (0.6.3)
@@ -140,6 +142,7 @@ GEM
 
 PLATFORMS
   x64-mingw32
+  x86-mingw32
 
 DEPENDENCIES
   byebug
