@@ -1,6 +1,5 @@
 <% provide(:button_text, 'Create Distributor') %>
-
-<h1>New Distributor</h1>
+<% provide(:title, 'New Distributor') %>
 
 <%= render 'form', form_data: [{controller: "distributors", action: "create"}, method: 'post'] %>
 

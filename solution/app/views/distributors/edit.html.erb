@@ -1,6 +1,5 @@
 <% provide(:button_text, 'Save changes') %>
-
-<h1>Editing Distributor</h1>
+<% provide(:title, 'Editing Distributor') %>
 
 <%= render 'form', form_data: [{controller: "distributors", action: "update"}, method: 'patch'] %>
 
