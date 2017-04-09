@@ -1,6 +1,6 @@
 class DistributorsController < ApplicationController
-  before_action :set_distributors, except: [:destroy]
-  before_action :set_distributor, only: [:edit, :update, :destroy]
+  before_action :set_distributors
+  before_action :set_distributor, only: [:edit, :update]
   before_action :set_locations, except: [:index, :destroy]
 
   require 'json'
@@ -16,8 +16,6 @@ class DistributorsController < ApplicationController
   end
 
   def check
-    @distributor = Hash.new
-
     unless params["distributor_id"].nil? || params["distributor_id"].empty?
       unless params["country"].nil? || params["country"].empty?
         if check_permission(params["distributor_id"], params["country"], params["province"], params["city"])
@@ -40,41 +38,74 @@ class DistributorsController < ApplicationController
   # POST /distributors
   # POST /distributors.json
   def create
-    @distributor = Distributor.new(distributor_params)
+    included_locations = create_location_template(params[:permitted_city_0], params[:permitted_province_0], params[:permitted_country_0])
+    excluded_locations = create_location_template(params[:restricted_city_0], params[:restricted_province_0], params[:restricted_country_0])
 
-    respond_to do |format|
-      if @distributor.save
-        format.html { redirect_to @distributor, notice: 'Distributor was successfully created.' }
-        format.json { render :show, status: :created, location: @distributor }
-      else
-        format.html { render :new }
-        format.json { render json: @distributor.errors, status: :unprocessable_entity }
-      end
-    end
+    @distributor = {
+      name: params[:name],
+      parent_id: params["parent_distributor"],
+      include: [included_locations],
+      exclude: [excluded_locations]
+    }
+
+    distributor_id = @distributors.keys.map {|a| a.to_i }.max.next.to_s
+
+    @distributors[distributor_id] = @distributor
+    File.open(Rails.root.join('db', 'distributors.json'), 'w') { |f| f.write(JSON.pretty_generate(@distributors)) }
+    redirect_to root_url
   end
 
   # PATCH/PUT /distributors/1
   # PATCH/PUT /distributors/1.json
   def update
-    respond_to do |format|
-      if @distributor.update(distributor_params)
-        format.html { redirect_to @distributor, notice: 'Distributor was successfully updated.' }
-        format.json { render :show, status: :ok, location: @distributor }
-      else
-        format.html { render :edit }
-        format.json { render json: @distributor.errors, status: :unprocessable_entity }
+    included_array = []
+    count = 0
+    loop do
+      temp_city_symbol = "permitted_city_" + count.to_s
+      temp_province_symbol = "permitted_province_" + count.to_s
+      temp_country_symbol = "permitted_country_" + count.to_s
+      break if params[temp_country_symbol.to_sym].nil?
+      count += 1
+      next if params[temp_country_symbol.to_sym].empty?
+      unless create_location_template(params[temp_city_symbol.to_sym], params[temp_province_symbol.to_sym], params[temp_country_symbol.to_sym])
+        return
       end
+      included_array.push(create_location_template(params[temp_city_symbol.to_sym], params[temp_province_symbol.to_sym], params[temp_country_symbol.to_sym]))
     end
+
+    excluded_array = []
+    count = 0
+    loop do
+      temp_city_symbol = "restricted_city_" + count.to_s
+      temp_province_symbol = "restricted_province_" + count.to_s
+      temp_country_symbol = "restricted_country_" + count.to_s
+      break if params[temp_country_symbol.to_sym].nil?
+      count += 1
+      next if params[temp_country_symbol.to_sym].empty?
+      unless create_location_template(params[temp_city_symbol.to_sym], params[temp_province_symbol.to_sym], params[temp_country_symbol.to_sym])
+        return
+      end
+      excluded_array.push(create_location_template(params[temp_city_symbol.to_sym], params[temp_province_symbol.to_sym], params[temp_country_symbol.to_sym]))
+    end
+
+    @distributor = {
+      name: params[:name],
+      parent_id: params["parent_distributor"],
+      include: included_array,
+      exclude: excluded_array
+    }
+
+    @distributors[params[:id]] = @distributor
+    File.open(Rails.root.join('db', 'distributors.json'), 'w') { |f| f.write(JSON.pretty_generate(@distributors)) }
+    redirect_to root_url
   end
 
   # DELETE /distributors/1
   # DELETE /distributors/1.json
   def destroy
-    @distributor.destroy
-    respond_to do |format|
-      format.html { redirect_to distributors_url, notice: 'Distributor was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @distributors.delete(params[:id])
+    File.open(Rails.root.join('db', 'distributors.json'), 'w') { |f| f.write(JSON.pretty_generate(@distributors)) }
+    redirect_to root_url
   end
 
   private
@@ -137,8 +168,27 @@ class DistributorsController < ApplicationController
       return false
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def distributor_params
-      params.fetch(:distributor, {})
+    def create_location_template(city, province, country)
+      if country.empty?
+        flash[:danger] = "Some issue with locations"
+        redirect_to root_url
+        return false
+      elsif province.empty?
+        return "#{country}"
+      elsif city.empty?
+        if @locations.select { |x| x["Province Code"] == province && x["Country Code"] == country }.count.zero?
+          flash[:danger] = "Province location doesn't matched!!!"
+          redirect_to root_url
+          return false
+        end
+        return "#{province}_#{country}"
+      else
+        if @locations.select { |x| x["City Code"] == city && x["Province Code"] == province && x["Country Code"] == country }.count.zero?
+          flash[:danger] = "City and Province location doesn't matched!!!"
+          redirect_to root_url
+          return false
+        end
+        return "#{city}_#{province}_#{country}"
+      end
     end
 end

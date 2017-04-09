@@ -17,7 +17,10 @@
         <td> <%= id %> </td>
         <td> <%= data["name"] %> </td>
         <td> <%= data["parent_id"] %> </td>
-        <td> <%= link_to 'edit', edit_distributor_path(id) %> | <%= link_to 'delete', "#" %> </td>
+        <td> <%= link_to 'edit', edit_distributor_path(id) %> |
+          <%= link_to 'delete', distributor_path(id),
+          method: :delete,
+          data: { confirm: "You sure?" } %> </td>
       </tr>
     <% end %>
   </tbody>
