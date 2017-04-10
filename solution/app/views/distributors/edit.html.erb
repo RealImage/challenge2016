@@ -11,6 +11,8 @@
   <% unless @distributor.empty? %>
     <%#= included province %>
     <% count = 1 %>
+    <b><%= label_tag "Edit Existing location" %></b>
+    <%= label_tag "Permitted Locations:"  %>
     <% @distributor['include'].each do |location| %>
       <% default_city = '' %>
       <% default_province = '' %>
@@ -27,18 +29,18 @@
       <% elsif location.split('_').count == 1 %>
         <% default_country = location %>
       <% end %>
-      <b><%= label_tag "Edit Existing location" %></b>
-      <%= label_tag "Permitted Locations:"  %>
       <%= select_tag "permitted_country_" + count.to_s, options_for_select((@locations.map {|x| [ x["Country Name"], x["Country Code"] ] }).compact.uniq.sort, default_country), id: "Country", prompt: "-Country-" %>
-      <%= select_tag "permitted_province_" + count.to_s, options_for_select((@locations.map {|x| [ x["Province Name"], x["Province Code"] ] }).compact.uniq.sort, default_province), prompt: "-Province-" %>
-      <%= text_field_tag("permitted_city_" + count.to_s, default_city) %>
+      <%#= select_tag "permitted_province_" + count.to_s, options_for_select((@locations.map {|x| [ x["Province Name"], x["Province Code"] ] }).compact.uniq.sort, default_province), prompt: "-Province-" %>
+      <%= text_field_tag("permitted_province_" + count.to_s, default_province, placeholder: '-Province-') %>
       <%#= select_tag "permitted_city_" + count.to_s, options_for_select((@locations.map {|x| [ x["City Name"], x["City Code"] ] }).compact.uniq.sort), prompt: "-City-" %>
+      <%= text_field_tag("permitted_city_" + count.to_s, default_city, placeholder: '-City-') %>
       <% count += 1 %>
       <br><br>
     <% end %>
 
     <%#= excluded province %>
     <% count = 1 %>
+    <%= label_tag "Restricted Locations:"  %>
     <% @distributor['exclude'].each do |location| %>
       <% default_city = '' %>
       <% default_province = '' %>
@@ -55,12 +57,11 @@
       <% elsif location.split('_').count == 1 %>
         <% default_country = location %>
       <% end %>
-      <b><%= label_tag "Edit Existing location" %></b>
-      <%= label_tag "Restricted Locations:"  %>
       <%= select_tag "restricted_country_" + count.to_s, options_for_select((@locations.map {|x| [ x["Country Name"], x["Country Code"] ] }).compact.uniq.sort, default_country), id: "Country", prompt: "-Country-" %>
-      <%= select_tag "restricted_province_" + count.to_s, options_for_select((@locations.map {|x| [ x["Province Name"], x["Province Code"] ] }).compact.uniq.sort, default_province), prompt: "-Province-" %>
-      <%= text_field_tag("restricted_city_" + count.to_s, default_city) %>
+      <%#= select_tag "restricted_province_" + count.to_s, options_for_select((@locations.map {|x| [ x["Province Name"], x["Province Code"] ] }).compact.uniq.sort, default_province), prompt: "-Province-" %>
+      <%= text_field_tag("restricted_province_" + count.to_s, default_province, placeholder: '-Province-') %>
       <%#= select_tag "restricted_city_" + count.to_s, options_for_select((@locations.map {|x| [ x["City Name"], x["City Code"] ] }).compact.uniq.sort), prompt: "-City-" %>
+      <%= text_field_tag("restricted_city_" + count.to_s, default_city, placeholder: '-City-') %>
       <% count += 1 %>
       <br><br>
     <% end %>
