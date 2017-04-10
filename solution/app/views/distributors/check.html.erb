@@ -1,0 +1,20 @@
+<% provide(:title, 'Check Distributor Permissions') %>
+
+<% unless @message.nil? || @message.empty? %>
+  <div><b>
+    <%= @message %>
+  </b></div><br><br>
+<% end %>
+
+<%= form_tag({controller: "distributors", action: "check"}, method: 'get') do %>
+  <%= label_tag "Distributor:"  %>
+  <%= select_tag "distributor_id", options_for_select(@distributors.collect{|id, data| [data["name"],id]}), required: true, prompt: "-Distributor-" %>
+  <%= label_tag "Location to check:"  %>
+  <%= select_tag "country", options_for_select((@locations.map {|x| [ x["Country Name"], x["Country Code"] ] }).compact.uniq.sort), id: "Country", required: true, prompt: "-Country-" %>
+  <%= select_tag "province", options_for_select((@locations.map {|x| [ x["Province Name"], x["Province Code"] ] }).compact.uniq.sort), required: true, prompt: "-Province-" %>
+  <%= select_tag "city", options_for_select((@locations.map {|x| [ x["City Name"], x["City Code"] ] }).compact.uniq.sort), required: true, prompt: "-City-" %>
+  <div class="actions">
+    <%= submit_tag "Check Permission" %>
+  </div>
+<% end %>
+<%= link_to 'Back', distributors_path %>

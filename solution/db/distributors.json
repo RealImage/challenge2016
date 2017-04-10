@@ -1,0 +1,35 @@
+{
+  "1": {
+    "name": "DISTRIBUTOR1",
+    "parent_id": "",
+    "include": [
+      "IN",
+      "US"
+    ],
+    "exclude": [
+      "KA_IN",
+      "CENAI_TN_IN"
+    ]
+  },
+  "2": {
+    "name": "DISTRIBUTOR2",
+    "parent_id": "1",
+    "include": [
+      "IN",
+      "CN"
+    ],
+    "exclude": [
+      "TN_IN"
+    ]
+  },
+  "3": {
+    "name": "DISTRIBUTOR3",
+    "parent_id": "2",
+    "include": [
+      "UDUPI_KA_IN"
+    ],
+    "exclude": [
+
+    ]
+  }
+}

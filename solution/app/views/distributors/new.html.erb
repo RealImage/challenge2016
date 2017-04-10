@@ -1,0 +1,6 @@
+<% provide(:button_text, 'Create Distributor') %>
+<% provide(:title, 'New Distributor') %>
+
+<%= render 'form', form_data: [{controller: "distributors", action: "create"}, method: 'post'] %>
+
+<%= link_to 'Back', distributors_path %>
