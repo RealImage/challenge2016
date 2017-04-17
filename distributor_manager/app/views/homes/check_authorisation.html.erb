@@ -1,0 +1,83 @@
+<%= form_tag("/check_authorisation/#{@id}", method: "post") do %>
+
+  <h4>Enter Location to Check</h4>
+  
+  <div class="form-group">
+  <%= label_tag(:inc_country, "Country") %>
+  <%= select_tag(:inc_country, options_for_select(["", "Select Country"]), onChange: "LoadIncState();", class: "country") %>
+  <span id="inc_load_country">Loading Countries</span>
+  </div>
+  
+  <div class="form-group">
+  <%= label_tag(:inc_state, "State") %>
+  <%= select_tag(:inc_state, options_for_select(["", "Select State"]), onChange: "LoadIncCity();", class: "state") %>
+  <span id="inc_load_state" style="display: none">Loading States</span>
+  </div>
+
+  <div class="form-group">
+  <%= label_tag(:inc_city, "City") %>
+  <%= select_tag(:inc_city, options_for_select(["", "Select City"]), class: "city" ) %>
+  <span id="inc_load_city" style="display: none">Loading Cities</span>
+  </div>
+
+  <%= submit_tag("Submit", class: "btn btn-primary") %>
+<% end %>
+
+<%= javascript_tag do %>
+
+$(document).ready(function(){
+  $.ajax("/get_countries", {
+      success: function(data) {
+        $('#inc_load_country').hide();
+         jQuery.each( data, function( i, val ) {
+         $('.country').append('<option value="'+val[0]+'">'+val[1]+'</option>');
+         });
+      },
+      error: function() {
+         console.log("Error loading states");
+         alert("Error loading states");
+      }
+   });
+});
+
+function LoadIncState() {
+  var country = $("#inc_country :selected").val();
+  $('#inc_load_state').show();
+  $.ajax("/get_states?country_id="+country, {
+      success: function(data) {
+        $('#inc_load_state').hide();
+          $('#inc_state').empty();
+          $('#inc_state').append('<option value="">Select State</option>');
+         jQuery.each( data, function( i, val ) {
+         $('#inc_state').append('<option value="'+val[0]+'">'+val[1]+'</option>');
+         });
+      },
+      error: function() {
+         console.log("Error loading states");
+         alert("Error loading states");
+      }
+   });
+}
+
+function LoadIncCity() {
+  $('#inc_load_city').show();
+  var country = $("#inc_country :selected").val();
+  var state = $("#inc_state :selected").val();
+  
+  $.ajax("/get_cities?country_id="+country+"&state_id="+state, {
+      success: function(data) {
+        $('#inc_load_city').hide();
+         $('#inc_city').empty();
+         $('#inc_city').append('<option value="">Select City</option>');
+         jQuery.each( data, function( i, val ) {
+         $('#inc_city').append('<option value="'+val[0]+'">'+val[1]+'</option>');
+         });
+      },
+      error: function() {
+         console.log("Error loading states");
+         alert("Error loading states");
+      }
+   });
+}
+<% end %>
+

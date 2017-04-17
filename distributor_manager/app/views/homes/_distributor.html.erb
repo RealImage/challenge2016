@@ -1,0 +1,28 @@
+<%= form_tag(distributor_path, method: "post") do %>
+  <h4>Distributor</h4>
+  <div class="form-group">
+  <%= label_tag(:distributor_name, "Distributor Name: ") %>
+  <%= text_field_tag(:distributor_name) %>
+  </div>
+  <!-- <h4>Include Places</h4>
+  <%= label_tag(:inc_country, "Country") %>
+  <%= text_field_tag(:inc_country) %>
+
+  <%= label_tag(:inc_state, "State") %>
+  <%= text_field_tag(:inc_state) %>
+
+  <%= label_tag(:inc_city, "City") %>
+  <%= text_field_tag(:inc_city) %>
+
+  <h4>Exclude Places</h4>
+  <%= label_tag(:exc_country, "Country") %>
+  <%= text_field_tag(:exc_country) %>
+
+  <%= label_tag(:exc_state, "State") %>
+  <%= text_field_tag(:exc_state) %>
+
+  <%= label_tag(:exc_city, "City") %>
+  <%= text_field_tag(:exc_city) %> -->
+
+  <%= submit_tag("Submit", class: "btn btn-primary") %>
+<% end %>

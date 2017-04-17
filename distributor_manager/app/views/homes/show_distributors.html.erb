@@ -1,0 +1,14 @@
+<h2><%= @distributor["name"]%></h2>
+<br>
+<h4>List of Included Places</h4>
+<ul>
+	<% @distributor["inc_locations_with_name"].each do |location|%>
+	<li><%= location%></li>
+	<% end %>
+</ul>
+<h4>List of Excluded Places</h4>
+<ul>
+	<% @distributor["exc_locations_with_name"].each do |location|%>
+	<li><%= location%></li>
+	<% end %>
+</ul>
