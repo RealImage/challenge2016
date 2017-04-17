@@ -1,0 +1,51 @@
+<%= javascript_tag do %>
+function load_sub_distributor(parent_id) {
+	console.log(parent_id);
+	$.ajax("/get_parent?parent_id="+parent_id, {
+      success: function(data) {
+         $('#sub_distributor-'+parent_id).html('Sub distributor of '+data['name']);
+      },
+      error: function() {
+         console.log("Error loading parent");
+         alert("Error loading parent");
+      }
+   });
+}
+<% end %>
+<%if flash[:notice].present?%>
+<div class="alert alert-info alert-dismissable fade in">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+<%= flash[:notice]%>
+</div>
+<% end %>
+<br>
+<br>
+<h4>Distributors List</h4>
+<% unless (@distributors.empty? && @distributors.blank?) %>
+	<table class="table table-striped table-bordered">
+	    <thead>
+	      <tr>
+	        <th>Name</th>
+	        <th>Action</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	    <% @distributors.each do |distributor|%>
+	      <tr>
+	        <td><%= distributor["name"]%>
+	        <%unless distributor["parent_id"].nil? && distributor["parent_id"].blank?%>
+	         <p class="label label-default" id="sub_distributor-<%= distributor['parent_id']%>">Loading Sub Distributor</p><script>load_sub_distributor(<%= distributor['parent_id'] %>);</script>
+	         <% end %>
+	         </td>
+
+	        <td><%= link_to "Add new Location", "/add_new_location/#{distributor['id']}", class: "label label-primary"%> &nbsp;&nbsp;&nbsp; 
+	        <%= link_to "Check Authorisation for location", "/check_authorisation/#{distributor['id']}", class: "label label-info"%> &nbsp;&nbsp;&nbsp; 
+	        <%= link_to "Add New Sub Distributor", "/distributor/#{distributor['id']}", class: "label label-default"%> &nbsp;&nbsp;&nbsp; 
+	        <%= link_to "List locations", "/show/#{distributor['id']}", class: "label label-danger"%>
+	        </td>
+	        
+	      </tr>
+	    <% end %>
+	    </tbody>
+	  </table>
+<% end %>
