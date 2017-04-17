@@ -96,7 +96,7 @@ class HomesController< ApplicationController
 				is_parent = distributor["parent_id"].nil? && distributor["parent_id"].blank?
 
 				inclusion_location_with_name =  find_ids(params[:inc_country], params[:inc_state], params[:inc_city]) unless (params[:inc_country].blank? && params[:inc_country].empty?)
-				# binding.pry
+
 				unless inclusion_location_with_name.nil? && inclusion_location_with_name.blank?
 					unless inclusion_location_with_name[0].nil? && inclusion_location_with_name[0].blank?
 					 if check_for_inclusion(get_locations_for_inclusion(id), inclusion_location_with_name[0], is_parent)
@@ -113,7 +113,6 @@ class HomesController< ApplicationController
 
 				exclusion_location_with_name = find_ids(params[:exc_country], params[:exc_state], params[:exc_city]) unless (params[:exc_country].blank? && params[:exc_country].empty?)
 
-				#binding.pry
 				unless exclusion_location_with_name.nil? && exclusion_location_with_name.blank?
 					unless exclusion_location_with_name[0].nil? && exclusion_location_with_name[0].blank?
 						if check_for_exclusion(get_locations_for_exclusion(id), exclusion_location_with_name[0])
@@ -128,12 +127,6 @@ class HomesController< ApplicationController
 					end
 				end
 
-				
-				# get_locations_for_inclusion(id)
-				# get_locations_for_exclusion(id)
-				# binding.pry
-
-				#save_distributors_to_json_file
 				if is_included || is_excluded
 					flash[:notice] = "Created Successfully..!"
 					redirect_to list_path
