@@ -1,6 +1,7 @@
 <div class="jumbotron text-center">
   <h1>List Of States in {{country.Name}}</h1>
-  
+    <a href="#states/new/{{country.Id}}"><i class="fa fa-plus-circle"></i> Add State</a>
+
   <table class="table table-bordered table-striped">
     
     <thead>
@@ -14,7 +15,7 @@
         <th>
           CODE
         </th>
-        <th>States</th>
+        <th colspan="2">Action</th>
       </tr>
     </thead>
     
@@ -23,7 +24,8 @@
         <td>{{ state.Id }}</td>
         <td>{{ state.Name }}</td>
         <td>{{ state.Code }}</td>
-        <td><a href="#states/{{ state.Id }}"><i class="fa fa-shield"></i> View State</a></td>
+        <td><a href="#states/{{ state.Id }}"><i class="fa fa-eye"></i> View State</a></td>
+        <td><a href="#cities/new/{{ state.Id }}"><i class="fa fa-plus-circle"></i> Add city</a></td>
       </tr>
     </tbody>
     

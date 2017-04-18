@@ -14,7 +14,7 @@
         <th>
           CODE
         </th>
-        <th>States</th>
+        <th>Action</th>
       </tr>
     </thead>
     
@@ -23,7 +23,8 @@
         <td>{{ country.Id }}</td>
         <td>{{ country.Name }}</td>
         <td>{{ country.Code }}</td>
-        <td><a href="#countries/{{ country.Id }}"><i class="fa fa-shield"></i> View Country</a></td>
+        <td><a href="#countries/{{ country.Id }}"><i class="fa fa-eye "></i> View Country</a></td>
+        <td><a href="#states/new/{{ country.Id }}"><i class="fa fa-plus-circle"></i> Add State</a></td>
       </tr>
     </tbody>
     
