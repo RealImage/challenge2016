@@ -1,0 +1,49 @@
+<form name="distributorForm" ng-submit="submitForm()">
+{{message}}
+<input type="hidden" id="distributor_id" name="distributor_id" ng-model="distributor.distributor_id" value="{{distributor.distributor_id}}">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Name of the distributor</label>
+    <input type="text" class="form-control" id="name" placeholder="Name of the distributor" ng-model="distributor.name">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Select Included countries</label>
+    <select class="form-control" multiple="true" ng-model="distributor.included_countries" ng-change="countryChange()">
+      <option ng-repeat="country in countries"  value="{{country.Id}}">
+        {{country.Name}}
+    </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Select Included states</label>
+    <select class="form-control" multiple="true" ng-model="distributor.included_states"  ng-change="stateChange()">
+      <option ng-repeat="state in states"  value="{{state.Id}}">
+        {{state.Name}}
+    </option>
+    </select>
+  </div>
+    <div class="form-group">
+    <label for="exampleInputEmail1">Select Included cities</label>
+    <select class="form-control" multiple="true" ng-model="distributor.included_cities">
+      <option ng-repeat="city in cities"  value="{{city.Id}}">
+        {{city.Name}}
+    </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Select Excluded states</label>
+    <select class="form-control" multiple="true" ng-model="distributor.excluded_states">
+      <option ng-repeat="state in exstates"  value="{{state.Id}}">
+        {{state.Name}}
+    </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Select Excluded cities</label>
+    <select class="form-control" multiple="true" ng-model="distributor.excluded_cities">
+      <option ng-repeat="city in excities"  value="{{city.Id}}">
+        {{city.Name}}
+    </option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>

@@ -1,0 +1,13 @@
+<form name="cityForm" ng-submit="submitForm()">
+{{message}}
+<input type="hidden" id="state_id" name="state_id" ng-model="city.state_id">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Name of the City</label>
+    <input type="text" class="form-control" id="name" placeholder="Name of the City" ng-model="city.name">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Code for the City</label>
+    <input type="text" class="form-control" id="code" placeholder="Code for the City" ng-model="city.code">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>

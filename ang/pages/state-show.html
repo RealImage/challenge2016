@@ -1,0 +1,30 @@
+<div class="jumbotron text-center">
+  <h1>List Of cities in {{state.Name}}, {{country.Name}}</h1>
+    <a href="#cities/new/{{state.Id}}"><i class="fa fa-plus-circle"></i> Add cities</a>
+
+  <table class="table table-bordered table-striped">
+    
+    <thead>
+      <tr>
+        <th>
+            ID
+        </th>
+        <th>
+          NAME
+        </th>
+        <th>
+          CODE
+        </th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <tr ng-repeat="city in cities">
+        <td>{{ city.Id }}</td>
+        <td>{{ city.Name }}</td>
+        <td>{{ city.Code }}</td>
+      </tr>
+    </tbody>
+    
+  </table>
+</div>

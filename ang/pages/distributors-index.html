@@ -1,0 +1,34 @@
+<div class="jumbotron text-center">
+  <h1>List Of distributors</h1>
+  <a href="#distributors/new"><i class="fa fa-plus-circle"></i> Add Distributor</a>
+  <table class="table table-bordered table-striped">
+    
+    <thead>
+      <tr>
+        <th>
+            ID
+        </th>
+        <th>
+          NAME
+        </th>
+        <th>
+          Parent Distributor
+        </th>
+        <th colspan="2">Action</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <tr ng-repeat="distributor in distributors">
+        <td>{{ distributor.Id }}</td>
+        <td>{{ distributor.Name }}</td>
+        <td>{{ distributor.Distrubutor_Id }}</td>
+        <td><a href="#distributors/new/{{ distributor.Id }}"><i class="fa fa-plus-circle"></i> Add Sub Distibutor</a></td>
+        <td><a href="#distributors/permision/{{ distributor.Id }}"><i class="fa fa-eye"></i> Check Permision</a></td>
+
+
+      </tr>
+    </tbody>
+    
+  </table>
+</div>
