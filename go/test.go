@@ -5,6 +5,7 @@ import (
   "database/sql"
   "fmt"
   "github.com/gin-gonic/gin"
+  "github.com/itsjamie/gin-cors"
   _ "github.com/mattn/go-sqlite3"
   "net/http"
   "sort"
@@ -38,8 +39,12 @@ func main() {
     Name           string
     Distrubutor_Id int
   }
-
   router := gin.Default()
+  router.Use(cors.Middleware(cors.Config{
+    Origins:         "*",
+    ValidateHeaders: false,
+    RequestHeaders:  "Origin, Authorization, Content-Type",
+  }))
   // Get all countries
   router.GET("/countries", func(c *gin.Context) {
     var (
@@ -124,10 +129,11 @@ func main() {
   // Get state and its cities with id
   router.GET("/states/:id", func(c *gin.Context) {
     var (
-      state  State
-      city   City
-      cities []City
-      result gin.H
+      country Country
+      state   State
+      city    City
+      cities  []City
+      result  gin.H
     )
     id := c.Param("id")
     row := db.QueryRow("select id, name, code, country_id from states where id = ?;", id)
@@ -138,6 +144,9 @@ func main() {
         "state": nil,
       }
     } else {
+      row := db.QueryRow("select id, name, code from countries where id = ?;", state.Country_Id)
+      _ = row.Scan(&country.Id, &country.Name, &country.Code)
+
       rows, err := db.Query("select id, name, code,state_id from cities where state_id=?;", id)
       checkErr(err)
       for rows.Next() {
@@ -147,8 +156,9 @@ func main() {
       }
       defer rows.Close()
       result = gin.H{
-        "state":  state,
-        "cities": cities,
+        "country": country,
+        "state":   state,
+        "cities":  cities,
       }
     }
     c.JSON(http.StatusOK, result)
