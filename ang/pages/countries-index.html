@@ -1,0 +1,31 @@
+<div class="jumbotron text-center">
+	<h1>List Of countries</h1>
+	<a href="#countries/new"><i class="fa fa-plus-circle"></i> Add Country</a>
+	<table class="table table-bordered table-striped">
+    
+    <thead>
+      <tr>
+        <th>
+            ID
+        </th>
+        <th>
+          NAME
+        </th>
+        <th>
+          CODE
+        </th>
+        <th>States</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <tr ng-repeat="country in countries">
+        <td>{{ country.Id }}</td>
+        <td>{{ country.Name }}</td>
+        <td>{{ country.Code }}</td>
+        <td><a href="#countries/{{ country.Id }}"><i class="fa fa-shield"></i> View Country</a></td>
+      </tr>
+    </tbody>
+    
+  </table>
+</div>
