@@ -110,6 +110,23 @@ func main() {
     }
     c.JSON(http.StatusOK, result)
   })
+  router.GET("/states", func(c *gin.Context) {
+    var (
+      state  State
+      states []State
+    )
+    rows, err := db.Query("select id, name, code, country_id from states;")
+    checkErr(err)
+    for rows.Next() {
+      err = rows.Scan(&state.Id, &state.Name, &state.Code, &state.Country_Id)
+      states = append(states, state)
+      checkErr(err)
+    }
+    defer rows.Close()
+    c.JSON(http.StatusOK, gin.H{
+      "states": states,
+    })
+  })
   // Create states
   router.POST("/states", func(c *gin.Context) {
     name := c.PostForm("name")
@@ -163,6 +180,23 @@ func main() {
     }
     c.JSON(http.StatusOK, result)
   })
+  router.GET("/cities", func(c *gin.Context) {
+    var (
+      city   City
+      cities []City
+    )
+    rows, err := db.Query("select id, name, code, state_id from cities;")
+    checkErr(err)
+    for rows.Next() {
+      err = rows.Scan(&city.Id, &city.Name, &city.Code, &city.State_Id)
+      cities = append(cities, city)
+      checkErr(err)
+    }
+    defer rows.Close()
+    c.JSON(http.StatusOK, gin.H{
+      "cities": cities,
+    })
+  })
   // Create cities
   router.POST("/cities", func(c *gin.Context) {
     name := c.PostForm("name")
@@ -189,8 +223,8 @@ func main() {
     checkErr(err)
     for rows.Next() {
       err = rows.Scan(&distrubutor.Id, &distrubutor.Name, &distrubutor.Distrubutor_Id)
-      distrubutors = append(distrubutors, distrubutor)
       checkErr(err)
+      distrubutors = append(distrubutors, distrubutor)
     }
     defer rows.Close()
     c.JSON(http.StatusOK, gin.H{
@@ -209,6 +243,8 @@ func main() {
     excluded_cities := strings.Split(c.PostForm("excluded_cities"), ",")
     if distributor_id != "" {
       save = check_includion_exclution(db, distributor_id, included_countries, included_states, included_cities)
+    } else {
+      distributor_id = "0"
     }
     if save {
       stmt, err := db.Prepare("insert into distributors (name, distributor_id) values(?,?);")
