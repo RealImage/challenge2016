@@ -14,7 +14,7 @@
         <th>
           Parent Distributor
         </th>
-        <th>Action</th>
+        <th colspan="2">Action</th>
       </tr>
     </thead>
     
@@ -24,6 +24,8 @@
         <td>{{ distributor.Name }}</td>
         <td>{{ distributor.Distrubutor_Id }}</td>
         <td><a href="#distributors/new/{{ distributor.Id }}"><i class="fa fa-plus-circle"></i> Add Sub Distibutor</a></td>
+        <td><a href="#distributors/permision/{{ distributor.Id }}"><i class="fa fa-eye"></i> Check Permision</a></td>
+
 
       </tr>
     </tbody>

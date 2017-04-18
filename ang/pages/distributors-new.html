@@ -1,6 +1,6 @@
 <form name="distributorForm" ng-submit="submitForm()">
 {{message}}
-<input type="hidden" id="distributor_id" name="distributor_id" ng-model="distributor.distributor_id">
+<input type="hidden" id="distributor_id" name="distributor_id" ng-model="distributor.distributor_id" value="{{distributor.distributor_id}}">
   <div class="form-group">
     <label for="exampleInputEmail1">Name of the distributor</label>
     <input type="text" class="form-control" id="name" placeholder="Name of the distributor" ng-model="distributor.name">
