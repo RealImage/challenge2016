@@ -231,6 +231,67 @@ func main() {
       "distrubutors": distrubutors,
     })
   })
+  // get distributor
+  router.GET("/distributors/:id", func(c *gin.Context) {
+    var (
+      country      Country
+      in_countries []Country
+      state        State
+      in_states    []State
+      ex_states    []State
+      city         City
+      in_cities    []City
+      ex_cities    []City
+    )
+    id := c.Param("id")
+    rows, err := db.Query("select countries.id, countries.name, countries.code from included_countries join countries on countries.id = included_countries.country_id where included_countries.distributor_id=?;", id)
+    checkErr(err)
+    for rows.Next() {
+      err = rows.Scan(&country.Id, &country.Name, &country.Code)
+      checkErr(err)
+      in_countries = append(in_countries, country)
+    }
+    rows, err = db.Query("select states.id, states.name, states.code,states.country_id from included_states join states on states.id = included_states.state_id where included_states.distributor_id=?;", id)
+    checkErr(err)
+    for rows.Next() {
+      err = rows.Scan(&state.Id, &state.Name, &state.Code, &state.Country_Id)
+      checkErr(err)
+      in_states = append(in_states, state)
+    }
+    defer rows.Close()
+    rows, err = db.Query("select states.id, states.name, states.code,states.country_id from excluded_states join states on states.id = excluded_states.state_id where excluded_states.distributor_id=?;", id)
+    checkErr(err)
+    for rows.Next() {
+      err = rows.Scan(&state.Id, &state.Name, &state.Code, &state.Country_Id)
+      checkErr(err)
+      ex_states = append(ex_states, state)
+    }
+    defer rows.Close()
+    rows, err = db.Query("select cities.id, cities.name, cities.code,cities.state_id from included_cities join cities on cities.id = included_cities.city_id where included_cities.distributor_id=?;", id)
+    checkErr(err)
+    for rows.Next() {
+      err = rows.Scan(&city.Id, &city.Name, &city.Code, &city.State_Id)
+      checkErr(err)
+      in_cities = append(in_cities, city)
+    }
+    defer rows.Close()
+    rows, err = db.Query("select cities.id, cities.name, cities.code,cities.state_id from excluded_cities join cities on cities.id = excluded_cities.city_id where excluded_cities.distributor_id=?;", id)
+    checkErr(err)
+    for rows.Next() {
+      err = rows.Scan(&city.Id, &city.Name, &city.Code, &city.State_Id)
+      checkErr(err)
+      ex_cities = append(ex_cities, city)
+    }
+    defer rows.Close()
+
+    c.JSON(http.StatusOK, gin.H{
+      "in_countries": in_countries,
+      "in_states":    in_states,
+      "ex_states":    ex_states,
+      "in_cities":    in_cities,
+      "ex_cities":    ex_cities,
+    })
+  })
   // Create distributors
   router.POST("/distributors", func(c *gin.Context) {
     save := true
