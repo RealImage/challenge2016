@@ -5,4 +5,9 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     $scope.list = vm.List;
   }
 
+  $scope.gotoView = function(item) {
+    window.location = "/view?name=" + item;
+    return false;
+  }
+
 }]);

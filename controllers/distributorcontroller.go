@@ -7,6 +7,7 @@ import (
 	"strings"
 	"bytes"
 	"io/ioutil"
+	"fmt"
 )
 
 type DistributorController struct {
@@ -60,22 +61,50 @@ func (c *DistributorController) NewDistributor() {
 	if(r.Method == "POST"){ // Add new Distributor
 		selectedCities := c.GetStrings("selectedCities")
 		name := c.GetString("name")
+		mode := c.GetString("mode")
+
+		fmt.Println(selectedCities)
 
 		var buffer bytes.Buffer
 		buffer.WriteString("City Code,Province Code,Country Code,City Name,Province Name,Country Name")
-		buffer.WriteString("\n")
 
 		for i := 0; i < len(selectedCities); i++ {
 			for j := 0; j < len(allCities); j++ {
-				if strings.Compare(selectedCities[i], allCities[j][3]) == 0 {
-					for k := 0; k < len(allCities[j]); k++ {
-						buffer.WriteString(allCities[j][k])
-						if k != len(allCities[j]) - 1 {
-							buffer.WriteString(",")
+				if mode == "0" {
+					if strings.Compare(selectedCities[i], allCities[j][5]) == 0 {
+						if i < len(selectedCities) {
+							buffer.WriteString("\n")
+						}
+						for k := 0; k < len(allCities[j]); k++ {
+							buffer.WriteString(allCities[j][k])
+							if k != len(allCities[j]) - 1 {
+								buffer.WriteString(",")
+							}
 						}
 					}
-					if i != len(selectedCities) - 1 {
-						buffer.WriteString("\n")
+				} else if mode == "1" {
+					if strings.Compare(selectedCities[i], allCities[j][4]) == 0 {
+						if i < len(selectedCities) {
+							buffer.WriteString("\n")
+						}
+						for k := 0; k < len(allCities[j]); k++ {
+							buffer.WriteString(allCities[j][k])
+							if k != len(allCities[j]) - 1 {
+								buffer.WriteString(",")
+							}
+						}
+					}
+				} else {
+					if strings.Compare(selectedCities[i], allCities[j][3]) == 0 {
+						if i < len(selectedCities) {
+							buffer.WriteString("\n")
+						}
+						for k := 0; k < len(allCities[j]); k++ {
+							buffer.WriteString(allCities[j][k])
+							if k != len(allCities[j]) - 1 {
+								buffer.WriteString(",")
+							}
+						}
 					}
 				}
 			}
@@ -153,5 +182,19 @@ func (c *DistributorController) NewDistributor() {
 
 
 
+}
+
+func (c *DistributorController) ViewDistributor() {
+	name := c.GetString("name")
+	allCities, err := helpers.DataFromFile("./datafiles/distributors/"+ name +".csv")
+	if err != nil {
+		log.Println(err)
+	}
+	view := viewmodels.ViewDistributorVM{}
+	view.PageTitle = "New Distributor"
+	view.AllCities = allCities
+	c.Data["vm"] = view
+
+	c.TplName = "templates/view-distributor.html"
 }
 

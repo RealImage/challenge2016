@@ -4,6 +4,8 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   var uniqueProvinces = vm.UniqueProvinces;
   $scope.existingDistributors = [];
 
+  var detailsSaveLevel = 0;
+
   /*Condition for checking whether there are any already created distributors*/
   if (vm.DistributorCities != null) {
     $scope.existingDistributors = Object.keys(vm.DistributorCities);
@@ -36,8 +38,14 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     }
   }
 
+  /*Function for saving from country level*/
+  $scope.saveAllCountryDetails = function() {
+
+  }
+
   /*Function for creating and displaying province array*/
   $scope.gotoProvince = function() {
+    detailsSaveLevel = 1;
     $scope.countryButton = false;
     $scope.countrySelection = false;
     $scope.provinceSelection = true;
@@ -78,6 +86,7 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
 
   /*Function for creating and displaying city array*/
   $scope.gotoCity = function() {
+    detailsSaveLevel = 2;
     $scope.provinceButton = false;
     $scope.provinceSelection = false;
     $scope.citySelection = true;
@@ -122,21 +131,29 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   /*Function for collecting filled data and save them*/
   $scope.saveDetails = function() {
     var citiesToServer = "";
-    for (var i = 0; i < $scope.selectedCities.length; i++) {
-      citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedCities[i];
-      console.log(citiesToServer);
+    if(detailsSaveLevel == 0) {
+      for (var i = 0; i < $scope.selectedCountries.length; i++) {
+        citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedCountries[i];
+      }
+    } else if (detailsSaveLevel == 1) {
+      for (var i = 0; i < $scope.selectedProvinces.length; i++) {
+        citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedProvinces[i];
+      }
+    } else {
+      for (var i = 0; i < $scope.selectedCities.length; i++) {
+        citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedCities[i];
+      }
     }
+
     $.ajax({
-                    url: '/new',
-                    type: 'POST',
-                    dataType: 'json',
-                    data : "name=" + $scope.name + citiesToServer,
-                    success : function(data) {
-
-                        window.location = "/";
-
-                    }
-                });
+      url: '/new',
+      type: 'POST',
+      dataType: 'json',
+      data : "name=" + $scope.name + "&mode=" + detailsSaveLevel + citiesToServer,
+      success : function(data) {
+        window.location = "/";
+      }
+    });
   }
 
   /*Function for selecting existing distributors and adding them as super distributors fro newly creating distributors*/

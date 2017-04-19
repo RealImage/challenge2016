@@ -8,5 +8,6 @@ import (
 func init() {
 	beego.Router("/", &controllers.DistributorController{}, "*:ListDistributor")
 	beego.Router("/new", &controllers.DistributorController{}, "*:NewDistributor")
+	beego.Router("/view", &controllers.DistributorController{}, "*:ViewDistributor")
 }
 

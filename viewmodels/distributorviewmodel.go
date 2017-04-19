@@ -14,3 +14,9 @@ type ListDistributorVM struct {
 	PageTitle		string
 	List			[]string
 }
+
+/*Struct to send data to the view page*/
+type ViewDistributorVM struct {
+	PageTitle		string
+	AllCities		[][]string
+}

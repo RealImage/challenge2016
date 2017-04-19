@@ -13,9 +13,15 @@
               <option value="" selected disabled>Choose</option>
             </select>
           </div>
+          <div class="newDiv">            
+            <button type="button" ng-click="saveDetails()" ng-disabled="name ==''">
+              <label ng-if="name ==''">Fill Name to Save</label>
+              <label ng-if="name !=''">Save</label>
+            </button>
+          </div>
           <div class="newDiv" ng-if="countrySelection == true">
               <label>Countries: </label>
-              <button type="button" ng-click="gotoProvince()" ng-if="selectedCountries.length > 0" ng-disabled="countryButton == false">Done here</button>
+              <button type="button" ng-click="gotoProvince()" ng-if="selectedCountries.length > 0" ng-disabled="countryButton == false">Filter Provinces</button>
               <div>
                 <span ng-repeat="country in countries | orderBy">
                     <label><input  type="checkbox" ng-click="countryChecked(country)" id="{{country}}">{{country}}</label>
@@ -35,10 +41,10 @@
 
           <div class="newDiv" ng-if="citySelection == true">
               <label>Cities: </label>
-              <button type="button" ng-click="saveDetails()" ng-if="selectedCities.length > 0" ng-disabled="name ==''">
+              <!-- <button type="button" ng-click="saveDetails()" ng-if="selectedCities.length > 0" ng-disabled="name ==''">
                 <label ng-if="name ==''">Fill Name to Save</label>
                 <label ng-if="name !=''">Save</label>
-              </button>
+              </button> -->
               <div>
                 <span ng-repeat="city in citiesByProvince | orderBy">
                     <label><input type="checkbox" ng-click="cityChecked(city)" ng-checked="allCitiesChecked">{{city}}</label>
