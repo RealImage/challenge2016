@@ -3,8 +3,10 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   $scope.countries = vm.UniqueCountries;
   var uniqueProvinces = vm.UniqueProvinces;
   $scope.existingDistributors = [];
-
   var detailsSaveLevel = 0;
+
+  $scope.nameError = false;
+  $scope.saveValidate = "";
 
   /*Condition for checking whether there are any already created distributors*/
   if (vm.DistributorCities != null) {
@@ -36,15 +38,17 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     } else {
       $scope.selectedCountries.splice(index, 1);
     }
+    if($scope.selectedCountries.length > 0){
+      $scope.saveValidate = "true";
+    } else {
+      $scope.saveValidate = "";
+    }
   }
 
-  /*Function for saving from country level*/
-  $scope.saveAllCountryDetails = function() {
-
-  }
-
-  /*Function for creating and displaying province array*/
+    /*Function for creating and displaying province array*/
   $scope.gotoProvince = function() {
+    document.getElementById("distributorSelect").disabled = true;
+    $scope.saveValidate = "";
     detailsSaveLevel = 1;
     $scope.countryButton = false;
     $scope.countrySelection = false;
@@ -52,25 +56,30 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     if($scope.superDistributor == "") {
       for (var i = 0; i < $scope.selectedCountries.length; i++) {
         for (var j = 0; j < uniqueProvinces.length; j++) {
-          if (uniqueProvinces[j][1] == $scope.selectedCountries[i]) {
-            $scope.provincesByCountry.push(uniqueProvinces[j][0]);
+          if (uniqueProvinces[j][0] == $scope.selectedCountries[i]) {
+            $scope.provincesByCountry.push(uniqueProvinces[j]);
           }
         }
       }
     } else {
-      var distributorPlaces = vm.DistributorCities[$scope.superDistributor];
-      var tempArray = [];
-      for (var i = 0; i < distributorPlaces.length; i++) {
-        for (var j = 0; j < $scope.selectedCountries.length; j++) {
-          if(distributorPlaces[i][5] == $scope.selectedCountries[j]) {
-            var index = tempArray.indexOf(distributorPlaces[i][4]);
-            if(index == -1) {
-              tempArray.push(distributorPlaces[i][4]);
-            }
-          }
-        }
+
+      var citiesToServer = "";
+
+      for (var i = 0; i < $scope.selectedCountries.length; i++) {
+        citiesToServer = citiesToServer + "&selectedCountries=" + $scope.selectedCountries[i];
       }
-      $scope.provincesByCountry = tempArray;
+      var tempArray = [];
+      $.ajax({
+        url: '/new/distributor-provinces',
+        type: 'POST',
+        dataType: 'json',
+        data : "&superDistributor=" + $scope.superDistributor + citiesToServer,
+        success : function(data) {
+          $scope.$apply(function(){
+              $scope.provincesByCountry = data;
+          });
+        }
+      });
     }
   }
 
@@ -82,10 +91,16 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     } else {
       $scope.selectedProvinces.splice(index, 1);
     }
+    if($scope.selectedProvinces.length > 0){
+      $scope.saveValidate = "true";
+    } else {
+      $scope.saveValidate = "";
+    }
   }
 
   /*Function for creating and displaying city array*/
   $scope.gotoCity = function() {
+    $scope.saveValidate = "";
     detailsSaveLevel = 2;
     $scope.provinceButton = false;
     $scope.provinceSelection = false;
@@ -93,28 +108,33 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
     if($scope.superDistributor == "") {
       for (var i = 0; i < $scope.selectedProvinces.length; i++) {
         for (var j = 0; j < allPlaces.length; j++) {
-          if (allPlaces[j][4] == $scope.selectedProvinces[i]) {
-            var index = $scope.citiesByProvince.indexOf(allPlaces[j][3]);
-            if(index == -1){
-              $scope.citiesByProvince.push(allPlaces[j][3]);
-            }
+          if (allPlaces[j][1] == $scope.selectedProvinces[i][2] && allPlaces[j][2] == $scope.selectedProvinces[i][0]) {
+            $scope.citiesByProvince.push(allPlaces[j]);
           }
         }
       }
     } else {
-      var distributorPlaces = vm.DistributorCities[$scope.superDistributor];
-      var tempArray = [];
-      for (var i = 0; i < distributorPlaces.length; i++) {
-        for (var j = 0; j < $scope.selectedProvinces.length; j++) {
-          if(distributorPlaces[i][4] == $scope.selectedProvinces[j]) {
-            var index = tempArray.indexOf(distributorPlaces[i][3]);
-            if(index == -1) {
-              tempArray.push(distributorPlaces[i][3]);
-            }
-          }
-        }
+
+      console.log($scope.selectedProvinces);
+
+
+      var citiesToServer = "";
+
+      for (var i = 0; i < $scope.selectedProvinces.length; i++) {
+        citiesToServer = citiesToServer + "&selectedProvinces=" + $scope.selectedProvinces[i][0] + "," + $scope.selectedProvinces[i][2];
       }
-      $scope.citiesByProvince = tempArray;
+      var tempArray = [];
+      $.ajax({
+        url: '/new/distributor-cities',
+        type: 'POST',
+        dataType: 'json',
+        data : "&superDistributor=" + $scope.superDistributor + citiesToServer,
+        success : function(data) {
+          $scope.$apply(function(){
+              $scope.citiesByProvince = data;
+          });
+        }
+      });
     }
   }
 
@@ -125,6 +145,11 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
       $scope.selectedCities.push(city);
     } else {
       $scope.selectedCities.splice(index, 1);
+    }
+    if($scope.selectedCities.length > 0){
+      $scope.saveValidate = "true";
+    } else {
+      $scope.saveValidate = "";
     }
   }
 
@@ -137,11 +162,11 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
       }
     } else if (detailsSaveLevel == 1) {
       for (var i = 0; i < $scope.selectedProvinces.length; i++) {
-        citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedProvinces[i];
+        citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedProvinces[i][2] + "," + $scope.selectedProvinces[i][0];
       }
     } else {
       for (var i = 0; i < $scope.selectedCities.length; i++) {
-        citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedCities[i];
+        citiesToServer = citiesToServer + "&selectedCities=" + $scope.selectedCities[i][0] + "," + $scope.selectedCities[i][1] + "," + $scope.selectedCities[i][2];
       }
     }
 
@@ -159,16 +184,18 @@ myApp.controller('AppCtrl', ['$scope', function($scope) {
   /*Function for selecting existing distributors and adding them as super distributors fro newly creating distributors*/
   $scope.selectDistributor = function(){
     if($scope.superDistributor != ""){
-      var distributorPlaces = vm.DistributorCities[$scope.superDistributor];
-      $scope.countries = [];
-      for (var i = 0; i < distributorPlaces.length; i++) {
-        var index = $scope.countries.indexOf(distributorPlaces[i][5]);
-        if(index == -1) {
-          $scope.countries.push(distributorPlaces[i][5]);
-        }
-      }
+      $scope.countries = vm.DistributorCountries[$scope.superDistributor];
     }
 
+  }
+
+  $scope.validateName = function(){
+    var index = vm.DistributorNames.indexOf($scope.name);
+    if(index != -1) {
+      $scope.nameError = true;
+    } else {
+      $scope.nameError = false;
+    }
   }
 
 }]);

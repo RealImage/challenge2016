@@ -3,28 +3,30 @@
   <div ng-controller="AppCtrl">
       <form>
           <h3>New Distributor</h3>
+          <label>**Fill Name & Choose at least one checkbox to Save**</label>
           <div class="newDiv">
               <label>Name: </label>
-              <input ng-model="name" type="text">
+              <input ng-model="name" type="text" ng-change="validateName()">
           </div>
           <div class="newDiv">
             <label>Super Distributor:(if any) </label>
-            <select ng-disabled="existingDistributors.length == 0" ng-model="superDistributor" ng-selected="selectDistributor()" ng-options="distributor for distributor in existingDistributors">
+            <select id="distributorSelect" ng-disabled="existingDistributors.length == 0" ng-model="superDistributor" ng-selected="selectDistributor()" ng-options="distributor for distributor in existingDistributors">
               <option value="" selected disabled>Choose</option>
             </select>
           </div>
-          <div class="newDiv">            
-            <button type="button" ng-click="saveDetails()" ng-disabled="name ==''">
+          <div class="newDiv" ng-if="saveValidate != ''">
+            <button type="button" ng-click="saveDetails()" ng-disabled="name =='' || nameError == true">
               <label ng-if="name ==''">Fill Name to Save</label>
-              <label ng-if="name !=''">Save</label>
+              <label ng-if="nameError == true">Distributor Name Already Used</label>
+              <label ng-if="name !='' && nameError != true">Save</label>
             </button>
           </div>
           <div class="newDiv" ng-if="countrySelection == true">
               <label>Countries: </label>
               <button type="button" ng-click="gotoProvince()" ng-if="selectedCountries.length > 0" ng-disabled="countryButton == false">Filter Provinces</button>
               <div>
-                <span ng-repeat="country in countries | orderBy">
-                    <label><input  type="checkbox" ng-click="countryChecked(country)" id="{{country}}">{{country}}</label>
+                <span ng-repeat="country in countries">
+                    <label><input  type="checkbox" ng-click="countryChecked(country[0])" id="{{country[0]}}">{{country[1]}}</label>
                 </span>
               </div>
           </div>
@@ -34,7 +36,7 @@
               <button type="button" ng-click="gotoCity()" ng-if="selectedProvinces.length > 0" ng-disabled="provinceButton == false">Done here</button>
               <div>
                 <span ng-repeat="province in provincesByCountry | orderBy">
-                    <label><input type="checkbox" ng-click="provinceChecked(province)" ng-checked="allProvincesChecked">{{province}}</label>
+                    <label><input type="checkbox" ng-click="provinceChecked(province)" ng-checked="allProvincesChecked">{{province[3]}}({{province[1]}})</label>
                 </span>
               </div>
           </div>
@@ -47,7 +49,7 @@
               </button> -->
               <div>
                 <span ng-repeat="city in citiesByProvince | orderBy">
-                    <label><input type="checkbox" ng-click="cityChecked(city)" ng-checked="allCitiesChecked">{{city}}</label>
+                    <label><input type="checkbox" ng-click="cityChecked(city)" ng-checked="allCitiesChecked">{{city[3]}}({{city[4]}},{{city[5]}})</label>
                 </span>
               </div>
           </div>
