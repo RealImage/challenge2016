@@ -1,0 +1,1758 @@
+// Colors
+@bodyColor: #e8ebf1;
+@headerBackgroundColor: #222222;
+@headerTextColor: #e4e4e4;
+@bodyTextColor: #333333;
+@bodySpanTextColor: #9c9c9c;
+@headingTextColor: #333333;
+@buttonTextColor: #969696;
+@activeButtonTextColor: #f7fdff;
+@buttonColor: #eaeaea;
+@activeButtonColor: #1cbdee;
+@spanBorderColor: #6f6f6f;
+@buttonBorderColor: #d5d5d5;
+@activeButtonBorderColor: #afd7e4;
+
+//Spaces
+@headerSideMargin: 15px;
+@headerPadding: 15px;
+@marginTop: 120px;
+@marginRight: 15px;
+@margineBottom: 65px;
+@marginLeft: 10px;
+@paddingTop: 15px;
+@paddingright: 25px;
+@paddingBottom: 10px;
+@paddingLeft: 65px;
+
+//Text sizes
+@headerLinkSize: 85%;
+@bodyCommonTextSize: 80%;
+@bodyTitleSize: 18px;
+@bodyLabelSize: 85%;
+@bodySpanSize: 80%;
+@bodyButtonTextSize: 85%;
+@bodyLinkTextSize: 80%;
+
+//styles for body
+body
+{
+	background-color: #f6f4f4 !important;
+	font-family: 'Source Sans Pro', sans-serif;
+	//styles starts for common header
+	.header
+	{
+		background-color: @headerBackgroundColor;
+		div.container-fluid
+		{
+			.Divs
+			{
+				img.logo
+				{
+					height: 50px;
+					margin-top: 7px;
+				}
+			}
+			.Divs
+			{
+				.navigationMenu
+				{
+					background-color: @headerBackgroundColor !important;
+					border: none !important;
+					margin: 7px 0px;
+					float: right;
+					min-height: 48px;
+					.navigationList
+					{
+						li
+						{
+							a
+							{
+								color: @headerTextColor;
+								font-size: @headerLinkSize;
+							}
+							a:active, a:hover
+							{
+								color: #fff;
+							}
+						}
+						li.dropdownList
+						{
+							color: @headerTextColor;
+							a
+							{
+								border: none;
+							}
+							a:focus, a:active, a:hover
+							{
+								border: none;
+								background: @headerBackgroundColor;
+							}
+							ul
+							{
+								margin-top: 6px;
+								background-color: @headerBackgroundColor;
+								left: -80px;
+								li
+								{
+									color: @headerTextColor;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}//styles ends for common header
+
+	//styles start for registration
+	.registrationForm
+	{
+		margin: @marginTop auto;
+		padding: 0px @paddingright @paddingright @paddingTop;
+		width: 50%;
+		label.title
+		{
+			width: 100%;
+			font-size: 150%;
+			margin: 0px;
+			margin-bottom: 15px;
+			text-align: center;
+		}
+		label.servererror
+        		{
+        			width: 75%;
+        			float: right;
+        			font-size: 100%;
+        			color: red;
+        			text-align: center;
+        		}
+		label
+		{
+			width: 25%;
+			float: left;
+			margin-top: 9px;
+			font-size: @bodyLabelSize;
+		}
+		label.errormsg
+        		{
+        		    width: 100%;
+        			margin: 0px;
+        			color: red;
+        			text-align: left;
+        		}
+		input.downloadButton
+		{
+			width: 20px;
+			length: 20px;
+			margin-bottom: 15px;
+			font-size: @bodyLabelSize;
+		}
+		input
+        		{
+        			width: 75%;
+        			margin-bottom: 15px;
+        			font-size: @bodyLabelSize;
+        		}
+		select
+        		{
+        			width: 75%;
+        			margin-bottom: 15px;
+        			font-size: @bodyLabelSize;
+        		}
+        textarea
+        {
+            width: 75%;
+            margin-bottom: 15px;
+            font-size: @bodyLabelSize;
+        }
+		.border
+		{
+			border-bottom: 1px @buttonBorderColor solid;
+			margin-bottom: @marginRight;
+		}
+		button.registration
+		{
+			background-color: @activeButtonColor;
+			width: 75%;
+			float: right;
+			font-size: @bodyButtonTextSize;
+			color: @activeButtonTextColor;
+			height: 34px;
+		}
+		button.save
+        		{
+        			background-color: @activeButtonColor;
+        			width: 37%;
+        			float: right;
+        			font-size: @bodyButtonTextSize;
+        			color: @activeButtonTextColor;
+        			height: 34px;
+        		}
+        button.cancel
+                		{
+                			background-color: @activeButtonColor;
+                			width: 37%;
+                			float: right;
+                			font-size: @bodyButtonTextSize;
+                			color: @activeButtonTextColor;
+                			height: 34px;
+                		}
+		label.or
+        		{
+        			width: 75%;
+        			float: right;
+        			font-size: 100%;
+        			margin-bottom: 15px;
+        			text-align: center;
+        		}
+        button.facebook
+        		{
+        			background : url("/static/images/facebook_button_new.png");
+        			width: 37%;
+        			font-size: 150%;
+        			font-weight: bold;
+        			text-align: right;
+        			float: right;
+        			font-size: @bodyButtonTextSize;
+        			color: @activeButtonTextColor;
+        			height: 34px;
+        		}
+        	label.gap{
+        	width: 1%;
+        	float: right;
+        	}
+         button.google
+                		{
+                			background : url("/static/images/google_button_new.png");
+                			width: 37%;
+                			font-size: 200%;
+                			text-align: right;
+                            font-weight: bold;
+                			float: right;
+                			font-size: @bodyButtonTextSize;
+                			color: @activeButtonTextColor;
+                			height: 34px;
+                		}
+	}
+	@media (min-width: 768px) and (max-width: 1000px)
+	{
+		.registrationForm
+		{
+			margin: @margineBottom auto;
+			padding: @paddingright @paddingTop;
+			width: 75%;
+			label
+			{
+				width: 25%;
+			}
+			input
+			{
+				width: 75%;
+			}
+			select
+            			{
+            				width: 75%;
+            			}
+			button.registration
+			{
+				background-color: @activeButtonColor;
+				width: 75%;
+				float: right;
+			}
+			button.save
+            			{
+            				background-color: @activeButtonColor;
+            				width: 37%;
+            				float: right;
+            			}
+            			button.cancel
+                        			{
+                        				background-color: @activeButtonColor;
+                        				width: 37%;
+                        				float: right;
+                        			}
+			button.facebook
+            			{
+
+            				width: 37%;
+            				float: right;
+            				height: 34px;
+            			}
+            button.google
+            			{
+
+            				width: 37%;
+            				float: right;
+            				height: 34px;
+            			}
+		}
+	}
+	@media (min-width: 447px) and (max-width: 768px)
+	{
+		.registrationForm
+		{
+			margin: @margineBottom auto;
+			padding: @paddingright @paddingTop;
+			width: 100%;
+			label
+			{
+				width: 30%;
+			}
+			input
+			{
+				width: 70%;
+			}
+			select
+            			{
+            				width: 70%;
+            			}
+            textarea
+                    {
+                        width: 70%;
+                    }
+			button.registration
+			 {
+				 background-color: @activeButtonColor;
+				 width: 70%;
+				 float: right;
+			 }
+			 button.save
+             			 {
+             				 background-color: @activeButtonColor;
+             				 width: 34.5%;
+             				 float: right;
+             			 }
+             			 button.cancel
+                         			 {
+                         				 background-color: @activeButtonColor;
+                         				 width: 34.5%;
+                         				 float: right;
+                         			 }
+			 button.facebook
+                         			{
+
+                         				width: 34.5%;
+                         				float: right;
+                         				height: 31.5px;
+                         			}
+                         button.google
+                         			{
+
+                         				width: 34.5%;
+                         				float: right;
+                         				height: 31.5px;
+                         			}
+		}
+	}
+	@media (max-width: 447px)
+	{
+		.registrationForm
+		{
+			margin: @margineBottom auto;
+			padding: @paddingright @paddingTop;
+			width: 100%;
+			label
+			{
+				width: 50%;
+			}
+			input
+			{
+				width: 50%;
+			}
+			select
+            			{
+            				width: 50%;
+            			}
+            textarea
+                                {
+                                    width: 50%;
+                                }
+			button.registration
+			{
+				background-color: @activeButtonColor;
+				width: 50%;
+				float: right;
+			}
+			button.save
+            			{
+            				background-color: @activeButtonColor;
+            				width: 24.5%;
+            				float: right;
+            			}
+            button.cancel
+            			{
+            				background-color: @activeButtonColor;
+            				width: 24.5%;
+            				float: right;
+            			}
+			button.facebook
+                        			{
+
+                        				width: 24.5%;
+                        				float: right;
+                        				height: 22.5px;
+                        			}
+                        button.google
+                        			{
+
+                        				width: 24.5%;
+                        				float: right;
+                        				height: 22.5px;
+                        			}
+		}
+	}//styles ends for registration
+
+	//styles starts for process
+	.tabListDiv
+	{
+		margin: @marginTop auto 0px auto;
+		padding: @paddingTop;
+		width: 50%;
+		height: 66px;
+		.tabList
+		{
+			border-bottom: none;
+			width: 100%;
+			li
+			{
+				width: 25%;
+				background: none;
+				height: 35px;
+				margin-bottom: @paddingright;
+				a
+				{
+					padding: 10px 15px;
+					background-color: @buttonColor;
+					font-size: @bodyButtonTextSize;
+					height: 35px;
+					text-align: center;
+					color: @buttonTextColor;
+				}
+				a:focus, a:active, a:hover
+				{
+					padding: 10px 15px;
+					background-color: #fff;
+					color: @bodyTextColor;
+					font-size: @bodyButtonTextSize;
+					height: 35px;
+				}
+			}
+			li:hover
+			{
+				background: none;
+			}
+			li:first-child
+			{
+				a
+				{
+					border-top-left-radius: 4px;
+					border-bottom-left-radius: 4px;
+				}
+			}
+			li:last-child
+			{
+				a
+				{
+					border-top-right-radius: 4px;
+					border-bottom-right-radius: 4px;
+				}
+			}
+		}
+	}
+	@media (min-width: 430px) and (max-width: 768px)
+	{
+		.tabListDiv
+		{
+			margin: @marginTop auto 0px auto;
+			padding: @paddingTop;
+			width: 100%;
+			height: 66px;
+			.tabList
+			{
+			border-bottom: none;
+			width: 100%;
+			li
+			{
+				width: 25%;
+				background: none;
+				height: 35px;
+				margin-bottom: @paddingright;
+				a
+				{
+					padding: 10px 15px;
+					background-color: @buttonColor;
+					font-size: @bodyButtonTextSize;
+					height: 35px;
+					text-align: center;
+					color: @buttonTextColor;
+				}
+				a:focus, a:active, a:hover
+				{
+					padding: 10px 15px;
+					background-color: #fff;
+					color: @bodyTextColor;
+					font-size: @bodyButtonTextSize;
+					height: 35px;
+				}
+			}
+			li:hover
+			{
+				background: none;
+			}
+			li:first-child
+			{
+				a
+				{
+					border-top-left-radius: 4px;
+					border-bottom-left-radius: 4px;
+				}
+			}
+			li:last-child
+			{
+				a
+				{
+					border-top-right-radius: 4px;
+					border-bottom-right-radius: 4px;
+				}
+			}
+		}
+		}
+	}
+	@media (max-width: 429px)
+	{
+		.tabListDiv
+		{
+			margin: @marginTop auto 0px auto;
+			padding: @paddingTop;
+			width: 100%;
+			height: 66px;
+			.tabList
+			{
+				border-bottom: none;
+				width: 100%;
+				li
+				{
+					width: 100%;
+					background: none;
+					height: 35px;
+					margin-bottom: 0px;
+					a
+					{
+						padding: 10px 15px;
+						background-color: @buttonColor;
+						font-size: @bodyButtonTextSize;
+						height: 35px;
+						text-align: center;
+						color: @buttonTextColor;
+						border: 1px solid @buttonBorderColor;
+						border-radius: 4px;
+					}
+					a:focus, a:active, a:hover
+					{
+						padding: 10px 15px;
+						background-color: #fff;
+						color: @bodyTextColor;
+						font-size: @bodyButtonTextSize;
+						height: 35px;
+					}
+				}
+				li:hover
+				{
+					background: none;
+				}
+				li:first-child
+				{
+					a
+					{
+						border-top-left-radius: 4px;
+						border-bottom-left-radius: 4px;
+					}
+				}
+				li:last-child
+				{
+					a
+					{
+						border-top-right-radius: 4px;
+						border-bottom-right-radius: 4px;
+					}
+				}
+			}
+		}
+	}
+	.process
+	{
+		margin: 0px auto @marginRight auto;
+		padding: 0px @paddingTop @paddingright @paddingTop;
+		width: 50%;
+		height: auto;
+		.addProcessDiv
+		{
+			border: 1px solid @buttonBorderColor;
+			width: 100%;
+			padding: 15px;
+			height: auto;
+			background-color: #fff;
+		}
+		.border
+		{
+			border-bottom: 1px solid @buttonBorderColor;
+
+		}
+		.addProcess
+		{
+			width: 100%;
+			label
+			{
+				width: 25%;
+				float: left;
+				margin-top: 9px;
+				font-size: @bodyLabelSize;
+			}
+			input.processName
+			{
+				width: 45%;
+				float: left;
+				margin: 0px 15px 15px 15px;
+				font-size: @bodyLabelSize;
+			}
+			select.processType
+            			{
+            				width: 45%;
+            				float: left;
+            				margin: 0px 15px 15px 15px;
+            				font-size: @bodyLabelSize;
+            			}
+			button.addButton
+			{
+				width: 24%;
+				float: left;
+				font-size: @bodyButtonTextSize;
+				height: 34px;
+				background-color: @activeButtonColor;
+				color: @activeButtonTextColor;
+			}
+			label.validationError
+			{
+			    width: 45%;
+			    float: left;
+			    color: red;
+			    text-align: center;
+			}
+		}
+		.sortList
+		{
+			margin: 15px auto 0px auto;
+			ul
+			{
+				list-style: none;
+				display: block;
+				-webkit-margin-before: 1em;
+				-webkit-margin-after: 1em;
+				-webkit-margin-start: 0px;
+				-webkit-margin-end: 0px;
+				-webkit-padding-start: 0px;
+				li
+				{
+					border: 1px solid @buttonBorderColor;
+					display: list-item;
+					text-align: center;
+					height: 34px;
+					margin-top: -1px;
+					overflow: hidden;
+					span.sort
+					{
+						background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABlBMVEWcnJz///8sHd3oAAAAGElEQVR4AWNgxAuGvDQDBhj12KjHhpI0AAFlA0+HRe+JAAAAAElFTkSuQmCC);
+						background-size: 90%;
+						background-repeat: no-repeat;
+						display: block;
+						height: 34px;
+						width: 34px;
+						position: relative;
+						float: left;
+					}
+					label.sortLabelLeft
+					{
+						text-align: center;
+						float: left;
+					}
+					label.sortLabelRight
+                    {
+                  		text-align: center;
+                  		float: none;
+                  	}
+					span.delete
+					{
+						display: block;
+						height: 34px;
+						width: 34px;
+						position: relative;
+						float: right;
+						right: 0px;
+						background-position: 1px -1px;
+					}
+				}
+			}
+			.saveBtn
+			{
+				button
+				{
+					background-color: @activeButtonColor;
+					height: 34px;
+					width: 100%;
+					color: @activeButtonTextColor;
+					font-size: @bodyButtonTextSize;
+				}
+			}
+		}
+	}
+	@media (min-width: 500px) and (max-width: 768px)
+	{
+		.process
+		{
+			margin: 0px auto @marginRight auto;
+			padding: 0px @paddingTop @paddingright @paddingTop;
+			width: 100%;
+			height: auto;
+			.addProcessDiv
+			{
+				border: 1px solid @buttonBorderColor;
+				width: 100%;
+				padding: 15px;
+				height: auto;
+			}
+			.border
+			{
+				border-bottom: 1px solid @buttonBorderColor;
+
+			}
+			.addProcess
+			{
+				width: 100%;
+				label
+				{
+					width: 25%;
+					float: left;
+					margin-top: 9px;
+					font-size: @bodyLabelSize;
+				}
+				input.processName
+				{
+					width: 47%;
+					float: left;
+					margin: 0px 15px 15px 0px;
+					font-size: @bodyLabelSize;
+				}
+				select.processType
+                            			{
+                            				width: 47%;
+                            				float: left;
+                            				margin: 0px 15px 15px 15px;
+                            				font-size: @bodyLabelSize;
+                            			}
+				button.addButton
+				{
+					width: 24%;
+					float: left;
+					font-size: @bodyButtonTextSize;
+					height: 34px;
+					background-color: @activeButtonColor;
+					color: @activeButtonTextColor;
+				}
+				label.validationError
+                			{
+                			    width: 47%;
+                			    float: left;
+                			    color: red;
+                			    text-align: center;
+                			}
+			}
+			.sortList
+			{
+				margin: 15px auto 0px auto;
+				ul
+				{
+					list-style: none;
+					display: block;
+					-webkit-margin-before: 1em;
+					-webkit-margin-after: 1em;
+					-webkit-margin-start: 0px;
+					-webkit-margin-end: 0px;
+					-webkit-padding-start: 0px;
+					li
+					{
+						border: 1px solid @buttonBorderColor;
+						display: list-item;
+						text-align: center;
+						height: 34px;
+						margin-top: -1px;
+						overflow: hidden;
+						span.sort
+						{
+							background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABlBMVEWcnJz///8sHd3oAAAAGElEQVR4AWNgxAuGvDQDBhj12KjHhpI0AAFlA0+HRe+JAAAAAElFTkSuQmCC);
+							background-size: 90%;
+							background-repeat: no-repeat;
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: left;
+						}
+						label.sortLabelLeft
+                        					{
+                        						text-align: center;
+                        						float: left;
+                        					}
+                        					label.sortLabelRight
+                                            {
+                                          		text-align: center;
+                                          		float: none;
+                                          	}
+						span.delete
+						{
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: right;
+							right: 0px;
+							background-position: 1px -1px;
+						}
+					}
+				}
+				.saveBtn
+				{
+					button
+					{
+						background-color: @activeButtonColor;
+						height: 34px;
+						width: 100%;
+						color: @activeButtonTextColor;
+						font-size: @bodyButtonTextSize;
+					}
+				}
+			}
+		}
+	}
+	@media (min-width: 430px) and (max-width: 500px)
+	{
+		.process
+		{
+			margin: 0px auto @marginRight auto;
+			padding: 0px @paddingTop @paddingright @paddingTop;
+			width: 100%;
+			height: auto;
+			.addProcessDiv
+			{
+				border: 1px solid @buttonBorderColor;
+				width: 100%;
+				padding: 15px;
+				height: auto;
+			}
+			.border
+			{
+				border-bottom: 1px solid @buttonBorderColor;
+
+			}
+			.addProcess
+			{
+				width: 100%;
+				label
+				{
+					width: 45%;
+					float: left;
+					margin-top: 9px;
+					font-size: @bodyLabelSize;
+				}
+				input.processName
+				{
+					width: 55%;
+					float: left;
+					margin: 0px 0px 15px 0px;
+					font-size: @bodyLabelSize;
+				}
+				select.processType
+                            			{
+                            				width: 55%;
+                            				float: left;
+                            				margin: 0px 15px 15px 15px;
+                            				font-size: @bodyLabelSize;
+                            			}
+				button.addButton
+				{
+					width: 100%;
+					float: left;
+					font-size: @bodyButtonTextSize;
+					height: 34px;
+					background-color: @activeButtonColor;
+					color: @activeButtonTextColor;
+				}
+				label.validationError
+                                			{
+                                			    width: 55%;
+                                			    float: left;
+                                			    color: red;
+                                			    text-align: center;
+                                			}
+			}
+			.sortList
+			{
+				margin: 15px auto 0px auto;
+				ul
+				{
+					list-style: none;
+					display: block;
+					-webkit-margin-before: 1em;
+					-webkit-margin-after: 1em;
+					-webkit-margin-start: 0px;
+					-webkit-margin-end: 0px;
+					-webkit-padding-start: 0px;
+					li
+					{
+						border: 1px solid @buttonBorderColor;
+						display: list-item;
+						text-align: center;
+						height: 34px;
+						margin-top: -1px;
+						overflow: hidden;
+						span.sort
+						{
+							background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABlBMVEWcnJz///8sHd3oAAAAGElEQVR4AWNgxAuGvDQDBhj12KjHhpI0AAFlA0+HRe+JAAAAAElFTkSuQmCC);
+							background-size: 90%;
+							background-repeat: no-repeat;
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: left;
+						}
+						label.sortLabelLeft
+                        					{
+                        						text-align: center;
+                        						float: left;
+                        					}
+                        					label.sortLabelRight
+                                            {
+                                          		text-align: center;
+                                          		float: none;
+                                          	}
+						span.delete
+						{
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: right;
+							right: 0px;
+							background-position: 1px -1px;
+						}
+					}
+				}
+				.saveBtn
+				{
+					button
+					{
+						background-color: @activeButtonColor;
+						height: 34px;
+						width: 100%;
+						color: @activeButtonTextColor;
+						font-size: @bodyButtonTextSize;
+					}
+				}
+			}
+		}
+	}
+	@media (min-width: 768px) and (max-width: 900px)
+	{
+		.process
+		{
+			margin: 0px auto @marginRight auto;
+			padding: 0px @paddingTop @paddingright @paddingTop;
+			width: 50%;
+			height: auto;
+			.addProcessDiv
+			{
+				border: 1px solid @buttonBorderColor;
+				width: 100%;
+				padding: 15px;
+				height: auto;
+			}
+			.border
+			{
+				border-bottom: 1px solid @buttonBorderColor;
+
+			}
+			.addProcess
+			{
+				width: 100%;
+				label
+				{
+					width: 30%;
+					float: left;
+					margin-top: 9px;
+					font-size: @bodyLabelSize;
+				}
+				input.processName
+				{
+					width: 55%;
+					float: left;
+					margin: 0px 0px 15px 0px;
+					font-size: @bodyLabelSize;
+				}
+				select.processType
+                                            			{
+                                            				width: 55%;
+                                            				float: left;
+                                            				margin: 0px 15px 15px 15px;
+                                            				font-size: @bodyLabelSize;
+                                            			}
+				button.addButton
+				{
+					width: 30%;
+					float: left;
+					font-size: @bodyButtonTextSize;
+					height: 34px;
+					background-color: @activeButtonColor;
+					color: @activeButtonTextColor;
+				}
+				label.validationError
+                                			{
+                                			    width: 55%;
+                                			    float: left;
+                                			    color: red;
+                                			    text-align: center;
+                                			}
+			}
+			.sortList
+			{
+				margin: 15px auto 0px auto;
+				ul
+				{
+					list-style: none;
+					display: block;
+					-webkit-margin-before: 1em;
+					-webkit-margin-after: 1em;
+					-webkit-margin-start: 0px;
+					-webkit-margin-end: 0px;
+					-webkit-padding-start: 0px;
+					li
+					{
+						border: 1px solid @buttonBorderColor;
+						display: list-item;
+						text-align: center;
+						height: 34px;
+						margin-top: -1px;
+						overflow: hidden;
+						span.sort
+						{
+							background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABlBMVEWcnJz///8sHd3oAAAAGElEQVR4AWNgxAuGvDQDBhj12KjHhpI0AAFlA0+HRe+JAAAAAElFTkSuQmCC);
+							background-size: 90%;
+							background-repeat: no-repeat;
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: left;
+						}
+						label.sortLabelLeft
+                        					{
+                        						text-align: center;
+                        						float: left;
+                        					}
+                        					label.sortLabelRight
+                                            {
+                                          		text-align: center;
+                                          		float: none;
+                                          	}
+						span.delete
+						{
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: right;
+							right: 0px;
+							background-position: 1px -1px;
+						}
+					}
+				}
+				.saveBtn
+				{
+					button
+					{
+						background-color: @activeButtonColor;
+						height: 34px;
+						width: 100%;
+						color: @activeButtonTextColor;
+						font-size: @bodyButtonTextSize;
+					}
+				}
+			}
+		}
+	}
+	@media (max-width: 429px)
+	{
+		.process
+		{
+			margin: 100px auto @marginRight auto;
+			padding: 0px @paddingTop @paddingright @paddingTop;
+			width: 100%;
+			height: auto;
+			.addProcessDiv
+			{
+				border: 1px solid @buttonBorderColor;
+				width: 100%;
+				padding: 15px;
+				height: auto;
+			}
+			.border
+			{
+				border-bottom: 1px solid @buttonBorderColor;
+
+			}
+			.addProcess
+			{
+				width: 100%;
+				label
+				{
+					width: 35%;
+					float: left;
+					margin-top: 2px;
+					font-size: @bodyLabelSize;
+				}
+				input.processName
+				{
+					width: 65%;
+					float: left;
+					margin: 0px 0px 15px 0px;
+					font-size: @bodyLabelSize;
+				}
+				select.processType
+                                            			{
+                                            				width: 65%;
+                                            				float: left;
+                                            				margin: 0px 15px 15px 15px;
+                                            				font-size: @bodyLabelSize;
+                                            			}
+				button.addButton
+				{
+					width: 100%;
+					float: left;
+					font-size: @bodyButtonTextSize;
+					height: 34px;
+					background-color: @activeButtonColor;
+					color: @activeButtonTextColor;
+				}
+				label.validationError
+                                			{
+                                			    width: 65%;
+                                			    float: left;
+                                			    color: red;
+                                			    text-align: center;
+                                			}
+			}
+			.sortList
+			{
+				margin: 15px auto 0px auto;
+				ul
+				{
+					list-style: none;
+					display: block;
+					-webkit-margin-before: 1em;
+					-webkit-margin-after: 1em;
+					-webkit-margin-start: 0px;
+					-webkit-margin-end: 0px;
+					-webkit-padding-start: 0px;
+					li
+					{
+						border: 1px solid @buttonBorderColor;
+						display: list-item;
+						text-align: center;
+						height: 34px;
+						margin-top: -1px;
+						overflow: hidden;
+						span.sort
+						{
+							background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABlBMVEWcnJz///8sHd3oAAAAGElEQVR4AWNgxAuGvDQDBhj12KjHhpI0AAFlA0+HRe+JAAAAAElFTkSuQmCC);
+							background-size: 90%;
+							background-repeat: no-repeat;
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: left;
+						}
+						label.sortLabelLeft
+                        					{
+                        						text-align: center;
+                        						float: left;
+                        					}
+                        					label.sortLabelRight
+                                            {
+                                          		text-align: center;
+                                          		float: none;
+                                          	}
+						span.delete
+						{
+							display: block;
+							height: 34px;
+							width: 34px;
+							position: relative;
+							float: right;
+							right: 0px;
+							background-position: 1px -1px;
+						}
+					}
+				}
+				.saveBtn
+				{
+					button
+					{
+						background-color: @activeButtonColor;
+						height: 34px;
+						width: 100%;
+						color: @activeButtonTextColor;
+						font-size: @bodyButtonTextSize;
+					}
+				}
+			}
+		}
+	}//styles ends for process
+
+	//styles starts for user
+	.addUser
+	{
+		margin: 0px auto @marginRight auto;
+		padding: 0px @paddingTop @paddingright @paddingTop;
+		width: 50%;
+		height: auto;
+		.addUserDiv
+		{
+			border: 1px solid @buttonBorderColor;
+			padding: @marginRight @marginRight 0px @marginRight;
+			background-color: #fff;
+			button.addUserLink
+			{
+				font-size: @bodyButtonTextSize;
+				background-color: @activeButtonColor;
+				border-radius: 4px;
+				height: 34px;
+				float: right;
+				color: @activeButtonTextColor;
+				margin-bottom: @marginRight;
+				margin-right: 0px;
+				width: 90px;
+			}
+			.userList
+			{
+				.userListItem
+				{
+					background-color: @buttonColor;
+					padding: 0px;
+					margin-bottom: 15px;
+					height: 36px;
+					border-radius: 4px;
+					border: 1px solid #CCCCCC;
+					label
+					{
+						margin: 9px 0px 0px 10px;
+						font-size: @bodyLabelSize;
+					}
+					button
+					{
+						font-size: @bodyButtonTextSize;
+						float: right;
+						height: 34px;
+						background-color: @activeButtonColor;
+						color: @activeButtonTextColor;
+						border-top-left-radius: 0px;
+						border-bottom-left-radius: 0px;
+					}
+				}
+			}
+		}
+		.border
+		{
+			border-bottom: 1px solid @buttonBorderColor;
+			margin-bottom: @marginRight;
+		}
+	}
+	@media (max-width: 768px)
+	{
+		.addUser
+		{
+			width: 100%;
+		}
+	}
+	@media (max-width: 429px)
+	{
+		.addUser
+		{
+			width: 100%;
+			margin-top: 100px;
+		}
+	}//styles ends for user
+
+	//styles starts for documents
+	.addUser
+	{
+		margin: 0px auto @marginRight auto;
+		padding: 0px @paddingTop @paddingright @paddingTop;
+		width: 50%;
+		height: auto;
+		.addDocumentDiv
+		{
+			border: 1px solid @buttonBorderColor;
+			padding: @marginRight @marginRight 0px @marginRight;
+			background-color: #fff;
+			button.addDocumentLink
+			{
+				font-size: @bodyButtonTextSize;
+				background-color: @activeButtonColor;
+				border-radius: 4px;
+				height: 34px;
+				float: right;
+				color: @activeButtonTextColor;
+				margin-bottom: @marginRight;
+				width: 110px;
+			}
+			.documentList
+			{
+				.documentListItem
+				{
+					background-color: @buttonColor;
+					padding: 0px;
+					margin-bottom: 15px;
+					min-height: 36px;
+					max-height: auto;
+					border-radius: 4px;
+					border: 1px solid #CCCCCC;
+					label
+					{
+						margin: 9px 0px 0px 10px;
+						font-size: @bodyLabelSize;
+					}
+					button
+					{
+						font-size: @bodyButtonTextSize;
+						float: right;
+						height: 34px;
+						background-color: @activeButtonColor;
+						color: @activeButtonTextColor;
+						border-radius: 0px;
+					}
+					button.editButton
+					{
+						border-top-right-radius: 4px;
+						border-bottom-right-radius: 4px;
+						border-left: 1px solid #CCCCCC;
+					}
+				}
+			}
+		}
+		.border
+		{
+			border-bottom: 1px solid @buttonBorderColor;
+			margin-bottom: @marginRight;
+		}
+	}
+	@media (max-width: 768px)
+	{
+		.addUser
+		{
+			width: 100%;
+		}
+	}
+	@media (max-width: 429px)
+	{
+		.addUser
+		{
+			width: 100%;
+			margin-top: 100px;
+		}
+	}
+	@media (max-width: 322px)
+	{
+		.addUser
+		{
+			width: 100%;
+			margin-top: 100px;
+		}
+		.documentListItem
+		{
+			height: 120px;
+			button
+			{
+				width: 100%;
+			}
+		}
+	} //styles ends for documents
+
+	//styles starts for client list
+	.clientContent
+	{
+		margin: 0px auto;
+		width: 50%;
+		background-color: #fff;
+		border: 1px solid @buttonBorderColor;
+		.clientDetails
+		{
+			padding: 15px 15px 0px 15px;
+			button.addLeadLink
+            {
+                font-size: @bodyButtonTextSize;
+                background-color: @activeButtonColor;
+                border-radius: 4px;
+                height: 34px;
+                color: @activeButtonTextColor;
+                margin-bottom: @marginRight;
+                margin-right: 0px;
+                width: 90px;
+            }
+			ul.mainList
+			{
+				list-style: none;
+				display: block;
+				-webkit-margin-before: 0px;
+				-webkit-margin-after: 0px;
+				-webkit-margin-start: 0px;
+				-webkit-margin-end: 0px;
+				-webkit-padding-start: 0px;
+				li
+				{
+					ul.subList
+					{
+						list-style: none;
+						display: block;
+						-webkit-margin-before: 0px;
+						-webkit-margin-after: 0px;
+						-webkit-margin-start: 0px;
+						-webkit-margin-end: 0px;
+						-webkit-padding-start: 0px;
+						border-radius: 4px;
+						height: auto;
+						background-color: #eaeaea;
+						border: 1px solid @buttonBorderColor;
+						margin-bottom: 15px;
+						li
+						{
+							height: auto;
+							margin: 0px;
+							padding: 15px;
+							display: inline-block;
+							position: relative;
+							label
+							{
+								width: 100%;
+								margin: 0px;
+								padding: 0px;
+								font-size: @bodyLabelSize;
+							}
+							span
+							{
+								width: 100%;
+								margin: 0px;
+								padding: 0px;
+								font-size: @bodySpanSize;
+								color: @bodySpanTextColor;
+							}
+							span.hours
+							{
+								position: absolute;
+								right: 15px;
+								text-align: right;
+								top: 15px;
+							}
+							button
+							{
+								background-color: @activeButtonColor;
+								color: @activeButtonTextColor;
+								font-size: @bodyButtonTextSize;
+								height: 19px;
+								float: right;
+								padding: 0px 12px;
+								position: absolute;
+								right: -50px;
+								top: 15px;
+							}
+						}
+						li:first-child
+						{
+							border-top-left-radius: 4px;
+							border-bottom-left-radius: 4px;
+							border-right: 1px solid #CCCCCC;
+							width: 65%;
+						}
+						li:last-child
+						{
+							border-top-right-radius: 4px;
+							border-bottom-right-radius: 4px;
+							width: 35;
+							position: relative;
+							top: -20px;
+						}
+					}
+				}
+			}
+		}
+	}
+	@media (max-width: 768px)
+	{
+		.clientContent
+		{
+			width: 100%;
+		}
+	}//styles ends for client list
+
+	//styles starts for client chat
+	.clientChat
+	{
+		background-color: #fff;
+		margin-top: 120px;
+		height: auto;
+		margin-left: -15px;
+		margin-right: -15px;
+		ul
+		{
+			position: relative;
+			list-style: none;
+			display: block;
+			-webkit-margin-before: 1em;
+			-webkit-margin-after: 1em;
+			-webkit-margin-start: 0px;
+			-webkit-margin-end: 0px;
+			-webkit-padding-start: 0px;
+			li
+			{
+				display: inline-block;
+				label.clientName
+				{
+					font-size: @bodyLabelSize;
+				}
+				span.hours
+				{
+					top: 50%;
+				}
+				span
+				{
+					font-size: @bodySpanSize;
+					color: @bodySpanTextColor;
+					margin-bottom: 5px;
+				}
+
+			}
+			li:first-child
+			{
+				width: 65%;
+				//position: relative;
+				float: left;
+			}
+			li:last-child
+			{
+				float: right;
+				width: 35%;
+				label
+				{
+					font-size: @bodyLabelSize;
+					top: 0px;
+					left: 0px;
+				}
+				button
+				{
+					top: 0px;
+					float: right;
+					padding: 0px 15px;
+					background-color: @activeButtonColor;
+					font-size: @bodyButtonTextSize;
+					color: @activeButtonTextColor;
+				}
+				ul.tabList
+				{
+					background: none;
+					border: none;
+					margin-top: 23px;
+					li
+					{
+						background-color: @buttonColor;
+						border: 1px solid #CCCCCC;
+						width: auto;
+						float: none;
+						margin-right: -5px;
+						a
+						{
+							padding: 2px 7px;
+							font-size: @bodyButtonTextSize;
+							color: @buttonTextColor;
+							background: none;
+							border: none;
+						}
+						a:hover, a:active, a:focus
+						{
+							border: none;
+							color: @activeButtonTextColor;
+						}
+					}
+					li:active, li:focus, li:hover
+					{
+						background-color: @activeButtonColor;
+						color: @activeButtonTextColor;
+					}
+					li:first-child
+					{
+						border-top-left-radius: 4px;
+						border-bottom-left-radius: 4px;
+						width: auto;
+						float: none;
+					}
+					li:last-child
+					{
+						border-top-right-radius: 4px;
+						border-bottom-right-radius: 4px;
+						width: auto;
+						float: none;
+					}
+				}
+			}
+		}
+	}
+	.chatList
+	{
+		margin:15px auto 0px auto;
+		width: 50%;
+		ul.mainList
+		{
+			list-style: none;
+			display: block;
+			-webkit-margin-before: 1em;
+			-webkit-margin-after: 1em;
+			-webkit-margin-start: 0px;
+			-webkit-margin-end: 0px;
+			-webkit-padding-start: 11px;
+			border-left: 1px solid #CCCCCC;
+			li
+			{
+				ul
+				{
+					list-style-image: url("../images/list-style.png");
+					display: block;
+					-webkit-margin-before: 1em;
+					-webkit-margin-after: 1em;
+					-webkit-margin-start: 0px;
+					-webkit-margin-end: 0px;
+					-webkit-padding-start: 0px;
+					li
+					{
+						background-color: #fff;
+						border-radius: 4px;
+						border: 1px solid #CCCCCC;
+						padding: 15px;
+						position: relative;
+						height: auto;
+						label
+						{
+							font-size: @bodyLabelSize;
+							width: 100%;
+						}
+						label.process
+						{
+							width: 80%;
+							font-size: @bodySpanSize;
+							color: @bodySpanTextColor;
+							padding: 0px;
+							margin: 0px;
+							text-align: justify;
+						}
+						label.file
+						{
+							width: 80%;
+							font-size: @bodySpanSize;
+							color: @bodySpanTextColor;
+						}
+						span
+						{
+							font-size: @bodySpanSize;
+							color: @bodySpanTextColor;
+							position: absolute;
+							margin-left: 15px;
+						}
+						button
+						{
+							padding: 0px 5px;
+							background: none;
+							position: absolute;
+							top: 0px;
+							right: 0px;
+							border: 0px  #ccc;
+						}
+					}
+					li:first-child
+					{
+
+					}
+					li:last-child
+					{
+
+					}
+				}
+			}
+		}
+		ul.message
+		{
+			list-style: none;
+			display: block;
+			-webkit-margin-before: 1em;
+			-webkit-margin-after: 1em;
+			-webkit-margin-start: 0px;
+			-webkit-margin-end: 0px;
+			-webkit-padding-start: 0px;
+			li
+			{
+				ul.messageList
+				{
+					list-style: none;
+					display: block;
+					-webkit-margin-before: 1em;
+					-webkit-margin-after: 1em;
+					-webkit-margin-start: 0px;
+					-webkit-margin-end: 0px;
+					-webkit-padding-start: 0px;
+					padding: 15px;
+					padding-top: 0px;
+					margin-top: 0px;
+					li
+					{
+						label.postMessageLabel
+						{
+							font-size: 120%;
+							margin-bottom: 15px;
+						}
+						textarea
+						{
+							height: 75px;
+							margin-bottom: 15px;
+						}
+						button.post
+						{
+							height: 34px;
+							background-color: @activeButtonColor;
+							color: @activeButtonTextColor;
+							font-size: @bodyButtonTextSize;
+							float: right;
+							width: 150px;
+							margin-bottom: 15px;
+						}
+					}
+				}
+			}
+		}
+	}
+	@media (max-width: 768px)
+	{
+		.chatList
+		{
+			width: 100%;
+		}
+	}//styles ends for client chat
+}
+
+

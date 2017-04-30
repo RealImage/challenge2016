@@ -1,0 +1,7 @@
+.newDiv {
+  margin-top: 10px;
+  .checkbox-wrapper {
+    position: relative;
+    top: -1px;
+  }
+}

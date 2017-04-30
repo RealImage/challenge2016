@@ -1,0 +1,35 @@
+<<< template "layout/layout.html" . >>>
+<<< define "content" >>>
+  <div ng-controller="AppCtrl">
+    <a href="/new">Add new distributors</a>
+    <h3>View Distribution Details</h3>
+
+    <label>Search: <input ng-model="searchText"></label>
+    <table border="2">
+      <tr>
+        <td style="width=15%">City Code</td>
+        <td style="width=15%">Province Code</td>
+        <td style="width=15%">Country Code</td>
+        <td style="width=15%">City Name</td>
+        <td style="width=15%">Province Name</td>
+        <td style="width=15%">Country Name</td>
+      </tr>
+
+      <tr ng-repeat="item in list | orderBy | filter:searchText">
+        <td style="width=15%">{{item[0]}}</td>
+        <td style="width=15%">{{item[1]}}</td>
+        <td style="width=15%">{{item[2]}}</td>
+        <td style="width=15%">{{item[3]}}</td>
+        <td style="width=15%">{{item[4]}}</td>
+        <td style="width=15%">{{item[5]}}</td>
+      </tr>
+    </table>
+  </div>
+<<< end >>>
+
+<<< define "scripts" >>>
+    <script src = "/static/javascript/custom/view-distributor.js"></script>
+    <script type="text/javascript">
+        var vm = <<< .vm>>>;
+    </script>
+<<< end >>>
