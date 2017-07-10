@@ -1,0 +1,38 @@
+var dist = {
+	"Distributor1" : {
+		"include": {
+			"City": ["Most Indian cities"],
+			"Province": ["Most Indian Province"],
+			"Country": ["India"]
+		},
+		"exclude": {
+			"City": ["Chennai"],
+			"Province": ["Karnataka"],
+			"Country": []
+		}
+	},
+	"Distributor2" : {
+		"include": {
+			"City": ["Most cities"],
+			"Province": ["Tamil Nadu"],
+			"Country": ["India"]
+		},
+		"exclude": {
+			"City": ["Chennai"],
+			"Province": [],
+			"Country": []
+		}
+	},
+	"Sub-Distributor2" : {
+		"include": {
+			"City": ["Keelakarai", "Wellington"],
+			"Province": [],
+			"Country": []
+		},
+		"exclude": {
+			"City": [],
+			"Province": [],
+			"Country": []
+		}
+	}
+}
