@@ -1,41 +1,167 @@
-# Real Image Challenge 2016
+# Distribution Service(Real Image Challenge)
 
-In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
+## Introduction:
+This Distribution REST Service helps you to create Distributors and Sub-Distributors Permissions and also Check the Permissions of any Distributor. You can also List the Distributors available with us.
 
-Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
+## Installation:
+
+1. Install Go latest version
+
+## To Run the Service:
+
+You can Run the Service using "go run" command. flags to choose the port on which the Service should Run and file flag to specify the CSV File Path are provided.
 ```
-Permissions for DISTRIBUTOR1
-INCLUDE: INDIA
-INCLUDE: UNITEDSTATES
-EXCLUDE: KARNATAKA-INDIA
-EXCLUDE: CHENNAI-TAMILNADU-INDIA
+go run main.go -port 7770 -file cities.csv
 ```
-This allows `DISTRIBUTOR1` to distribute in any city inside the United States and India, *except* cities in the state of Karnataka (in India) and the city of Chennai (in Tamil Nadu, India).
 
-At this point, asking your program if `DISTRIBUTOR1` has permission to distribute in `CHICAGO-ILLINOIS-UNITEDSTATES` should get `YES` as the answer, and asking if distribution can happen in `CHENNAI-TAMILNADU-INDIA` should of course be `NO`. Asking if distribution is possible in `BANGALORE-KARNATAKA-INDIA` should also be `NO`, because the whole state of Karnataka has been excluded.
+The Above Command Starts the REST Service on port 7770 and reads the cities.csv file from your present directory.
 
-Sometimes, a distributor might split the work of distribution amount smaller sub-distiributors inside their authorized geographies. For instance, `DISTRIBUTOR1` might assign the following permissions to `DISTRIBUTOR2`:
-
+If Go is Not Installed on your machine, you can still Run the Service using the below command. (Executable Binary File is Also Provided)
 ```
-Permissions for DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: INDIA
-EXCLUDE: TAMILNADU-INDIA
+./main -port 7770 -file cities.csv
 ```
-Now, `DISTRIBUTOR2` can distribute the movie anywhere in `INDIA`, except inside `TAMILNADU-INDIA` and `KARNATAKA-INDIA` - `DISTRIBUTOR2`'s permissions are always a subset of `DISTRIBUTOR1`'s permissions. It's impossible/invalid for `DISTRIBUTOR2` to have `INCLUDE: CHINA`, for example, because `DISTRIBUTOR1` isn't authorized to do that in the first place. 
 
-If `DISTRIBUTOR2` authorizes `DISTRIBUTOR3` to handle just the city of Hubli, Karnataka, India, for example:
-```
-Permissions for DISTRIBUTOR3 < DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: HUBLI-KARNATAKA-INDIA
-```
-Again, `DISTRIBUTOR2` cannot authorize `DISTRIBUTOR3` with a region that they themselves do not have access to. 
+## EndPoints Available:
 
-We've provided a CSV with the list of all countries, states and cities in the world that we know of - please use the data mentioned there for this program. *The codes you see there may be different from what you see here, so please always use the codes in the CSV*. This Readme is only an example. 
+/addDist/ - This Takes the Array of JSON filled with Distributors Permissions and stores the permissions in its respective Distributor Template.(Sample JSON provided under the Sample JSON Structure)
 
-Write a program in any language you want (If you're here from Gophercon, use Go :D) that does this. Feel free to make your own input and output format / command line tool / GUI / Webservice / whatever you want. Feel free to hold the dataset in whatever structure you want, but try not to use external databases - as far as possible stick to your langauage without bringing in MySQL/Postgres/MongoDB/Redis/Etc.
+/verifyDist/ - This lets you verify a particular Distributor Permissions by the taking the location you want to check through JSON.(Sample JSON provided under the Sample JSON Structure)
 
-To submit a solution, fork this repo and send a Pull Request on Github. 
+/listDist/ - On a GET Request to this Endpoint it will Return you an array with the list of Distributors stored.
 
-For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
+(For Example : If the Service is Running on localhost and 7770 port then "localhost:7770/addDist/" || "localhost:7770/verifyDist/")
+
+## Logging & Monitoring:
+
+Server Logs INFO & ERROR Logs after every action. you can redirect the logs to the required file for Debugging Purposes.
+
+## Sample JSON:
+	---Sample JSON also provided in addDistsample.json & verifyDistsample.json---
+	
+For /addDist:
+
+[
+  {
+    "parentDistributorName": "none",
+    "distributorName": "Distributor1",
+    "includeData": [
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "ERODE"
+      },
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "COBTE"
+      },
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "MDURI"
+      },
+      {
+        "countryCode": "ES",
+        "provinceCode": "*",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "*",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "US",
+        "provinceCode": "CA",
+        "cityCode": "*"
+      }
+    ],
+    "excludeData": [
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "NMAKL"
+      },
+      {
+        "countryCode": "US",
+        "provinceCode": "CA",
+        "cityCode": "ALMED"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "MN",
+        "cityCode": "*"
+      }
+    ]
+  },
+  {
+    "parentDistributorName": "Distributor1",
+    "distributorName": "Distributor2",
+    "includeData": [
+      {
+        "countryCode": "ES",
+        "provinceCode": "EX",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "AM",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "US",
+        "provinceCode": "CA",
+        "cityCode": "AVEJO"
+      }
+    ],
+    "excludeData": [
+      {
+        "countryCode": "ES",
+        "provinceCode": "EX",
+        "cityCode": "VLENA"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "AM",
+        "cityCode": "WASIR"
+      }
+    ]
+  }
+]
+
+For /verifyDist:
+
+{
+  "distributorName": "Distributor2",
+  "locations": [
+    {
+      "countryCode": "JO",
+      "provinceCode": "AM",
+      "cityCode": "WASIR"
+    },
+    {
+      "countryCode": "US",
+      "provinceCode": "CA",
+      "cityCode": "AVEJO"
+    }
+  ]
+}
+
+## Test Results:
+
+Request-1: curl -XPOST "http://localhost:7770/addDist/" -d '[{"parentDistributorName":"none","distributorName":"Distributor1","includeData":[{"countryCode":"IN","provinceCode":"TN","cityCode":"ERODE"},{"countryCode":"IN","provinceCode":"TN","cityCode":"COBTE"},{"countryCode":"IN","provinceCode":"TN","cityCode":"MDURI"},{"countryCode":"ES","provinceCode":"*","cityCode":"*"},{"countryCode":"JO","provinceCode":"*","cityCode":"*"},{"countryCode":"US","provinceCode":"CA","cityCode":"*"}],"excludeData":[{"countryCode":"IN","provinceCode":"TN","cityCode":"NMAKL"},{"countryCode":"US","provinceCode":"CA","cityCode":"ALMED"},{"countryCode":"JO","provinceCode":"MN","cityCode":"*"}]},{"parentDistributorName":"Distributor1","distributorName":"Distributor2","includeData":[{"countryCode":"ES","provinceCode":"EX","cityCode":"*"},{"countryCode":"JO","provinceCode":"AM","cityCode":"*"},{"countryCode":"US","provinceCode":"CA","cityCode":"AVEJO"}],"excludeData":[{"countryCode":"ES","provinceCode":"EX","cityCode":"VLENA"},{"countryCode":"JO","provinceCode":"AM","cityCode":"WASIR"}]}]'
+
+Response-1: {"ServerResponse":["Created Distributor: Distributor1 And Sucessfully Updated Permissions; ","Created Distributor: Distributor2 And Sucessfully Updated Permissions; "]}
+
+Request-2: curl -XPOST "http://localhost:7770/verifyDist/" -d '{"distributorName":"Distributor2","locations":[{"countryCode":"JO","provinceCode":"AM","cityCode":"WASIR"},{"countryCode":"US","provinceCode":"CA","cityCode":"AVEJO"}]}'
+
+Response-2: {"ServerResponse":["NO For : WASIR-AM-JO; ","YES For : AVEJO-CA-US; "]}
+
+Request-3: curl "http://localhost:7770/listDist/"
+
+Response-3: {"ServerResponse":["Distributor1","Distributor2"]}
 
 
+## Author:
+
+   NAGA SAI AAKARSHIT BATCHU (aakarshit.batchu@gmail.com)

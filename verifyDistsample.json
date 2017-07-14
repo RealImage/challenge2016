@@ -1,0 +1,15 @@
+{
+  "distributorName": "Distributor2",
+  "locations": [
+    {
+      "countryCode": "JO",
+      "provinceCode": "AM",
+      "cityCode": "WASIR"
+    },
+    {
+      "countryCode": "US",
+      "provinceCode": "CA",
+      "cityCode": "AVEJO"
+    }
+  ]
+}

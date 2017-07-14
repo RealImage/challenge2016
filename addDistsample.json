@@ -1,0 +1,88 @@
+[
+  {
+    "parentDistributorName": "none",
+    "distributorName": "Distributor1",
+    "includeData": [
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "ERODE"
+      },
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "COBTE"
+      },
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "MDURI"
+      },
+      {
+        "countryCode": "ES",
+        "provinceCode": "*",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "*",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "US",
+        "provinceCode": "CA",
+        "cityCode": "*"
+      }
+    ],
+    "excludeData": [
+      {
+        "countryCode": "IN",
+        "provinceCode": "TN",
+        "cityCode": "NMAKL"
+      },
+      {
+        "countryCode": "US",
+        "provinceCode": "CA",
+        "cityCode": "ALMED"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "MN",
+        "cityCode": "*"
+      }
+    ]
+  },
+  {
+    "parentDistributorName": "Distributor1",
+    "distributorName": "Distributor2",
+    "includeData": [
+      {
+        "countryCode": "ES",
+        "provinceCode": "EX",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "AM",
+        "cityCode": "*"
+      },
+      {
+        "countryCode": "US",
+        "provinceCode": "CA",
+        "cityCode": "AVEJO"
+      }
+    ],
+    "excludeData": [
+      {
+        "countryCode": "ES",
+        "provinceCode": "EX",
+        "cityCode": "VLENA"
+      },
+      {
+        "countryCode": "JO",
+        "provinceCode": "AM",
+        "cityCode": "WASIR"
+      }
+    ]
+  }
+]
