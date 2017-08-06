@@ -1,0 +1,41 @@
+<section class="content-header">
+  <h1> Countries <small class= "pull-right"><%= link_to 'New Country', new_country_path %></small></h1>
+</section>
+<div class="box">
+  <!-- /.box-header -->
+  <div class="box-body">
+    <div class="row">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @countries.each do |country| %>
+            <tr>
+              <td><%= country.name %></td>
+              <td><%= country.code %></td>
+              <td><%= link_to 'Edit', edit_country_path(country) %></td>
+              <td><%= link_to 'Destroy', country, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th colspan="2"></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-sm-4"><%= page_entries_info @countries, entry_name: 'country' %></div>
+      <div class="col-sm-8 dataTables_paginate"><%= paginate @countries %></div>
+    </div>
+  </div>
+  <!-- /.box-body -->
+</div>

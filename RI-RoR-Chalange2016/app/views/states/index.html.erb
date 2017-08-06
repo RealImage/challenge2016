@@ -1,0 +1,48 @@
+<section class="content-header">
+  <h1> States <small class= "pull-right"><%= link_to 'New State', new_state_path %></small></h1>
+</section>
+<div class="box">
+  <!-- /.box-header -->
+  <div class="box-body">
+    <div class="row">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Country</th>
+            <th>Country Code</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @states.each do |state| %>
+            <tr>
+              <td><%= state.name %></td>
+              <td><%= state.code %></td>
+              <td><%= state.country.name %></td>
+              <td><%= state.country.code %></td>
+              <td><%= link_to 'Edit', edit_state_path(state) %></td>
+              <td><%= link_to 'Destroy', state, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Country</th>
+            <th>Country Code</th>
+            <th colspan="2"></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-sm-4"><%= page_entries_info @states, entry_name: 'state' %></div>
+      <div class="col-sm-8 dataTables_paginate"><%= paginate @states %></div>
+    </div>
+  </div>
+  <!-- /.box-body -->
+</div>
+

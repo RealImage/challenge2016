@@ -1,0 +1,30 @@
+<% if state.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(state.errors.count, "error") %> prohibited this state from being saved:</h2>
+
+    <ul>
+    <% state.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="box-body">
+  <%= form_for state, html: {role: "form"} do |f| %>
+    <!-- text input -->
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name , class: "form-control"%>
+    </div>
+    <div class="form-group">
+      <%= f.label :code %>
+      <%= f.text_field :code , class: "form-control"%>
+    </div>
+    <div class="form-group">
+      <%= f.label :country_id %>
+      <%= f.collection_select :country_id, Country.order(:name).all, :id, :name, {}, {class: "form-control select2"} %>
+    </div>
+    <%= f.submit class: "btn btn-primary"%>
+  <% end %>
+</div>

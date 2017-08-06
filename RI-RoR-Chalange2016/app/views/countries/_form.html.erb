@@ -1,0 +1,26 @@
+<% if country.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(country.errors.count, "error") %> prohibited this country from being saved:</h2>
+
+    <ul>
+    <% country.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+<div class="box-body">
+  <%= form_for country, html: {role: "form"} do |f| %>
+    <!-- text input -->
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name , class: "form-control"%>
+    </div>
+    <div class="form-group">
+      <%= f.label :code %>
+      <%= f.text_field :code , class: "form-control"%>
+    </div>
+    
+    <%= f.submit class: "btn btn-primary"%>
+  <% end %>
+</div>
