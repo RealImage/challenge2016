@@ -1,0 +1,53 @@
+<% if distbutor.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(distbutor.errors.count, "error") %> prohibited this distbutor from being saved:</h2>
+
+    <ul>
+    <% distbutor.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="box-body">
+  <%= form_for distbutor, html: {role: "form"} do |f| %>
+    <!-- text input -->
+    <%if @p_d_id.present? %>
+      <%= f.hidden_field :primary_dist_id , value: @p_d_id %>
+    <% end %>
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name , class: "form-control"%>
+    </div>
+    <div class="form-group">
+      <%= f.label :included_countries %>
+      <%= f.collection_select :included_countries, Country.order(:name).all, :id, :name, {}, {class: "form-control select2",multiple: true} %>
+    </div>
+    <div class="form-group">
+      <%= f.label :included_states %>
+      <%= f.select :included_states, {}, {},{class: "form-control", multiple: true,style: "width:100%"} %>
+      <span class="help-block">Select Country to processd</span>
+      <span class="help-block">If state is not present in the list then select ist country first</span>
+    </div>
+    <div class="form-group">
+      <%= f.label :included_cities %>
+      <%= f.select :included_cities, {}, {}, {class: "form-control",multiple: true,style: "width:100%"} %>
+      <span class="help-block">Select Included State to processd</span>
+      <span class="help-block">If city is not present in the list then select ist included state first</span>
+    </div>
+    <div class="form-group">
+      <%= f.label :excluded_states %>
+      <%= f.select :excluded_states, {}, {},{class: "form-control",multiple: true,style: "width:100%"} %>
+      <span class="help-block">Select Country to processd</span>
+      <span class="help-block">If states is not present in the list then select ist country first</span>
+    </div>
+    <div class="form-group">
+      <%= f.label :excluded_cities %>
+      <%= f.select :excluded_cities, {}, {},{class: "form-control",multiple: true,style: "width:100%"} %>
+      <span class="help-block">Select Included State to processd</span>
+      <span class="help-block">If city is not present in the list then select ist included or excluded state first</span>
+    </div>
+    <%= f.submit class: "btn btn-primary"%>
+  <% end %>
+</div>

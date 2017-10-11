@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app="distApp">
+
+<head>
+  <!-- SCROLLS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+  <!-- SPELLS -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<!-- define angular controller -->
+<body ng-controller="mainController">
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">DISTRIBUTOR</a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="main">
+    <div class="col-md-2">
+      <nav class="affix"> 
+        <ul class="nav"> 
+          <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+          <li><a href="#countries"><i class=""></i> Locations</a></li>
+          <li><a href="#distributors"><i class=""></i> Distributors</a></li>
+        </ul>
+      </nav> 
+    </div>
+    <!-- angular templating -->
+		<!-- this is where content will be injected -->
+    <div class="col-md-10">
+    <div ng-view></div>
+      
+    </div>
+    
+  </div>
+  
+  <footer class="text-center">
+   
+  </footer>
+  
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+<div class="box box-default">
+  <div class="box-header with-border">
+    <h3 class="box-title">New <%= "Sub "if @p_d_id.present?%>Distbutor</h3>
+  </div>
+  <!-- /.box-header -->
+  <%= render 'form', distbutor: @distbutor %>
+  <!-- /.box-body -->
+  <div class="box-footer">
+    <%= link_to 'Back', distbutors_path %>
+  </div>
+</div>

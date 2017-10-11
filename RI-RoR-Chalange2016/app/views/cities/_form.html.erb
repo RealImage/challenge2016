@@ -1,0 +1,30 @@
+<% if city.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(city.errors.count, "error") %> prohibited this city from being saved:</h2>
+
+    <ul>
+    <% city.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="box-body">
+  <%= form_for city, html: {role: "form"} do |f| %>
+    <!-- text input -->
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="form-group">
+      <%= f.label :code %>
+      <%= f.text_field :code %>
+    </div>
+    <div class="form-group">
+      <%= f.label :state_id %>
+      <%= f.collection_select :state_id, State.order(:name).all, :id, :name, {}, {class: "form-control select2"} %>
+    </div>
+    <%= f.submit class: "btn btn-primary"%>
+  <% end %>
+</div>

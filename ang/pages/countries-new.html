@@ -1,0 +1,12 @@
+<form name="countryForm" ng-submit="submitForm()">
+{{message}}
+  <div class="form-group">
+    <label for="exampleInputEmail1">Name of the Country</label>
+    <input type="text" class="form-control" id="name" placeholder="Name of the Country" ng-model="country.name">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Code for the Country</label>
+    <input type="text" class="form-control" id="code" placeholder="Code for the Country" ng-model="country.code">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>

@@ -1,0 +1,13 @@
+//= require jquery
+//= require best_in_place
+//= require jquery_ujs
+//= require turbolinks
+//= require adminlte/bootstrap
+//= require adminlte/jquery.slimscroll
+//= require adminlte/fastclick
+//= require adminlte/select2.full
+// require jquery-ui
+// require best_in_place.jquery-ui
+//= require adminlte/app
+//= require adminlte/demo
+//= require distbutors
