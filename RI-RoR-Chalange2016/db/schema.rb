@@ -79,13 +79,6 @@ ActiveRecord::Schema.define(version: 20170805122126) do
     t.index ["state_id"], name: "index_included_states_on_state_id"
   end
 
-  create_table "movies", force: :cascade do |t|
-    t.string   "name"
-    t.date     "release_date"
-    t.text     "description"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
 
   create_table "states", force: :cascade do |t|
     t.string   "name"

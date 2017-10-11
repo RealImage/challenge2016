@@ -35,7 +35,7 @@ class DistbutorsController < ApplicationController
     permision_ok = true
     distbutor_save = false
     @distbutor = Distbutor.new(distbutor_params)
-    if params[:distbutor][:primary_dist_id].nil?
+    unless params[:distbutor][:primary_dist_id].nil?
       params[:distbutor][:included_cities].each do |city_id|
         if city_id != ""
           city = City.find_by(id: city_id)
@@ -46,13 +46,17 @@ class DistbutorsController < ApplicationController
       end
       if permision_ok
         params[:distbutor][:included_states].each do |state_id|
-          country_id = State.find_by(id: state_id).country_id
-          permision_ok = false unless check_premisions(params[:distbutor][:primary_dist_id], country_id, state_id,"")
+          if state_id != ""
+            country_id = State.find_by(id: state_id).country_id
+            permision_ok = false unless check_premisions(params[:distbutor][:primary_dist_id], country_id, state_id,"")
+          end
         end
       end
       if permision_ok
         params[:distbutor][:included_countries].each do |country_id|
-          permision_ok = false unless check_premisions(params[:distbutor][:primary_dist_id], country_id, "","")
+          if country_id != ""
+            permision_ok = false unless check_premisions(params[:distbutor][:primary_dist_id], country_id, "","")
+          end
         end
       end
     end
