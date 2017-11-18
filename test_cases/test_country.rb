@@ -19,13 +19,14 @@ class TestCountry < Test::Unit::TestCase
   end
 
   def test_create_country
-    country = Country.create({"Country Code" => "IN", "Country Name" => "India"})
-    assert_equal("Country", country.class.name)
-    assert_equal("IN", country.code)
-    assert_equal("India", country.name)
+    country = Country.create({"Country Code" => "ENG", "Country Name" => "England"})
+    assert_equal(Country, country.class)
+    assert_equal("ENG", country.code)
+    assert_equal("England", country.name)
 
-    country2 = Country.create({"Country Code" => "US", "Country Name" => "United States"})
+    country2 = Country.create({"Country Code" => "IT", "Country Name" => "Italy"})
     assert_equal(nil, Country.create({"Country Code" => "", "Country Name" => "United States"}) )
     assert_equal(nil, Country.create({"Country Code" => nil, "Country Name" => "United States"}) )
+    assert_equal(nil, Country.create({"Country Code" => "IT", "Country Name" => "Italy"}) )
   end
 end
