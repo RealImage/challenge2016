@@ -20,4 +20,9 @@ class State
   def self.find_by_code(province_code, country_code=nil)
     all.to_a.detect { |state| state.code == province_code && state.country_code == country_code }
   end
+
+  def included?(region)
+    country_code, state_code, city_code = region
+    self.code == state_code && self.country_code == country_code
+  end
 end

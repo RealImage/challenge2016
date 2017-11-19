@@ -19,4 +19,9 @@ class Country
   def self.find_by_code(code)
     all.to_a.detect { |obj| obj.code == code }
   end
+
+  def included?(region)
+    country_code, state_code, city_code = region
+    self.code == country_code
+  end
 end

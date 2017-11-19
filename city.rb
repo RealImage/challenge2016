@@ -21,4 +21,9 @@ class City
   def self.find_by_code(city_code, province_code=nil, country_code=nil)
     all.to_a.detect { |city| city.code == city_code && city.state_code == province_code && city.country_code == country_code }
   end
+
+  def included?(region)
+    country_code, state_code, city_code = region
+    self.code == city_code && self.state_code == state_code && self.country_code == country_code
+  end
 end
