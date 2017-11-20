@@ -1,3 +1,59 @@
+###################################
+
+Environment:
+
+Ruby - 2.3.1
+
+###################################
+
+Assumptions:
+
+1. Include(Allowed regions) should always be there
+2. Validations are done for inputs like valid region, valid distributor, multi level hierarchy etc
+1. Incase of not providing Exclude(Unallwed regions) give it as NULL Eg. add Distributor3 IN NULL Distributor2
+2. Exclude regions will be a valid one i.e a subset of include
+
+Files:
+
+1. regions.csv - Cities.csv has so many data inorder to load the data quick created regions.csv
+2. process.rb - Loads the data from regions.csv. Gets the input from user and prints the result
+3. csv_util - Reads file and gives parsed csv result
+4. distributor.rb - Create new Distributor objects and check permissions
+5. country.rb - Has country objects
+6. state.rb - has state objects
+7. city.rb - has city objects
+8. test_cases folder contains test cases for the above files
+
+###################################
+
+Schema: 
+
+Country - code, name
+State - code, name, country_code
+City - code, name, country_code, state_code
+Distributor - name, allowed_regions, unallowed_regions, extends
+Each of them treated as Models instead od DB, all the inputs are stored in-memory as objects
+
+Command to run the program: 
+
+$ ruby process.rb
+
+Inputs are given by user (add distributor / check permission od distributor). inputs are given by space separated
+
+1. Add a distributor in this format 
+add Distributor Name,Allowed regions,Unallowed regions,Extends 
+
+add Distributor1 IN,IT KA-IN,CENAI-TN-IN)
+add Distributor2 IN TN-IN Distributor1
+add Distributor3 IN NULL Distributor2
+
+2. Please provide distributor name and location for permission as 
+
+(Eg. permission? Distributor1 BENAU-KA-IN)
+
+###################################
+
+
 # Real Image Challenge 2016
 
 In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
