@@ -9,7 +9,7 @@ var cities []distributor.Cities
 var distributorMap map[string]interface{}
 
 func init() {
-	cities = distributor.PrepareCitiesJson()
+	cities = distributor.PrepareCitiesJson("cities.csv")
 	distributorMap = make(map[string]interface{})
 }
 
@@ -20,6 +20,9 @@ func main() {
 		if len(distributorMap) == 0 {
 			fmt.Printf("By default you need to create a Direct Distributor initially\n")
 			fmt.Printf("Please enter your PERMISSION following the order Country, State and then City\n")
+			fmt.Printf("use `_` to seperate Country Name, State Name and City Name (not case sessitive)\n")
+			fmt.Printf("Sample : EXCLUDE: CHENNAI_TAMIL nadu_INDIa \n\n")
+
 			distType = "direct"
 		} else {
 			distributor.ActionIdentifier(distributorMap, cities)

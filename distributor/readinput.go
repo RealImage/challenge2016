@@ -18,13 +18,15 @@ func GetInput(action string) []string {
 		scanner.Scan()
 		text := scanner.Text()
 		if text == "" {
-			if len(inputLines) > 0 {
+			if len(inputLines) > 1 {
 				status = "pass"
 			} else {
 				fmt.Printf("You are not allowed to create a user with no rules/actual rules of parent distributor\n")
 			}
 		} else {
-			inputLines = append(inputLines, text)
+			if text != "" {
+				inputLines = append(inputLines, text)
+			}
 		}
 		if len(inputLines) == 1 && action == "add" {
 			fmt.Printf("Please list the permissions,\n")

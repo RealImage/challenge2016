@@ -19,8 +19,8 @@ type Cities struct {
 	Country     string `json:"country`
 }
 
-func PrepareCitiesJson() []Cities {
-	csvFile, _ := os.Open("cities.csv")
+func PrepareCitiesJson(fileName string) []Cities {
+	csvFile, _ := os.Open(fileName)
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	var cities []Cities
 	for {
