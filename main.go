@@ -19,6 +19,7 @@ func main() {
 		var distType string
 		if len(distributorMap) == 0 {
 			fmt.Printf("By default you need to create a Direct Distributor initially\n")
+			fmt.Printf("Please enter your PERMISSION following the order Country, State and then City\n")
 			distType = "direct"
 		} else {
 			distributor.ActionIdentifier(distributorMap, cities)
@@ -40,7 +41,7 @@ func main() {
 			//valid := distributor.ExistInArray(directUserList, distType)
 			valid := distributorMap[distType]
 			if valid != nil {
-				userCountry, _ := distributor.StringArray(valid.(map[string]interface{}), "countries")
+				/*userCountry, _ := distributor.StringArray(valid.(map[string]interface{}), "countries")
 				userStates, _ := distributor.StringArray(valid.(map[string]interface{}), "included_states")
 				userCities, _ := distributor.StringArray(valid.(map[string]interface{}), "included_cities")
 				if len(userCountry) > 0 {
@@ -49,7 +50,7 @@ func main() {
 					fmt.Printf("FYI: You have controlled access in States - %v\n", userStates)
 				} else if len(userCities) > 0 {
 					fmt.Printf("FYI: You have controlled access in Cities - %v\n", userCities)
-				}
+				}*/
 				fmt.Printf("Enter the Sub - Distributor name: ")
 				permission := distributor.GetInput("add")
 				checkexistance := distributorMap[permission[0]]
@@ -71,10 +72,12 @@ func main() {
 
 func prepareDistributor(permission []string) {
 
-	currentUser := distributor.PrepareRoorUser(permission, cities)
+	userName := permission[0]
+	permission = distributor.Remove(permission, permission[0])
+	currentUser := distributor.PrepareRootUser(permission, cities)
 	if currentUser["err"] == nil {
 		currentUser["type"] = "direct"
-		distributorMap[permission[0]] = currentUser
+		distributorMap[userName] = currentUser
 		fmt.Printf("Distributor created successfully !!\n\n")
 	} else {
 		fmt.Printf("%v", currentUser["err"])
@@ -82,11 +85,13 @@ func prepareDistributor(permission []string) {
 }
 
 func prepareSubDistributor(permission []string, root map[string]interface{}, parent string) {
+	userName := permission[0]
+	permission = distributor.Remove(permission, permission[0])
 	currentUser := distributor.PrepareSubUser(permission, cities, root)
 	if currentUser["err"] == nil {
 		currentUser["type"] = "indirect"
 		currentUser["parent"] = parent
-		distributorMap[permission[0]] = currentUser
+		distributorMap[userName] = currentUser
 		fmt.Printf("Sub-Distributor created successfully !!\n")
 	} else {
 		fmt.Printf("%v", currentUser["err"])

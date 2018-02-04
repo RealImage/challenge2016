@@ -100,10 +100,15 @@ func extendStateAccess(cities []Cities, countries []string) []string {
 	/*Direct distributor can choose any state provided he haven't included/excluded corresponding country*/
 	var unselectedState []string
 
+	for _, item := range cities {
+		unselectedState = append(unselectedState, fmt.Sprintf("%v_%v", item.State, item.Country))
+
+	}
+
 	for _, country := range countries {
 		for _, item := range cities {
-			if item.Country != country {
-				unselectedState = append(unselectedState, fmt.Sprintf("%v_%v", item.State, item.Country))
+			if item.Country == country {
+				unselectedState = Remove(unselectedState, fmt.Sprintf("%v_%v", item.State, item.Country))
 			}
 		}
 	}
@@ -119,33 +124,37 @@ func extendAreaAccess(cities []Cities, countries []string, states []string) []st
 		unSelectedCity = append(unSelectedCity, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
 	}
 	/*Area access should not be permitted in case if the user is prohibited from any State or Country*/
-	if len(countries) > 0 && len(states) > 0 {
+	/*if len(countries) > 0 && len(states) > 0 {
 		for _, country := range countries {
 			for _, item := range cities {
 				if item.Country == country {
 					for _, state := range states {
 						stateName := fmt.Sprintf("%v_%v", item.State, item.Country)
 						if stateName == state {
-							unSelectedCity = remove(unSelectedCity, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
+							unSelectedCity = Remove(unSelectedCity, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
 						}
 					}
 				}
 			}
 		}
-	} else if len(countries) > 0 {
+	}*/
+
+	if len(countries) > 0 {
 		for _, item := range cities {
 			for _, country := range countries {
 				if item.Country == country {
-					unSelectedCity = remove(unSelectedCity, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
+					unSelectedCity = Remove(unSelectedCity, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
 				}
 			}
 		}
-	} else if len(states) > 0 {
+	}
+
+	if len(states) > 0 {
 		for _, item := range cities {
 			for _, state := range states {
 				stateName := fmt.Sprintf("%v_%v", item.State, item.Country)
 				if stateName == state {
-					unSelectedCity = remove(unSelectedCity, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
+					unSelectedCity = Remove(unSelectedCity, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
 				}
 			}
 		}
@@ -178,7 +187,7 @@ func subAllowedStateNames(userAccess map[string]interface{}, cities []Cities) []
 		for _, allowed := range allowedStates {
 			for _, restricted := range excludeState {
 				if allowed == restricted {
-					allowedStates = remove(allowedStates, restricted)
+					allowedStates = Remove(allowedStates, restricted)
 				}
 			}
 		}
@@ -208,7 +217,7 @@ func subAllowedAreaNames(userAccess map[string]interface{}, cities []Cities, inc
 	excludeState, _ := userAccess["excluded_states"].([]string)
 	excludeArea, _ := userAccess["excluded_cities"].([]string)
 
-	var tmp []string
+	var allowedAreas []string
 
 	if len(include) > 0 {
 		includeState = append(includeState, include...)
@@ -222,7 +231,7 @@ func subAllowedAreaNames(userAccess map[string]interface{}, cities []Cities, inc
 	for _, cnt := range countryAccess {
 		for _, item := range cities {
 			if item.Country == cnt {
-				tmp = append(tmp, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
+				allowedAreas = append(allowedAreas, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
 			}
 		}
 	}
@@ -230,14 +239,14 @@ func subAllowedAreaNames(userAccess map[string]interface{}, cities []Cities, inc
 	/*based on the parent distributor remove the city name*/
 
 	for _, inc := range includeArea {
-		tmp = append(tmp, inc)
+		allowedAreas = append(allowedAreas, inc)
 	}
 
 	for _, ins := range includeState {
 		for _, item := range cities {
 			custom := strings.Split(ins, "_")
 			if item.State == custom[0] {
-				tmp = append(tmp, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
+				allowedAreas = append(allowedAreas, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
 			}
 		}
 	}
@@ -246,23 +255,23 @@ func subAllowedAreaNames(userAccess map[string]interface{}, cities []Cities, inc
 		for _, item := range cities {
 			custom := strings.Split(exs, "_")
 			if item.State == custom[0] {
-				tmp = remove(tmp, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
+				allowedAreas = Remove(allowedAreas, fmt.Sprintf("%v_%v_%v", item.Area, item.State, item.Country))
 			}
 		}
 	}
 
 	for _, exa := range excludeArea {
-		for _, item := range tmp {
+		for _, item := range allowedAreas {
 			if item == exa {
-				tmp = remove(tmp, item)
+				allowedAreas = Remove(allowedAreas, item)
 			}
 		}
 	}
 
-	return removeDuplicates(tmp)
+	return removeDuplicates(allowedAreas)
 }
 
-func remove(s []string, r string) []string {
+func Remove(s []string, r string) []string {
 	for i, v := range s {
 		if v == r {
 			return append(s[:i], s[i+1:]...)
@@ -271,7 +280,7 @@ func remove(s []string, r string) []string {
 	return s
 }
 
-func PrepareRoorUser(input []string, cities []Cities) map[string]interface{} {
+func PrepareRootUser(input []string, cities []Cities) map[string]interface{} {
 	currentUser := make(map[string]interface{})
 	var countries []string
 	var excludeStateAccess []string
@@ -279,7 +288,7 @@ func PrepareRoorUser(input []string, cities []Cities) map[string]interface{} {
 	var rootStateAccess []string
 	var rootAreaAccess []string
 
-	for _, line := range input[1:] {
+	for _, line := range input {
 		lowerLine := strings.ToLower(line)
 		if strings.Contains(lowerLine, "exclude") && strings.Contains(lowerLine, ":") {
 			custom := strings.Split(line, ":")
@@ -328,6 +337,9 @@ func PrepareRoorUser(input []string, cities []Cities) map[string]interface{} {
 					areaName := ExistInArray(allowedAreas, custom1)
 					if areaName != "" {
 						rootAreaAccess = append(rootAreaAccess, areaName)
+					} else {
+						currentUser["err"] = fmt.Sprintf("[%v] Not permitted, please try again\n", line)
+						return currentUser
 					}
 				}
 			} else {
@@ -360,7 +372,7 @@ func PrepareSubUser(input []string, cities []Cities, root map[string]interface{}
 	var includedStateAccess []string
 	var excludedStateAccess []string
 
-	for _, line := range input[1:] {
+	for _, line := range input {
 		lowerLine := strings.ToLower(line)
 		if strings.Contains(lowerLine, "exclude") && strings.Contains(lowerLine, ":") {
 			custom := strings.Split(line, ":")

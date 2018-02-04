@@ -119,9 +119,10 @@ func ActionIdentifier(distributorMap map[string]interface{}, cities []Cities) {
 					} else {
 						fmt.Printf("%v", currentUser["err"])
 					}
+				} else {
+					fmt.Printf("\nDistributor not exist :( \n")
+					status = "fail"
 				}
-				fmt.Printf("\nDistributor not exist :( \n")
-				status = "fail"
 			}
 		} else {
 			fmt.Printf("\nPlease enter a valid input :( ")
