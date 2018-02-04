@@ -44,16 +44,6 @@ func main() {
 			//valid := distributor.ExistInArray(directUserList, distType)
 			valid := distributorMap[distType]
 			if valid != nil {
-				/*userCountry, _ := distributor.StringArray(valid.(map[string]interface{}), "countries")
-				userStates, _ := distributor.StringArray(valid.(map[string]interface{}), "included_states")
-				userCities, _ := distributor.StringArray(valid.(map[string]interface{}), "included_cities")
-				if len(userCountry) > 0 {
-					fmt.Printf("FYI: You have controlled access in Countries - %v\n", userCountry)
-				} else if len(userStates) > 0 {
-					fmt.Printf("FYI: You have controlled access in States - %v\n", userStates)
-				} else if len(userCities) > 0 {
-					fmt.Printf("FYI: You have controlled access in Cities - %v\n", userCities)
-				}*/
 				fmt.Printf("Enter the Sub - Distributor name: ")
 				permission := distributor.GetInput("add")
 				checkexistance := distributorMap[permission[0]]
