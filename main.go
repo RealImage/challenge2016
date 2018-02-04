@@ -29,10 +29,9 @@ func main() {
 			fmt.Printf("Enter the Distributor name: ")
 			permission := distributor.GetInput("add")
 			//permission := []string{"DIST1", "INCLUDE: INDIA", "INCLUDE: UNITEDSTATES", "EXCLUDE: KARNATAKA-INDIA", "EXCLUDE: CHENNAI-TAMILNADU-INDIA"}
-			//valid := distributor.ExistInArray(directUserList, permission[0])
 			valid := distributorMap[permission[0]]
 			if valid == nil {
-				prepareDirectUser(permission)
+				prepareDistributor(permission)
 			} else {
 				fmt.Printf("Direct user already exist with this name\n\n")
 			}
@@ -44,7 +43,6 @@ func main() {
 				userCountry, _ := distributor.StringArray(valid.(map[string]interface{}), "countries")
 				userStates, _ := distributor.StringArray(valid.(map[string]interface{}), "included_states")
 				userCities, _ := distributor.StringArray(valid.(map[string]interface{}), "included_cities")
-				//distributor.CallClear()
 				if len(userCountry) > 0 {
 					fmt.Printf("FYI: You have controlled access in Countries - %v\n", userCountry)
 				} else if len(userStates) > 0 {
@@ -56,7 +54,7 @@ func main() {
 				permission := distributor.GetInput("add")
 				checkexistance := distributorMap[permission[0]]
 				if checkexistance == nil {
-					prepareInDirectUser(permission, valid.(map[string]interface{}), distType)
+					prepareSubDistributor(permission, valid.(map[string]interface{}), distType)
 				} else {
 					fmt.Printf("Disributor name already exist, try with a different name\n")
 				}
@@ -71,34 +69,26 @@ func main() {
 
 /*CRITICAL: SALVA,BN,RO,Salva,Bistrita-Nasaud,Romania*/
 
-func prepareDirectUser(permission []string) {
+func prepareDistributor(permission []string) {
 
 	currentUser := distributor.PrepareRoorUser(permission, cities)
 	if currentUser["err"] == nil {
-		//directUserList = append(directUserList, permission[0])
 		currentUser["type"] = "direct"
 		distributorMap[permission[0]] = currentUser
 		fmt.Printf("Distributor created successfully !!\n\n")
 	} else {
-		//distributor.CallClear()
 		fmt.Printf("%v", currentUser["err"])
 	}
-
-	//fmt.Printf("%v", distributorMap[permission[0]])
 }
 
-func prepareInDirectUser(permission []string, root map[string]interface{}, parent string) {
+func prepareSubDistributor(permission []string, root map[string]interface{}, parent string) {
 	currentUser := distributor.PrepareSubUser(permission, cities, root)
 	if currentUser["err"] == nil {
 		currentUser["type"] = "indirect"
 		currentUser["parent"] = parent
-		//indirectUserList = append(indirectUserList, permission[0])
 		distributorMap[permission[0]] = currentUser
 		fmt.Printf("Sub-Distributor created successfully !!\n")
 	} else {
-		//distributor.CallClear()
 		fmt.Printf("%v", currentUser["err"])
 	}
-
-	//fmt.Printf("%v", distributorMap[permission[0]])
 }
