@@ -32,7 +32,7 @@ INCLUDE: Istgah-e Rah Ahan-e Garmsar_Semnan_Iran
 
 
 
-######Possible Response:
+**Possible Response:**
 
 In case if the rules we have entered are valid, console will be responding with 
 
