@@ -151,7 +151,12 @@ func printDistributor(distributorMap map[string]interface{}, distType string) st
 		dist := distributorMap[k].(map[string]interface{})
 		userType := mustString(dist, "type", "")
 		if userType == distType {
-			distString = fmt.Sprintf("%v\n%v", distString, k)
+			if distType == "direct" {
+				distString = fmt.Sprintf("%v\n%v", distString, k)
+			} else {
+				parent := mustString(dist, "parent", "")
+				distString = fmt.Sprintf("%v\n%v < %v", distString, k, parent)
+			}
 		}
 	}
 
