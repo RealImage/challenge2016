@@ -1,0 +1,14 @@
+1. Create and provide permissions of Distributor.
+2. Query Distributor Access.
+
+Use (1) to provide permissions like:
+    Permissions of Distributor1
+    INCLUDE: IN
+
+    Permissions of Distributor2 < Distributor1
+    EXCLUDE: TN-IN
+
+Use (2) to query distributors like:
+    Can DISTRIBUTOR2 distribute in ->KLRAI-TN-IN
+
+    Note: Prefix an arrow for locations during querying
