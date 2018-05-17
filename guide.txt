@@ -1,0 +1,13 @@
+###################################
+
+Environment:
+
+Ruby - 2.4.1
+
+###################################
+
+Command to run the code: 
+
+1. Open this folder in the terminal and execute the following from project path
+
+ruby main.rb
