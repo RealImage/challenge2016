@@ -4,10 +4,23 @@ Environment:
 
 Ruby - 2.4.1
 
-###################################
+####################################
 
-Command to run the code: 
+Command to run the code:
 
 1. Open this folder in the terminal and execute the following from project path
 
 ruby main.rb
+
+###################################
+
+Notes:
+
+1.Distributors are created from "distributor.csv" file.
+2.cities.csv is used for validating content
+
+####################################
+
+Assumptions:
+1. Distributor will always have INCLUDE(Allowed locations).
+2. All entries in distributor.csv and cities.csv are given in correct format

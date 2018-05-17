@@ -1,0 +1,3 @@
+Name,Allowed locations,Unallowed locations,Parent name
+Distributor1,"INDIA, UNITEDSTATES, IN","KARNATAKA-INDIA, CHENNAI-TAMIL NADU-INDIA",
+Distributor2,INDIA,TAMIL NADU-INDIA,Distributor1
