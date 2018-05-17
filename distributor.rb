@@ -1,4 +1,3 @@
-require 'pry'
 class Distributor
   attr_accessor :id, :name, :allowed_locations, :unallowed_locations, :parents
 
@@ -71,8 +70,8 @@ class Distributor
   def validate_province_and_cities(province_details, province, city)
     city_details = province_details.map {|keys, value| value if keys.include? province}.compact.first
     @errors << "#{province} is not valid in the provided country. So answer is NO" unless city_details
-    if city && !city.empty? && @errors.empty?
-      @errors << "#{city} is not in our list. So answer is NO" unless city_details[:city_list].include? city
+    if city && !city.empty? && @errors.empty? && !(city_details[:city_list].include? city)
+      @errors << "#{city} is not in our list. So answer is NO"
     end
   end
 
