@@ -1,0 +1,132 @@
+SAMPLE OUTPUT
+-------------
+
+Enter Total distributors
+3
+Enter distributor name
+DISTRIBUTOR1
+No of includes
+2
+Enter Country Name
+india
+Enter Province Name
+
+Enter Country Name
+united states
+Enter Province Name
+
+No of excludes
+2
+Enter Country Name
+india
+Enter Province Name
+karnataka
+Enter City Name
+
+Enter Country Name
+india
+Enter Province Name
+tamil nadu
+Enter City Name
+chennai
+Enter distributor name
+DISTRIBUTOR2
+Enter parent distributor name
+DISTRIBUTOR1
+No of includes
+1
+Enter Country Name
+india
+Enter Province Name
+
+No of excludes
+1
+Enter Country Name
+india
+Enter Province Name
+tamil nadu
+Enter City Name
+
+Enter distributor name
+DISTRIBUTOR3
+Enter parent distributor name
+DISTRIBUTOR2
+No of includes
+1
+Enter Country Name
+india
+Enter Province Name
+karnataka
+Enter City Name
+hubli
+Given details was not exist in our directory. Try agian.
+Enter Country Name
+india
+Enter Province Name
+karnataka
+Enter City Name
+Somwarpet
+No of excludes
+
+Enter no of times you want run the test
+20
+Enter distributor name
+DISTRIBUTOR1
+Distributor1 has permission to distribute in (country-province-city)
+united states
+YES
+Enter distributor name
+DISTRIBUTOR1
+Distributor1 has permission to distribute in (country-province-city)
+india
+YES
+Enter distributor name
+DISTRIBUTOR1
+Distributor1 has permission to distribute in (country-province-city)
+india-karnataka
+NO
+Enter distributor name
+DISTRIBUTOR1
+Distributor1 has permission to distribute in (country-province-city)
+india-tamil nadu-chennai
+NO
+Enter distributor name
+DISTRIBUTOR1
+Distributor1 has permission to distribute in (country-province-city)
+india-tamil nadu-Vikravandi
+YES
+Enter distributor name
+DISTRIBUTOR2
+Distributor2 has permission to distribute in (country-province-city)
+india
+YES
+Enter distributor name
+DISTRIBUTOR2
+Distributor2 has permission to distribute in (country-province-city)
+india-tamil nadu
+NO
+Enter distributor name
+DISTRIBUTOR2
+Distributor2 has permission to distribute in (country-province-city)
+india-karnataka
+NO
+Enter distributor name
+DISTRIBUTOR2
+Distributor2 has permission to distribute in (country-province-city)
+china
+NO
+Enter distributor name
+DISTRIBUTOR3
+Distributor3 has permission to distribute in (country-province-city)
+india-karnataka
+NO
+Enter distributor name
+DISTRIBUTOR3
+Distributor3 has permission to distribute in (country-province-city)
+india-karnataka-Somwarpet
+NO
+Enter distributor name
+DISTRIBUTOR3
+Distributor3 has permission to distribute in (country-province-city)
+india
+NO
