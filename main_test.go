@@ -4,8 +4,7 @@ import (
 	"testing"
 )
 
-func TestCheck(t *testing.T) {
-
+func Test_Check(t *testing.T) {
 	DistData["prabesh"] = Dist{Name: "prabesh", Country: map[string]Country{
 		"IN": Country{
 			State: map[string]State{
@@ -44,7 +43,7 @@ func TestCheck(t *testing.T) {
 	}
 }
 
-func TestAdd(t *testing.T) {
+func Test_Add(t *testing.T) {
 
 	tests := []struct {
 		name    string
@@ -70,4 +69,21 @@ func TestAdd(t *testing.T) {
 		})
 	}
 
+}
+
+func Test_AddSub(t *testing.T) {
+	tests := []struct {
+		name    string
+		nm      string
+		include string
+		exclude string
+		check   string
+		want    bool
+	}{}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+		})
+	}
 }

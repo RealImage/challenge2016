@@ -46,40 +46,12 @@ var (
 )
 
 func main() {
-
-	csvFile, err := os.Open("cities.csv")
+	//reading csv file
+	err := read("cities.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
-	reader := csv.NewReader(bufio.NewReader(csvFile))
-	Data = make(map[string]Country)
-	for {
-		line, err := reader.Read()
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			log.Fatal(err)
-		}
-		if _, ok := Data[line[2]]; ok {
-			if _, ok := Data[line[2]].State[line[1]]; ok {
-				Data[line[2]].State[line[1]].Province[line[0]] = Province{line[3], line[0]}
-			} else {
-				Data[line[2]].State[line[1]] = State{Code: line[1], Name: line[4],
-					Province: map[string]Province{
-						line[0]: Province{line[3], line[0]},
-					}}
-			}
-		} else {
-			Data[line[2]] = Country{Code: line[2], Name: line[5],
-				State: map[string]State{
-					line[1]: State{Code: line[1], Name: line[4],
-						Province: map[string]Province{
-							line[0]: Province{line[3], line[0]},
-						}},
-				}}
-		}
 
-	}
 Loop:
 	for {
 		var action int
@@ -179,6 +151,48 @@ Loop:
 
 }
 
+func read(file string) error {
+	handle, err := os.Open(file)
+
+	if err != nil {
+		return err
+	}
+	defer handle.Close()
+	return process(handle)
+}
+func process(handle io.Reader) error {
+	reader := csv.NewReader(bufio.NewReader(handle))
+	Data = make(map[string]Country)
+	for {
+		line, err := reader.Read()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return err
+		}
+		if _, ok := Data[line[2]]; ok {
+			if _, ok := Data[line[2]].State[line[1]]; ok {
+				Data[line[2]].State[line[1]].Province[line[0]] = Province{line[3], line[0]}
+			} else {
+				Data[line[2]].State[line[1]] = State{Code: line[1], Name: line[4],
+					Province: map[string]Province{
+						line[0]: Province{line[3], line[0]},
+					}}
+			}
+		} else {
+			Data[line[2]] = Country{Code: line[2], Name: line[5],
+				State: map[string]State{
+					line[1]: State{Code: line[1], Name: line[4],
+						Province: map[string]Province{
+							line[0]: Province{line[3], line[0]},
+						}},
+				}}
+		}
+
+	}
+	return nil
+}
+
 func getDist(name string) Dist {
 	if v, ok := DistData[name]; ok {
 		return v
@@ -188,6 +202,7 @@ func getDist(name string) Dist {
 
 //Add adds a distributor
 func (per Dist) Add(inc, ex, name string) {
+
 	s := strings.Split(inc, ",")
 
 	if len(s) == 2 { // case with two values in include
