@@ -83,7 +83,6 @@ func main() {
 Loop:
 	for {
 		var action int
-
 		fmt.Println("*************************")
 		fmt.Println()
 		fmt.Println("SELECT AN OPTION        ")
@@ -107,6 +106,10 @@ Loop:
 			fmt.Scanf("%s", &incl)
 			fmt.Println("Please enter the exclude permissions in a comma seperated way ")
 			fmt.Scanf("%s", &excl)
+			if incl == "" {
+				fmt.Println("All permission assignment is not allowed")
+				break
+			}
 			getDist(name).Add(incl, excl, name)
 
 		case 2: //DEL A DISTRIBUTOR
@@ -130,7 +133,25 @@ Loop:
 			fmt.Scanf("%s", &incl)
 			fmt.Println("Please enter the exclude permissions in a comma seperated way ")
 			fmt.Scanf("%s", &excl)
-
+			if incl == "" {
+				fmt.Println("All permission is not allowed")
+				break
+			}
+			str := incl
+			if excl != "" {
+				str = incl + "," + excl
+			}
+			s := strings.Split(str, ",")
+			if !Valid(s) {
+				fmt.Println("Not a Valid permission")
+				break
+			}
+			if !getDist(pname).Check(str) {
+				fmt.Printf("%s has no permission to distribute\n", pname)
+				break
+			}
+			dist := Dist{name, getDist(pname).copyMap()}
+			dist.Add(incl, excl, name)
 			break
 		case 5: //CHECK PERMISSION
 			var name, p string
@@ -138,7 +159,8 @@ Loop:
 			fmt.Scanf("%s", &name)
 			fmt.Println("Please enter the permission in a comma seperated way (country,state,province)")
 			fmt.Scanf("%s", &p)
-			if !Valid(strings.Split(p, ",")) {
+			s := strings.Split(p, ",")
+			if !Valid(s) || len(s) < 3 {
 				fmt.Println("Not a Valid permission")
 				break
 			}
@@ -275,19 +297,25 @@ func (per Dist) Add(inc, ex, name string) {
 	DistData[name] = per
 }
 
-//AddSub adds a distributor
-func (per Dist) AddSub(inc, ex, name string) {
-
-}
-
 //Valid checks if given permission is valid or not
 func Valid(s []string) bool {
-
-	if _, ok := Data[s[0]]; ok {
-		if _, ok := Data[s[0]].State[s[1]]; ok {
-			if _, ok := Data[s[0]].State[s[1]].Province[s[2]]; ok {
+	if len(s) == 3 {
+		if _, ok := Data[s[0]]; ok {
+			if _, ok := Data[s[0]].State[s[1]]; ok {
+				if _, ok := Data[s[0]].State[s[1]].Province[s[2]]; ok {
+					return true
+				}
+			}
+		}
+	} else if len(s) == 2 {
+		if _, ok := Data[s[0]]; ok {
+			if _, ok := Data[s[0]].State[s[1]]; ok {
 				return true
 			}
+		}
+	} else if len(s) == 1 {
+		if _, ok := Data[s[0]]; ok {
+			return true
 		}
 	}
 	return false
@@ -328,4 +356,20 @@ func (per Dist) Check(p string) bool {
 
 	}
 	return false
+}
+
+func (per Dist) copyMap() map[string]Country {
+	m := make(map[string]Country)
+	for i := range per.Country {
+		s := make(map[string]State)
+		for j := range per.Country[i].State {
+			p := make(map[string]Province)
+			for x := range per.Country[i].State[j].Province {
+				p[x] = per.Country[i].State[j].Province[x]
+			}
+			s[j] = State{Province: p}
+		}
+		m[i] = Country{State: s}
+	}
+	return m
 }
