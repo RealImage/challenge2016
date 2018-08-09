@@ -40,8 +40,8 @@ var UserDataMap = map[string]User{
 	},
 }
 
-// getUser will return user by user id
-func getUser(userID string) (User, error) {
+// GetUser will return user by user id
+func GetUser(userID string) (User, error) {
 	user, ok := UserDataMap[userID]
 	if !ok {
 		return user, fmt.Errorf("Invalid UserID:(%s)\n", userID)

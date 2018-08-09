@@ -14,8 +14,8 @@ var scanner = bufio.NewScanner(os.Stdin)
 var AreaToStateMap = make(map[string][]string)
 var StateToCountryMap = make(map[string][]string)
 
-func RetrieveAreas() []Area {
-	csvFile, _ := os.Open("./cities.csv")
+func RetrieveAreas(file string) []Area {
+	csvFile, _ := os.Open(file)
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	var areas []Area
 	for {
@@ -60,7 +60,7 @@ func GetInput() {
 		scanner.Scan()
 		user_id := strings.TrimSpace(scanner.Text())
 
-		user, err = getUser(user_id)
+		user, err = GetUser(user_id)
 		if err == nil {
 			userSelectStatus = "selected"
 		} else {

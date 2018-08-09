@@ -12,6 +12,8 @@ type User struct {
 	ParentID    string
 }
 
+var UniversalAreaList []Area
+
 // parses user permissions and returns a permission map
 func (u *User) ParsePermission() (map[string]bool, error) {
 
@@ -25,7 +27,7 @@ func (u *User) ParsePermission() (map[string]bool, error) {
 	var allPermsissions = make(map[string]bool)
 
 	// check parent user permissions to follow the permission inheritence
-	if parentUser, err := getUser(u.ParentID); err == nil {
+	if parentUser, err := GetUser(u.ParentID); err == nil {
 		parentPermissions, err = parentUser.ParsePermission()
 		if err != nil {
 			return nil, err
@@ -98,7 +100,7 @@ func (u *User) ParsePermission() (map[string]bool, error) {
 		}
 	}
 	// create permission map for user
-	for _, a := range RetrieveAreas() {
+	for _, a := range UniversalAreaList {
 		valueCountry, okCountry := countryLevel[a.Country]
 
 		if okCountry && valueCountry {
