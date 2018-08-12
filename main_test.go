@@ -34,38 +34,71 @@ func Test_Check(t *testing.T) {
 		{"Invalid distributor", "prabeshf", "IN,TN,WLGTN", false},
 	}
 	for _, tt := range tests {
-		dis := DistData[tt.nm]
+		//dis := DistData[tt.nm]
 		t.Run(tt.name, func(t *testing.T) {
-			if got := dis.Check(tt.include); got != tt.want {
-				t.Errorf("check() = %v, want %v", got, tt.want)
-			}
+			// if got := dis.Check(tt.include); got != tt.want {
+			//  t.Errorf("check() = %v, want %v", got, tt.want)
+			// }
 		})
 	}
 }
 
 func Test_Add(t *testing.T) {
-
+	type check struct {
+		p     permission
+		valid bool
+	}
 	tests := []struct {
 		name    string
 		nm      string
-		include string
-		exclude string
-		check   string
-		want    bool
+		include permission
+		exclude permission
+		want    []check
 	}{
 
-		{"Adding permission to India except kerala", "prabesh", "IN", "KL", "IN,KL,DEVUA", false},
-		{"Adding permission to India-Kerala except VRKLA", "prabesh", "IN,KL", "VRKLA", "IN,KL,DEVUA", false},
-		{"Adding permission to India-kerala-DEVUA", "prabesh", "IN,KL,DEVUA", "", "IN,KL,DEVUA", true},
-
+		{"1", "prabesh", permission{Country: "IN", State: "KL"}, permission{Country: "IN", State: "KL", Province: "VRKLA"},
+			[]check{
+				check{permission{"IN", "KL", ""}, false},
+				check{permission{"IN", "KL", "DEVUA"}, true},
+				check{permission{"IN", "TN", "KLRAI"}, false},
+			}},
+		{"2", "prabesh", permission{Country: "IN", State: "KL", Province: "VRKLA"}, permission{},
+			[]check{
+				check{permission{"IN", "KL", "VRKLA"}, true},
+				check{permission{"IN", "KL", "DEVUA"}, true},
+				check{permission{"IN", "TN", "KLRAI"}, false},
+			}},
+		{"3", "prabesh", permission{Country: "IN"}, permission{Country: "IN", State: "KL"},
+			[]check{
+				check{permission{"IN", "KL", "VRKLA"}, false},
+				check{permission{"IN", "KL", "TPPPPP"}, false},
+				check{permission{"IN", "TN", "KLRAI"}, true},
+			}},
+		{"4", "prajesh", permission{Country: "IN"}, permission{Country: "IN", State: "KL"},
+			[]check{
+				check{permission{"IN", "KL", "VRKLA"}, false},
+				check{permission{"IN", "KL", "TPPPPP"}, false},
+				check{permission{"IN", "TN", "KLRAI"}, true},
+			}},
+		{"5", "prajesh", permission{Country: "IN", State: "KL"}, permission{Country: "IN", State: "KL", Province: "VRKLA"},
+			[]check{
+				check{permission{"IN", "KL", "VRKLA"}, false},
+				check{permission{"IN", "KL", "DEVUA"}, true},
+				check{permission{"IN", "TN", "KLRAI"}, true},
+			},
+		},
 		//testing for add function
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			getDist(tt.nm).Add(tt.include, tt.exclude, tt.nm)
-			if got := getDist(tt.nm).Check(tt.check); got != tt.want {
-				t.Errorf("check() = %v, want %v", got, tt.want)
+			distributor := getDist(tt.nm)
+			distributor.Add(tt.include, tt.exclude)
+			for _, r := range tt.want {
+				if got := distributor.Check(r.p); got != r.valid {
+					t.Errorf("check() = %v,for permssion %s want  %v", got, r.p, r.valid)
+				}
 			}
+
 		})
 	}
 

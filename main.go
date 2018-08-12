@@ -12,8 +12,16 @@ import (
 
 //Dist holds dist
 type Dist struct {
-	Name    string
-	Country map[string]Country
+	Name      string
+	Parent    string
+	Country   map[string]Country
+	ExCountry map[string]Country
+}
+
+type permission struct {
+	Country  string
+	State    string
+	Province string
 }
 
 //Country hold contry
@@ -52,96 +60,66 @@ func main() {
 		log.Fatal(err)
 	}
 
-Loop:
-	for {
+	var exitFlag bool
+	for !exitFlag {
 		var action int
-		fmt.Println("*************************")
-		fmt.Println()
-		fmt.Println("SELECT AN OPTION        ")
-		fmt.Println("")
-		fmt.Println("ADD DIST       : ", 1)
-		fmt.Println("DEL DIST       : ", 2)
-		fmt.Println("ADD SUB DIST       : ", 4)
-		fmt.Println("CHECK PERMMISION   : ", 5)
-		fmt.Println("EXIT           : ", 0)
-		fmt.Println()
-		fmt.Println("*************************")
+		writer := bufio.NewWriter(os.Stdin)
+		scanner := bufio.NewScanner(os.Stdin)
+		writer.Write([]byte("\n\nSELECT AN OPTION\n\nADD DIST\t\t:\t\t1\nADD SUB DIST\t\t:\t\t2\nCHECK PERMMISION\t:\t\t3\nExit\t\t\t:\t\t0\n\nPlease select:\t"))
+		writer.Flush()
 		fmt.Scanf("%d", &action)
 		switch action {
 		case 0: // EXIT
-			break Loop
+			exitFlag = true
 		case 1: //ADD DIST
-			var name, incl, excl string
-			fmt.Println("Please enter the name ")
-			fmt.Scanf("%s", &name)
-			fmt.Println("Please enter the inlucde permissions in a comma seperated way ")
-			fmt.Scanf("%s", &incl)
-			fmt.Println("Please enter the exclude permissions in a comma seperated way ")
-			fmt.Scanf("%s", &excl)
-			if incl == "" {
+			writer.Write([]byte("Please enter the details in the given format\nName\nInclude Permission\nExclude Permission\n\nExample:\nprabesh\nIN,KL\nIN,KL,VRKLA\n\n"))
+			writer.Flush()
+			scanner.Scan()
+			name := strings.TrimSpace(scanner.Text())
+			scanner.Scan()
+			inc := strings.TrimSpace(scanner.Text())
+			scanner.Scan()
+			exc := strings.TrimSpace(scanner.Text())
+			//checking if the given permission are valid or not
+			if !(Valid(getPermission(inc)) && Valid(getPermission(exc))) {
+				fmt.Println("Not a valid permission for the given data set")
+				break
+			}
+
+			if getPermission(inc).Country == "" {
 				fmt.Println("All permission assignment is not allowed")
 				break
 			}
-			getDist(name).Add(incl, excl, name)
+			getDist(name).Add(getPermission(inc), getPermission(exc))
+			fmt.Println("Permission succesfully added")
 
-		case 2: //DEL A DISTRIBUTOR
-			var name string
-			fmt.Println("Please enter the name ")
-			fmt.Scanf("%s", &name)
-			if _, ok := DistData[name]; ok {
-				delete(DistData, name)
+		case 2: //ADD SUB DISTRIBUTOR
+			writer.Write([]byte("Please enter the details in the given format\nName\nParent Distributor Name\nInclude Permission\nExclude Permission\n\nExample:\nprabesh\nprajesh\nIN,KL\nIN,KL,VRKLA\n\n"))
+			writer.Flush()
+			scanner.Scan()
+			name := strings.TrimSpace(scanner.Text())
+			scanner.Scan()
+			parentName := strings.TrimSpace(scanner.Text())
+			scanner.Scan()
+			inc := strings.TrimSpace(scanner.Text())
+			scanner.Scan()
+			exc := strings.TrimSpace(scanner.Text())
+			if !AddSubDistributor(name, parentName, getPermission(inc), getPermission(exc)) {
+
+			}
+
+		case 3: //CHECK FOR PERMISSION
+			writer.Write([]byte("\nPlease enter the details in the given format\nName\nPermission\n\nExample:\nprabesh\nIN,KL,VRKLA\n\n"))
+			writer.Flush()
+			scanner.Scan()
+			name := strings.TrimSpace(scanner.Text())
+			scanner.Scan()
+			per := strings.TrimSpace(scanner.Text())
+			if getDist(name).Check(getPermission(per)) {
+				fmt.Printf("\n%s has permission\n", name)
 			} else {
-				fmt.Printf("Distributor with given name %s is not present in the list\n", name)
+				fmt.Printf("\n%s has no permission\n", name)
 			}
-			break
-
-		case 4:
-			var name, pname, incl, excl string
-			fmt.Println("Please enter name ")
-			fmt.Scanf("%s", &name)
-			fmt.Println("Please enter parent Dist name ")
-			fmt.Scanf("%s", &pname)
-			fmt.Println("Please enter the inlucde permissions in a comma seperated way ")
-			fmt.Scanf("%s", &incl)
-			fmt.Println("Please enter the exclude permissions in a comma seperated way ")
-			fmt.Scanf("%s", &excl)
-			if incl == "" {
-				fmt.Println("All permission is not allowed")
-				break
-			}
-			str := incl
-			if excl != "" {
-				str = incl + "," + excl
-			}
-			s := strings.Split(str, ",")
-			if !Valid(s) {
-				fmt.Println("Not a Valid permission")
-				break
-			}
-			if !getDist(pname).Check(str) {
-				fmt.Printf("%s has no permission to distribute\n", pname)
-				break
-			}
-			dist := Dist{name, getDist(pname).copyMap()}
-			dist.Add(incl, excl, name)
-			break
-		case 5: //CHECK PERMISSION
-			var name, p string
-			fmt.Println("Please enter the name of ditributor")
-			fmt.Scanf("%s", &name)
-			fmt.Println("Please enter the permission in a comma seperated way (country,state,province)")
-			fmt.Scanf("%s", &p)
-			s := strings.Split(p, ",")
-			if !Valid(s) || len(s) < 3 {
-				fmt.Println("Not a Valid permission")
-				break
-			}
-			if !getDist(name).Check(p) {
-				fmt.Printf("%s has no permission\n", name)
-				break
-			}
-			fmt.Printf("%s has permission\n", name)
-			break
 
 		default:
 			fmt.Println("Invalid input")
@@ -149,6 +127,17 @@ Loop:
 		}
 	}
 
+}
+func getPermission(s string) permission {
+	g := strings.Split(s, ",")
+	if len(g) == 3 {
+		return permission{Country: g[0], State: g[1], Province: g[2]}
+	} else if len(g) == 2 {
+		return permission{Country: g[0], State: g[1]}
+	} else if len(g) == 1 {
+		return permission{Country: g[0]}
+	}
+	return permission{}
 }
 
 func read(file string) error {
@@ -163,6 +152,14 @@ func read(file string) error {
 func process(handle io.Reader) error {
 	reader := csv.NewReader(bufio.NewReader(handle))
 	Data = make(map[string]Country)
+	type data struct {
+		provinceCode string
+		stateCode    string
+		countryCode  string
+		province     string
+		state        string
+		country      string
+	}
 	for {
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -170,21 +167,22 @@ func process(handle io.Reader) error {
 		} else if err != nil {
 			return err
 		}
-		if _, ok := Data[line[2]]; ok {
-			if _, ok := Data[line[2]].State[line[1]]; ok {
-				Data[line[2]].State[line[1]].Province[line[0]] = Province{line[3], line[0]}
+		d := data{line[0], line[1], line[2], line[3], line[4], line[5]}
+		if _, ok := Data[d.countryCode]; ok {
+			if _, ok := Data[d.countryCode].State[d.stateCode]; ok {
+				Data[d.countryCode].State[d.stateCode].Province[d.provinceCode] = Province{d.province, d.provinceCode}
 			} else {
-				Data[line[2]].State[line[1]] = State{Code: line[1], Name: line[4],
+				Data[d.countryCode].State[d.stateCode] = State{Code: d.stateCode, Name: d.state,
 					Province: map[string]Province{
-						line[0]: Province{line[3], line[0]},
+						d.provinceCode: Province{d.province, d.provinceCode},
 					}}
 			}
 		} else {
-			Data[line[2]] = Country{Code: line[2], Name: line[5],
+			Data[d.countryCode] = Country{Code: d.countryCode, Name: d.country,
 				State: map[string]State{
-					line[1]: State{Code: line[1], Name: line[4],
+					d.stateCode: State{Code: d.stateCode, Name: d.state,
 						Province: map[string]Province{
-							line[0]: Province{line[3], line[0]},
+							d.provinceCode: Province{d.province, d.provinceCode},
 						}},
 				}}
 		}
@@ -193,198 +191,163 @@ func process(handle io.Reader) error {
 	return nil
 }
 
-func getDist(name string) Dist {
+func getDist(name string) *Dist {
 	if v, ok := DistData[name]; ok {
-		return v
+		return &v
 	}
-	return Dist{Name: name, Country: make(map[string]Country)}
+	return &Dist{Name: name, Country: make(map[string]Country), ExCountry: make(map[string]Country)}
+}
+
+//AddSubDistributor adds subsdistributor
+func AddSubDistributor(name, parentName string, inc, exc permission) bool {
+	if !getDist(parentName).Check(inc) {
+		return false
+	}
+	dis := getDist(name)
+	dis.Parent = parentName
+	dis.Add(inc, exc)
+	return true
 }
 
 //Add adds a distributor
-func (per Dist) Add(inc, ex, name string) {
+func (per *Dist) Add(inc, ex permission) {
 
-	s := strings.Split(inc, ",")
+	per.ExCountry = deleteInlcudedKeyfromMap(inc, per.ExCountry, true)
+	per.Country = addKeyToMap(inc, per.Country)
+	per.Country = deleteInlcudedKeyfromMap(ex, per.Country, false)
+	per.ExCountry = addKeyToMap(ex, per.ExCountry)
 
-	if len(s) == 2 { // case with two values in include
-		if _, ok := per.Country[s[0]]; ok {
-			if per.Country[s[0]].State != nil {
-				if _, ok := per.Country[s[0]].State[s[1]]; ok {
-					if per.Country[s[0]].State[s[1]].Province == nil {
-						per.Country[s[0]].State[s[1]] = State{
-							Province: map[string]Province{},
+	DistData[per.Name] = *per
+}
+
+func addKeyToMap(inc permission, country map[string]Country) map[string]Country {
+	if c, ok := country[inc.Country]; ok {
+		if inc.State != "" {
+			if c.State != nil {
+				if s, ok := c.State[inc.State]; ok {
+					if inc.Province != "" {
+						if s.Province != nil {
+							country[inc.Country].State[inc.State].Province[inc.Province] = Province{}
+						}
+					} else {
+						country[inc.Country].State[inc.State] = State{}
+					}
+				} else {
+					country[inc.Country].State[inc.State] = State{Province: map[string]Province{
+						inc.Province: Province{},
+					}}
+				}
+			}
+		} else {
+			country[inc.Country] = Country{}
+		}
+
+	} else {
+		if inc.Country != "" {
+			country[inc.Country] = Country{}
+			if inc.State != "" {
+				country[inc.Country] = Country{State: map[string]State{
+					inc.State: State{},
+				}}
+			}
+			if inc.Province != "" {
+				country[inc.Country].State[inc.State] = State{Province: map[string]Province{
+					inc.Province: Province{},
+				}}
+			}
+		}
+	}
+
+	return country
+}
+
+func deleteInlcudedKeyfromMap(inc permission, country map[string]Country, flag bool) map[string]Country {
+	if c, ok := country[inc.Country]; ok {
+		if c.State != nil {
+			if s, ok := c.State[inc.State]; ok {
+				if s.Province != nil {
+					if _, ok := s.Province[inc.Province]; ok {
+						delete(country[inc.Country].State[inc.State].Province, inc.Province)
+						if len(country[inc.Country].State[inc.State].Province) == 0 {
+							delete(country[inc.Country].State, inc.State)
+							if len(country[inc.Country].State) == 0 {
+								delete(country, inc.Country)
+							}
 						}
 					}
 				} else {
-					per.Country[s[0]].State[s[1]] = State{
-						Province: map[string]Province{},
-					}
-				}
-			} else {
-				per.Country[s[0]].State[s[1]] = State{
-					Province: map[string]Province{},
-				}
-			}
-		} else {
-			per.Country[s[0]] = Country{State: map[string]State{
-				s[1]: State{
-					Province: map[string]Province{},
-				},
-			}}
-		}
-		per.Country[s[0]].State[s[0]+":all"] = State{}
-		if ex != "" {
-			if per.Country[s[0]].State[s[1]].Province != nil {
-				per.Country[s[0]].State[s[1]].Province[ex] = Province{}
-			} else {
-				per.Country[s[0]].State[s[1]] = State{
-					Province: map[string]Province{
-						ex: Province{},
-					},
-				}
-			}
-		}
-
-	} else if len(s) == 1 { //case with a single include string
-
-		if _, ok := per.Country[s[0]]; !ok {
-			per.Country[s[0]] = Country{
-				State: map[string]State{},
-			}
-		}
-		if per.Country[s[0]].State != nil {
-
-			delete(per.Country[s[0]].State, s[0]+":all")
-		} else {
-			per.Country[s[0]] = Country{
-				State: map[string]State{},
-			}
-		}
-
-		//adding exlude permission part
-		if ex == "" {
-			return
-		}
-		e := strings.Split(ex, ",")
-		if len(e) == 1 {
-			if _, ok := per.Country[s[0]].State[e[0]]; !ok {
-				per.Country[s[0]].State[e[0]] = State{
-					Province: map[string]Province{
-						e[0] + ":all": Province{},
-					},
-				}
-			}
-		} else {
-			if _, ok := per.Country[s[0]].State[e[0]]; !ok {
-				per.Country[s[0]].State[e[0]] = State{
-					Province: map[string]Province{
-						e[1]:          Province{},
-						e[0] + ":all": Province{},
-					},
-				}
-			}
-			//adding province details
-			if per.Country[s[0]].State[e[0]].Province != nil {
-				per.Country[s[0]].State[e[0]].Province[e[1]] = Province{}
-				per.Country[s[0]].State[e[0]].Province[e[0]+":all"] = Province{}
-			} else {
-				per.Country[s[0]].State[e[0]] = State{
-					Province: map[string]Province{
-						e[1]:          Province{},
-						e[0] + ":all": Province{},
-					},
-				}
-			}
-		}
-
-	} else if len(s) == 3 { // with just inlcude string
-		if _, ok := per.Country[s[0]]; ok {
-			if per.Country[s[0]].State != nil {
-				if _, ok := per.Country[s[0]].State[s[1]]; ok {
-					if per.Country[s[0]].State[s[1]].Province != nil {
-						delete(per.Country[s[0]].State[s[1]].Province, s[1]+":all")
-						delete(per.Country[s[0]].State[s[1]].Province, s[2])
+					if flag {
+						delete(country[inc.Country].State, inc.State)
+						if len(country[inc.Country].State) == 0 {
+							delete(country, inc.Country)
+						}
 					}
 				}
 			}
-
 		}
 	}
-	DistData[name] = per
+	return country
 }
 
 //Valid checks if given permission is valid or not
-func Valid(s []string) bool {
-	if len(s) == 3 {
-		if _, ok := Data[s[0]]; ok {
-			if _, ok := Data[s[0]].State[s[1]]; ok {
-				if _, ok := Data[s[0]].State[s[1]].Province[s[2]]; ok {
-					return true
-				}
-			}
-		}
-	} else if len(s) == 2 {
-		if _, ok := Data[s[0]]; ok {
-			if _, ok := Data[s[0]].State[s[1]]; ok {
-				return true
-			}
-		}
-	} else if len(s) == 1 {
-		if _, ok := Data[s[0]]; ok {
-			return true
+func Valid(per permission) bool {
+	if per.Country != "" {
+		if _, ok := Data[per.Country]; !ok {
+			return false
 		}
 	}
-	return false
+	if per.State != "" {
+		if _, ok := Data[per.Country].State[per.State]; !ok {
+			return false
+		}
+	}
+	if per.Province != "" {
+		if _, ok := Data[per.Country].State[per.State].Province[per.Province]; !ok {
+			return false
+		}
+	}
+	return true
 }
 
 //Check if permission exists or not
-func (per Dist) Check(p string) bool {
-
-	s := strings.Split(p, ",")
-
-	if len(s) < 3 {
-		return false
+func (per Dist) Check(p permission) bool {
+	if c, ok := per.ExCountry[p.Country]; ok {
+		if c.State == nil {
+			return false
+		}
+		if p.State == "" && len(c.State) >= 0 {
+			return false
+		}
+		if s, ok := c.State[p.State]; ok {
+			if s.Province == nil {
+				return false
+			}
+			if p.Province == "" && len(s.Province) >= 0 {
+				return false
+			}
+			if _, ok := s.Province[p.Province]; ok {
+				return false
+			}
+		}
 	}
-
-	if per.Country != nil {
-		if _, ok := per.Country[s[0]]; ok {
-			if per.Country[s[0]].State != nil {
-				if _, ok := per.Country[s[0]].State[s[1]]; ok {
-					if per.Country[s[0]].State[s[1]].Province != nil {
-						if _, ok := per.Country[s[0]].State[s[1]].Province[s[2]]; !ok {
-							if _, ok := per.Country[s[0]].State[s[1]].Province[s[1]+":all"]; !ok {
-								return true
-							}
-						}
-					} else {
-						return true
-					}
-				} else {
-					if _, ok := per.Country[s[0]].State[s[0]+":all"]; !ok {
-						return true
-					}
-				}
-			} else {
+	if c, ok := per.Country[p.Country]; ok {
+		if c.State == nil {
+			return true
+		}
+		if p.State == "" && len(c.State) == 0 {
+			return true
+		}
+		if s, ok := c.State[p.State]; ok {
+			if s.Province == nil {
 				return true
 			}
-
+			if p.Province == "" && len(s.Province) == 0 {
+				return true
+			}
+			if _, ok := s.Province[p.Province]; ok {
+				return true
+			}
 		}
-
 	}
 	return false
-}
-
-func (per Dist) copyMap() map[string]Country {
-	m := make(map[string]Country)
-	for i := range per.Country {
-		s := make(map[string]State)
-		for j := range per.Country[i].State {
-			p := make(map[string]Province)
-			for x := range per.Country[i].State[j].Province {
-				p[x] = per.Country[i].State[j].Province[x]
-			}
-			s[j] = State{Province: p}
-		}
-		m[i] = Country{State: s}
-	}
-	return m
 }
