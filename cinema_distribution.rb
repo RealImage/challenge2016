@@ -1,8 +1,29 @@
+$ALL_REGIONS = []
 class Cinema
   attr_accessor :distributors
 
   def initialize
     self.distributors = []
+  end
+
+  require 'csv'
+  require 'json'
+
+  def self.all_regions
+    file = File.open("cities.csv", "r")
+    keys = file.readline().chomp!.split(",")
+    result = []
+
+    file.each_line do | line |
+      i = 0
+      obj = {}
+      line.chomp.split(",").each do |v|
+        obj[keys[i]] = v
+        i += 1
+      end
+      result.push(obj)
+    end
+    JSON.parse(result.to_json)
   end
 
   def add_distributors(total_distributors_count)
@@ -62,7 +83,7 @@ class Login
     username = gets.chomp
     print "Enter password: "
     password = gets.chomp
-    
+
     @login = true
     while @login
       if username.eql?(user.username) && password.eql?(user.password)
@@ -87,7 +108,7 @@ class User
 end
 
 class Admin < User
-  
+
 end
 
 class Distributor < User
@@ -98,12 +119,10 @@ class Distributor < User
     self.exclude_regions = []
     self.sub_distributors = []
   end
-  
+
 end
 
 class Region
-  require 'csv'
-
   def self.set_region(new_distributor)
     print "\nEnter number of regions you want to INCLUDE for #{new_distributor.username.capitalize}: "
     regions_count = gets.chomp.to_i
@@ -123,7 +142,7 @@ class Region
         puts "You can't exclude included region. Please try with other region."
         assign_regions(regions_count, new_distributor, include)
       end
-      result = new_distributor.type == "Distributor" ? Region.search_region(region) : 
+      result = new_distributor.type == "Distributor" ? Region.search_region(region) :
       (!Region.search_region(region, new_distributor.parent.exclude_regions, false) && ( Region.search_region(region, new_distributor.parent.include_regions, include) && Region.search_region(region) ) )
       if result
         include ? new_distributor.include_regions.push(region) : new_distributor.exclude_regions.push(region)
@@ -139,9 +158,9 @@ class Region
     permit_regions = keyword.split('-')
     regions_count = permit_regions.length
     headers = ["City Name", "Province Name", "Country Name"]
-    rows_or_regions = regions || CSV.foreach('cities.csv', headers: true)
+    rows_or_regions = regions || $ALL_REGIONS
     i = regions_count - 1
-    row_len = headers.length - 1 
+    row_len = headers.length - 1
     rows_or_regions.each do |row|
       incr = 0
       if regions
@@ -170,6 +189,7 @@ def roll_camera_action()
   Login.authenticate_user(admin)
 
   c = Cinema.new
+  $ALL_REGIONS = Cinema.all_regions
   total_distributors_count = Cinema.number_of_distributors
   c.add_distributors(total_distributors_count)
 end
@@ -180,7 +200,7 @@ roll_camera_action()
 
 #================= SAMPLE OUTPUT =================
 
-# coppernine01@coppernine01:~/ruby/challenge2016$ ruby cinema_distribution.rb 
+# coppernine01@coppernine01:~/ruby/challenge2016$ ruby cinema_distribution.rb
 
 # Welcome to Cinema Distribution World!!
 # Default Admin Account Details:
@@ -289,7 +309,7 @@ roll_camera_action()
 # Do you want to add sub-distributors for Distb02? type 'yes' or 'no': yes
 # Enter number of sub-distributors: 1
 
-# Enter SubDistributor 1 username: sub-distb02     
+# Enter SubDistributor 1 username: sub-distb02
 # Enter SubDistributor 1 password: 000000
 
 # Enter number of regions you want to INCLUDE for Sub-distb02: 1
