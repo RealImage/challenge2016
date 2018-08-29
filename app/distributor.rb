@@ -38,6 +38,12 @@ class Distributor
     !is_authorized_at(area)
   end
 
+  def print_details
+    puts "Name: #{name}"
+    puts "Inclusions: #{inclusions.keys.join(",")}"
+    puts "Exclusions: #{exclusions.keys.join(",")}\n\n"
+  end
+
   private
 
   def permitted_in(code)
