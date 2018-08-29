@@ -13,6 +13,7 @@ class Distributor
   end
 
   def include_area(code)
+    return if master && master.is_not_authorized_at(code)
     inclusions[code] = code
   end
 
