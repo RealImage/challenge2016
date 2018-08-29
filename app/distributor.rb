@@ -33,6 +33,10 @@ class Distributor
     authorization_for(area)
   end
 
+  def is_not_authorized_at(area)
+    !is_authorized_at(area)
+  end
+
   private
 
   def permitted_in(code)
