@@ -2,6 +2,10 @@ require_relative 'distributor'
 
 @distributors = []
 
+def print_result(result = nil)
+  puts "\n\n#{result}"
+end
+
 def print_menu
   puts "  0 - Quit\n" +
        "  1 - Create new distributor\n" +
@@ -26,16 +30,16 @@ def perform_action(action)
   when 5
     load_sample_distributor_data
   else
-    puts "\n\nInvalid action code"
+    print_result("Invalid action code")
   end
 end
 
 def show_distributors
   if @distributors.length > 0
-    puts "\n\nDistributor List\n\n"
+    print_result("Distributor List\n\n")
     @distributors.each(&:print_details)
   else
-    puts "\n\nNo saved distributors"
+    print_result("No distributors saved")
   end
 end
 
@@ -59,9 +63,9 @@ end
 
 def choose_distributor
   if @distributors.length == 0
-    puts "\n\nNo distributors saved."
+    print_result("")
   else
-    puts "\n\nChoose Distributor"
+    print_result("Choose Distributor")
     @distributors.each.with_index(1) do |db, i|
       puts "#{i} - db.name"
     end
@@ -70,14 +74,14 @@ def choose_distributor
     if (db_code > 0 && db_code <= @distributors.length)
        @distributors[db_code - 1]
     else
-      puts "\n\nInvalid distributor code."
+      print_result("Invalid distributor code")
       nil
     end
   end
 end
 
 def create_distributor
-  puts "Enter distributor name"
+  print_result "Enter distributor name"
   name = gets
   @distributors << Distributor.new(name)
   false
@@ -102,7 +106,7 @@ def load_sample_distributor_data
   @distributors = []
   @distributors << db1 << db2 << db3
 
-  puts "\n\nSample distributor data loaded"
+  print_result("Sample distributor data loaded")
   false
 end
 
@@ -110,7 +114,7 @@ quit = false
 while quit != true
   print_menu
   quit = perform_action(gets.chomp.to_i)
-  puts "\n\n"
+  print_result
 end
 
 # p db1.authorized_at?("CHICAGO::ILLINOIS::UNITEDSTATES")
