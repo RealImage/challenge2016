@@ -53,11 +53,13 @@ class Distributor
   end
 
   def authorization_for(area)
-    code = area.split("::")
-    if code.length == 3
-      ((permitted_in(code[2]) || permitted_in(code[1..2].join("::")) || permitted_in(area)) && !(excluded_from(code[2]) || excluded_from(code[1..2].join("::")) || excluded_from(area)))
-    elsif code.length == 2
-      ((permitted_in(code[1]) || permitted_in(area)) && !(excluded_from(code[1]) || excluded_from(area)))
+    province, state, country = area.split("::")
+    if country
+      state_and_country = [state, country].join("::")
+      ((permitted_in(country) || permitted_in(state_and_country) || permitted_in(area)) &&
+      !(excluded_from(country) || excluded_from(state_and_country) || excluded_from(area)))
+    elsif state
+      ((permitted_in(state) || permitted_in(area)) && !(excluded_from(state) || excluded_from(area)))
     else
       permitted_in(area) && !excluded_from(area)
     end
