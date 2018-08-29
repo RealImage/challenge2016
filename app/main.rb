@@ -7,12 +7,12 @@ def print_result(result = nil)
 end
 
 def print_menu
-  puts "  0 - Quit\n" +
-       "  1 - Create new distributor\n" +
-       "  2 - Include area for distributor\n" +
-       "  3 - Exclude area for distributor\n" +
-       "  4 - Show distributors\n" +
-       "  5 - Load sample distributor data"
+  puts "Quit".ljust(30, ' ') + "- 0\n" +
+       "Create new distributor".ljust(30, ' ') + "- 1\n" +
+       "Add inclusion".ljust(30, ' ') + "- 2\n" +
+       "Add exclusion".ljust(30, ' ') + "- 3\n" +
+       "Show distributors".ljust(30, ' ') + "- 4\n" +
+       "Load sample distributor data".ljust(30, ' ') + "- 5"
 end
 
 def perform_action(action)
@@ -67,7 +67,7 @@ def choose_distributor
   else
     print_result("Choose Distributor")
     @distributors.each.with_index(1) do |db, i|
-      puts "#{i} - db.name"
+      puts "#{db.name.ljust(30, ' ')}- #{i}"
     end
     puts @distributors.length
     db_code = gets.chomp.to_i
