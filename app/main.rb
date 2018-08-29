@@ -30,16 +30,16 @@ def perform_action(action)
   when 5
     load_sample_distributor_data
   else
-    print_result("Invalid action code")
+    print_result "Invalid action code"
   end
 end
 
 def show_distributors
   if @distributors.length > 0
-    print_result("Distributor List\n\n")
+    print_result "Distributor List\n\n"
     @distributors.each(&:print_details)
   else
-    print_result("No distributors saved")
+    print_result "No saved distributors"
   end
 end
 
@@ -63,9 +63,9 @@ end
 
 def choose_distributor
   if @distributors.length == 0
-    print_result("")
+    print_result "No saved distributors"
   else
-    print_result("Choose Distributor")
+    print_result "Choose Distributor"
     @distributors.each.with_index(1) do |db, i|
       puts "#{db.name.ljust(30, ' ')}- #{i}"
     end
@@ -74,7 +74,7 @@ def choose_distributor
     if (db_code > 0 && db_code <= @distributors.length)
        @distributors[db_code - 1]
     else
-      print_result("Invalid distributor code")
+      print_result "Invalid distributor code"
       nil
     end
   end
@@ -106,7 +106,7 @@ def load_sample_distributor_data
   @distributors = []
   @distributors << db1 << db2 << db3
 
-  print_result("Sample distributor data loaded")
+  print_result "Sample distributor data loaded"
   false
 end
 
