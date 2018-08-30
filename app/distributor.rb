@@ -40,8 +40,8 @@ class Distributor
 
   def print_details
     puts "Name: #{name}"
-    puts "Inclusions: #{inclusions.keys.join(",")}"
-    puts "Exclusions: #{exclusions.keys.join(",")}\n\n"
+    puts "Inclusions: #{inclusions.keys.join(", ")}"
+    puts "Exclusions: #{exclusions.keys.join(", ")}\n\n"
   end
 
   private
