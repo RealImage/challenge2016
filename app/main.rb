@@ -11,8 +11,10 @@ def print_menu
        "Create new distributor".ljust(30, ' ') + "- 1\n" +
        "Add inclusion".ljust(30, ' ') + "- 2\n" +
        "Add exclusion".ljust(30, ' ') + "- 3\n" +
-       "Show distributors".ljust(30, ' ') + "- 4\n" +
-       "Load sample distributor data".ljust(30, ' ') + "- 5"
+       "Update sub-distributors".ljust(30, ' ') + "- 4\n" +
+       "Show distributors".ljust(30, ' ') + "- 5\n" +
+       "Load sample distributor data".ljust(30, ' ') + "- 6\n" +
+       "Verify authorization".ljust(30, ' ') + "- 7"
 end
 
 def perform_action(action)
@@ -26,12 +28,37 @@ def perform_action(action)
   when 3
     add_exclusion
   when 4
-    show_distributors
+    update_subdistributor
   when 5
+    show_distributors
+  when 6
     load_sample_distributor_data
+  when 7
+    check_authorization
   else
     print_result "Invalid action code"
   end
+end
+
+def check_authorization
+  db = choose_distributor
+  return unless db
+  print_result  "Enter area code"
+  area = gets.chomp
+  print_result "Result: #{db.authorized_at?(area)}"
+  false
+end
+
+def update_subdistributor
+  print_result "Choose parent distributor"
+  db1 = choose_distributor
+  return unless db1
+  print_result "Choose child distributor"
+  db2 = choose_distributor
+  return unless db2
+  db2.extend_from db1
+  print_result "Updated sub distributors"
+  false
 end
 
 def show_distributors
