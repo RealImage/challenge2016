@@ -96,7 +96,6 @@ def choose_distributor
     @distributors.each.with_index(1) do |db, i|
       puts "#{db.name.ljust(30, ' ')}- #{i}"
     end
-    puts @distributors.length
     db_code = gets.chomp.to_i
     if (db_code > 0 && db_code <= @distributors.length)
        @distributors[db_code - 1]
