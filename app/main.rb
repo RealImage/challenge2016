@@ -1,3 +1,4 @@
+require_relative 'store'
 require_relative 'distributor'
 
 @distributors = []
@@ -109,6 +110,15 @@ def load_sample_distributor_data
   print_result "Sample distributor data loaded"
   false
 end
+
+def load_store(path)
+  store = Store.new(path)
+  store.load_data
+  store
+end
+
+root_dir = __dir__.match(/(.+)\/app$/)[1]
+@store = load_store("#{root_dir}/cities.csv")
 
 quit = false
 while quit != true
