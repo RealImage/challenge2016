@@ -143,28 +143,36 @@ while quit != true
   print_result
 end
 
-# p db1.authorized_at?("CHICAGO::ILLINOIS::UNITEDSTATES")
-# p db1.authorized_at?("CHENNAI::TAMILNADU::INDIA")
-# p db1.authorized_at?("BANGALORE::KARNATAKA::INDIA")
+# Quick debug #
 
-# db2 = Distributor.new('worldwide')
+# db1 = Distributor.new('DB1')
+# db1.include_area("INDIA")
+# db1.include_area("UNITEDSTATES")
+# db1.exclude_area("CHENNAI::TAMILNADU::INDIA")
+
+# p db1.authorized_at?("CHICAGO::ILLINOIS::UNITEDSTATES") # -> YES
+# p db1.authorized_at?("CHENNAI::TAMILNADU::INDIA") # -> NO
+# p db1.authorized_at?("BANGALORE::KARNATAKA::INDIA") # -> YES
+
+# db2 = Distributor.new('DB2')
 # db2.extend_from(db1)
 
 # db2.include_area("INDIA")
 # db2.include_area("CHINA")
 # db2.exclude_area("TAMILNADU::INDIA")
 
-# # p db2.inclusions
-# # p db2.authorized_at?("CHINA")
-# p db2.authorized_at?("TAMILNADU::INDIA")
-# p db2.authorized_at?("KARNATAKA::INDIA")
+# p db2.inclusions # CHINA not included
+# p db2.authorized_at?("CHINA") # -> NO
+# p db2.authorized_at?("TAMILNADU::INDIA")# -> NO
+# p db2.authorized_at?("KARNATAKA::INDIA") # -> YES
 
-# db3 = Distributor.new('local')
+# db3 = Distributor.new('DB3')
 # db3.extend_from(db2)
 
 # db3.include_area("HUBLI::KARNATAKA::INDIA")
 
-# p db1.authorized_at?("KARNATAKA::INDIA")
-# p db2.authorized_at?("KARNATAKA::INDIA")
-# p db3.authorized_at?("KARNATAKA::INDIA")
+# p db3.authorized_at?("HUBLI::KARNATAKA::INDIA") # -> YES
+# p db1.authorized_at?("KARNATAKA::INDIA") # -> YES
+# p db2.authorized_at?("KARNATAKA::INDIA") # -> YES
+# p db3.authorized_at?("KARNATAKA::INDIA") # -> NO
 
