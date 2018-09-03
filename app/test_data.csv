@@ -1,0 +1,12 @@
+CREATE,distributor one
+INCLUDE,distributor one,INDIA
+INCLUDE,distributor one,UNITEDSTATES
+EXCLUDE,distributor one,CHENNAI::TAMILNADU::INDIA
+CREATE,distributor 2
+EXTEND,distributor 2,distributor one
+INCLUDE,distributor 2,CHINA
+EXCLUDE,distributor 2,TAMILNADU::INDIA
+INCLUDE,distributor 2,INDIA
+CREATE,db3
+EXTEND,db3,distributor 2
+INCLUDE,db3,HUBLI::KARNATAKA::INDIA
