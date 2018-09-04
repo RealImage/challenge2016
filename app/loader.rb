@@ -14,7 +14,7 @@ class Loader
     end
   end
 
-  def perform(command, *args)
+  def perform(command = nil, *args)
     case command
     when 'CREATE'
       create_distributor(*args)
