@@ -24,7 +24,15 @@ class Loader
       add_exclusion(*args)
     when 'EXTEND'
       extend_distributor(*args)
+    when 'VERIFY'
+      verify_permissions(*args)
     end
+  end
+
+  def verify_permissions(db_name, area)
+    db = choose_distributor(db_name)
+    return unless db
+    puts "Authorization for #{db.name} at #{area}: #{db.authorized_at?(area)}"
   end
 
   def extend_distributor(child, parent)
