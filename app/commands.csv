@@ -1,23 +1,23 @@
 CREATE,distributor one
-INCLUDE,distributor one,INDIA
-INCLUDE,distributor one,UNITEDSTATES
-EXCLUDE,distributor one,CHENNAI::TAMILNADU::INDIA
+INCLUDE,distributor one,IN
+INCLUDE,distributor one,US
+EXCLUDE,distributor one,CENAI::TN::IN
 CREATE,distributor 2
 EXTEND,distributor 2,distributor one
-INCLUDE,distributor 2,CHINA
-EXCLUDE,distributor 2,TAMILNADU::INDIA
-INCLUDE,distributor 2,INDIA
+INCLUDE,distributor 2,CN
+EXCLUDE,distributor 2,TN::IN
+INCLUDE,distributor 2,IN
 CREATE,db3
 EXTEND,db3,distributor 2
-INCLUDE,db3,HUBLI::KARNATAKA::INDIA
+INCLUDE,db3,BENAU::KA::IN
 
-VERIFY,distributor one,CHICAGO::ILLINOIS::UNITEDSTATES
-VERIFY,distributor one,CHENNAI::TAMILNADU::INDIA
-VERIFY,distributor one,BANGALORE::KARNATAKA::INDIA
-VERIFY,distributor 2,CHINA
-VERIFY,distributor 2,TAMILNADU::INDIA
-VERIFY,distributor 2,KARNATAKA::INDIA
-VERIFY,db3,HUBLI::KARNATAKA::INDIA
-VERIFY,distributor one,KARNATAKA::INDIA
-VERIFY,distributor 2,KARNATAKA::INDIA
-VERIFY,db3,KARNATAKA::INDIA
+VERIFY,distributor one,CHIAO::IL::US
+VERIFY,distributor one,CENAI::TN::IN
+VERIFY,distributor one,BENAU::KA::IN
+VERIFY,distributor 2,CN
+VERIFY,distributor 2,TN::IN
+VERIFY,distributor 2,KA::IN
+VERIFY,db3,BENAU::KA::IN
+VERIFY,distributor one,KA::IN
+VERIFY,distributor 2,KA::IN
+VERIFY,db3,KA::IN
