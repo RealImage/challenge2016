@@ -72,6 +72,8 @@ class Loader
   end
 
   def validate_area(code)
-    store.find(code)
+    store.find(code) || (raise Cities::AreaCodeNotFound.new(code))
+  rescue Cities::AreaCodeNotFound => e
+    puts e.message
   end
 end
