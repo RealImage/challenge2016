@@ -1,24 +1,24 @@
 package main
 
 import (
+	
 	"bufio"
 	"encoding/json"
 	"fmt"
 	"os"
-
-	"github.com/RealImageChallenge/utilites"
-
-	"github.com/RealImageChallenge/csvreader"
-	"github.com/RealImageChallenge/distributer"
-	"github.com/RealImageChallenge/models"
+	"github.com/atyagi9006/challenge2016/models"
+	"github.com/atyagi9006/challenge2016/csvreader"
+	"github.com/atyagi9006/challenge2016/distributer"
+	"github.com/atyagi9006/challenge2016/utilites"
 )
 
 func main() {
-	csvFileName := "dub.csv"
+	csvFileName := "cities.csv"
 	distributerMap := make(models.DistributerMap)
 	countryStateMap := make(models.CountryMap)
 
 	csvreader.MakeDataStore(csvFileName, countryStateMap)
+	
 	//StaticInput(countryStateMap, distributerMap)
 	DynamicInput(countryStateMap, distributerMap)
 	mapJSON, _ := json.Marshal(distributerMap)

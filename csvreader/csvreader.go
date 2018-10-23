@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/RealImageChallenge/models"
+	"github.com/atyagi9006/challenge2016/models"
 )
 
 func MakeDataStore(csvFileName string, countryStateMap models.CountryMap) {

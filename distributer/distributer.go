@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/RealImageChallenge/models"
+	"github.com/atyagi9006/challenge2016/models"
 )
 
 func AddDistributer(input models.InputModel, countryMap models.CountryMap, distributerMap models.DistributerMap) {
