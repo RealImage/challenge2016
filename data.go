@@ -1,3 +1,4 @@
+package main
 
 const data = `CANIO	2	AD
 ETATR	2	AD
