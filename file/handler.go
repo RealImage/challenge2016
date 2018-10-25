@@ -2,7 +2,6 @@ package file
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -15,6 +14,7 @@ func Readfile(path string) error {
 		return er
 	}
 	defer file.Close()
+	var csvSlice []Csv
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		det := strings.Split(scanner.Text(), ",")
@@ -26,12 +26,12 @@ func Readfile(path string) error {
 			det[4],
 			det[5],
 		}
-		fmt.Println("County name: ", c.CountryCode)
-		fmt.Println("All : ", c)
+		csvSlice = append(csvSlice, c)
 	}
 	if err := scanner.Err(); err != nil {
 		log.Println(err)
 		return err
 	}
+
 	return nil
 }
