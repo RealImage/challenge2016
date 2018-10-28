@@ -24,8 +24,9 @@ func FillSlice(size int, list *[]file.Csv) {
 		fmt.Println("Enter the province name:")
 		fmt.Scanf("%s", &d.ProvinceName)
 
-		fmt.Println("Enter the country code:")
+		fmt.Println("Enter the country name:")
 		fmt.Scanf("%s", &d.CountryName)
+
 		*list = append(*list, d)
 	}
 }

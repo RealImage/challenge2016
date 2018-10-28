@@ -9,3 +9,9 @@ type Csv struct {
 	ProvinceName string
 	CountryName  string
 }
+type Distributor struct {
+	Name       string
+	ParentName string
+	InList     []Csv
+	Exlist     []Csv
+}
