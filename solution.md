@@ -35,8 +35,8 @@ curl -i -X POST \
 Parameters | Type | Description
 --- | --- | ---
 for | `string` | distributor ID
-includes | array of string | contains only the countries code
-excludes | array of object | contains the excluded city, province and country code
+includes | `array of string`| contains only the countries code
+excludes | `array of object` | contains the excluded city, province and country code
 
 ### To assign permissions for a Sub Distributor
 The following API needs to be posted for assigning a new subdistributor with include and exclude permissions. And also we have to give distributor ID
@@ -73,10 +73,10 @@ curl -i -X POST \
 ```
 Parameters | Type | Description
 --- | --- | ---
-from| string | distributor ID
+from| `string` | distributor ID
 for | `string` | distributor ID
-sub_includes | array of string | contains the included city, province and country code
-excludes | array of object | contains the excluded city, province and country code
+sub_includes | `array of string` | contains the included city, province and country code
+excludes | `array of object` | contains the excluded city, province and country code
 
 ### To check for permission authorization in particular region
 To check the distributor's permission to distribute the film in that particular region
@@ -98,9 +98,9 @@ curl -i -X POST \
 Parameters | Type | Description
 --- | --- | ---
 for | `string` | distributor ID
-city | string | contains  the city code
-province | string | contains the province code
-country | string | contains the country code
+city | `string` | contains  the city code
+province | `string` | contains the province code
+country | `string` | contains the country code
 
 For the assigning the distributor and sub-distributor, the response will be the following, even if you send the duplicate data
 ```
