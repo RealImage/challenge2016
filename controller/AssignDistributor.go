@@ -96,6 +96,9 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 								}
 							}
+						} else {
+							fmt.Println("Country is not included for this distributor")
+							fmt.Println(e)
 						}
 					}
 					d.Distributors[permission.For] = distributor
@@ -105,7 +108,6 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					var newPermission model.Permission
 					for _, country := range permission.Includes {
 						if provinces, ok := d.Countries[country]; ok {
-							// distributor.Includes = permission.Includes
 							newPermission.Includes = append(newPermission.Includes, country)
 							for _, e := range permission.Excludes {
 								isCountryPresent := false
@@ -120,7 +122,6 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									isProvincePresent := false
 									for _, p := range provinces {
 										if e.Province == p {
-											fmt.Println("province present")
 											isProvincePresent = true
 											for _, c := range d.Cities[p] {
 												if e.City == c {

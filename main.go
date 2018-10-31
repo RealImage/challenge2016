@@ -20,9 +20,11 @@ func main() {
 
 	assign := &controller.AssignDistributor{Countries: countries, Cities: cities, Distributors: distributors}
 	checkDistribution := &controller.CheckDistribution{Countries: countries, Cities: cities, Distributors: distributors}
+	assignSub := &controller.AssignSubDistributor{Countries: countries, Cities: cities, Distributors: distributors}
 
-	http.Handle("/assign", assign)
+	http.Handle("/assign_distributor", assign)
 	http.Handle("/check_permission", checkDistribution)
+	http.Handle("/assign_sub_distributor", assignSub)
 	http.ListenAndServe(":8000", nil)
 
 }
