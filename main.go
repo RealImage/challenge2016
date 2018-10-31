@@ -4,19 +4,29 @@ import (
 	"encoding/csv"
 	"io"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/bsyed6/challenge2016/controller"
 	"github.com/bsyed6/challenge2016/model"
 )
 
 func main() {
+	countries := make(map[string][]string)
+	cities := make(map[string][]string)
 	dataChannel := make(chan model.Region, 150)
-	initializeData(dataChannel)
+	distributors := make(map[string]model.Permission)
+	initializeData(dataChannel, countries, cities)
+
+	assign := &controller.AssignDistributor{Countries: countries, Cities: cities, Distributors: distributors}
+
+	http.Handle("/assign", assign)
+	http.ListenAndServe(":8000", nil)
 
 }
 
-func initializeData(dataChannel chan model.Region) {
-	go model.DataStore(dataChannel)
+func initializeData(dataChannel chan model.Region, data map[string][]string, cities map[string][]string) {
+	go model.DataStore(dataChannel, data, cities)
 	csvIn, err := os.Open("./cities.csv")
 
 	if err != nil {

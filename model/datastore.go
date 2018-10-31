@@ -8,9 +8,7 @@ type Region struct {
 }
 
 // DataStore - to hold the cities, province and country
-func DataStore(dataChannel chan Region) {
-	data := make(map[string][]string)
-	cities := make(map[string][]string)
+func DataStore(dataChannel chan Region, data map[string][]string, cities map[string][]string) {
 
 	for {
 		if rec, ok := <-dataChannel; ok {
