@@ -4,3 +4,8 @@ package model
 type AssignResponse struct {
 	Status string `json:"status,omitempty"`
 }
+
+//CheckDistributionResponse - Contains response for checking distributor permission for the region
+type CheckDistributionResponse struct {
+	IsAuthorized string `json:"is_authorized,omitempty"`
+}

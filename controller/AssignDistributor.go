@@ -117,20 +117,26 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								if isCountryPresent {
 
 									// checking v.Province is present in  Provinces(countries datastore)
+									isProvincePresent := false
 									for _, p := range provinces {
 										if e.Province == p {
+											fmt.Println("province present")
+											isProvincePresent = true
 											for _, c := range d.Cities[p] {
-
 												if e.City == c {
 													newPermission.Excludes = append(newPermission.Excludes, e)
+													// fmt.Println(newPermission)
+												} else if e.City == "" {
+													break
 												}
 											}
-											if e.City == "" {
-												e.City = "ALL"
-												newPermission.Excludes = append(newPermission.Excludes, e)
 
-											}
 										}
+									}
+									if e.City == "" && isProvincePresent {
+										e.City = "ALL"
+										newPermission.Excludes = append(newPermission.Excludes, e)
+
 									}
 								}
 							}
@@ -140,10 +146,11 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					}
 
-					fmt.Println(d.Distributors)
 				}
 
 			} else {
+				response := model.AssignResponse{Status: "Invalid Info!"}
+				json.NewEncoder(w).Encode(&response)
 				return
 			}
 		}

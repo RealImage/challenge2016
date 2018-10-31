@@ -22,7 +22,11 @@ func DataStore(dataChannel chan Region, data map[string][]string, cities map[str
 				}
 				if !isPresent {
 					data[rec.Country] = append(province, rec.Province)
-					cities[rec.Province] = []string{rec.City}
+					if _, ok := cities[rec.Province]; ok {
+						cities[rec.Province] = append(cities[rec.Province], rec.City)
+					} else {
+						cities[rec.Province] = []string{rec.City}
+					}
 				} else {
 					exisiting := cities[rec.Province]
 					cities[rec.Province] = append(exisiting, rec.City)
@@ -30,7 +34,12 @@ func DataStore(dataChannel chan Region, data map[string][]string, cities map[str
 
 			} else {
 				data[rec.Country] = []string{rec.Province}
-				cities[rec.Province] = []string{rec.City}
+				if _, ok := cities[rec.Province]; ok {
+					cities[rec.Province] = append(cities[rec.Province], rec.City)
+				} else {
+					cities[rec.Province] = []string{rec.City}
+				}
+
 			}
 
 		} else {

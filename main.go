@@ -19,8 +19,10 @@ func main() {
 	initializeData(dataChannel, countries, cities)
 
 	assign := &controller.AssignDistributor{Countries: countries, Cities: cities, Distributors: distributors}
+	checkDistribution := &controller.CheckDistribution{Countries: countries, Cities: cities, Distributors: distributors}
 
 	http.Handle("/assign", assign)
+	http.Handle("/check_permission", checkDistribution)
 	http.ListenAndServe(":8000", nil)
 
 }
