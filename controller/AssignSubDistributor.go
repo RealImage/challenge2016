@@ -2,11 +2,11 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/bsyed6/challenge2016/model"
+	"github.com/bsyed6/challenge2016/utils"
 )
 
 // AssignSubDistributor - contains sub distributor info
@@ -17,8 +17,6 @@ type AssignSubDistributor struct {
 }
 
 func (d *AssignSubDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "POST" {
 		decoder := json.NewDecoder(r.Body)
@@ -29,7 +27,12 @@ func (d *AssignSubDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		if err != nil {
 			log.Fatal(err)
 		}
+		if isError := utils.ValidateSubDistributor(w, subPermission); isError {
+			return
+		}
 
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Type", "application/json")
 		data := d.Distributors[subPermission.From]
 		var unauthorized []model.Included
 		var authorizedIncludes []model.Included
@@ -111,7 +114,6 @@ func (d *AssignSubDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		}
 		d.Distributors[subPermission.For] = model.Permission{SubIncludes: authorizedIncludes, Excludes: excludes}
 
-		fmt.Println(d.Distributors[subPermission.For])
 		response := model.AssignResponse{Status: "Distributor permissions successfully assigned!"}
 		json.NewEncoder(w).Encode(&response)
 	}

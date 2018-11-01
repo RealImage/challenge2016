@@ -2,11 +2,11 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/bsyed6/challenge2016/model"
+	"github.com/bsyed6/challenge2016/utils"
 )
 
 // AssignDistributor - contains distributor info
@@ -17,8 +17,6 @@ type AssignDistributor struct {
 }
 
 func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "POST" {
 		decoder := json.NewDecoder(r.Body)
@@ -29,13 +27,17 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		if isError := utils.Validate(w, permission); isError {
+			return
+		}
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Type", "application/json")
 
 		//Validating if the country is present in our countries datastore
 		for _, country := range permission.Includes {
 			if provinces, ok := d.Countries[country]; ok {
 				// Checking if the Distributor is already present in the distributor datastore
 				if distributor, ok := d.Distributors[permission.For]; ok {
-
 					for _, v := range permission.Includes {
 						isPresent := false
 						for _, element := range distributor.Includes {
@@ -97,12 +99,14 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}
 							}
 						} else {
-							fmt.Println("Country is not included for this distributor")
-							fmt.Println(e)
+							w.WriteHeader(http.StatusBadRequest)
+							response := model.AssignResponse{Status: "Invalid Country Code!"}
+							json.NewEncoder(w).Encode(&response)
+							return
 						}
 					}
 					d.Distributors[permission.For] = distributor
-					fmt.Println(d.Distributors)
+					// fmt.Println(d.Distributors)
 
 				} else {
 					var newPermission model.Permission
@@ -126,7 +130,6 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											for _, c := range d.Cities[p] {
 												if e.City == c {
 													newPermission.Excludes = append(newPermission.Excludes, e)
-													// fmt.Println(newPermission)
 												} else if e.City == "" {
 													break
 												}
@@ -150,13 +153,15 @@ func (d *AssignDistributor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 			} else {
-				response := model.AssignResponse{Status: "Invalid Info!"}
+				w.WriteHeader(http.StatusBadRequest)
+				response := model.AssignResponse{Status: "Invalid Country Code!"}
 				json.NewEncoder(w).Encode(&response)
 				return
 			}
 		}
 
 	}
+
 	response := model.AssignResponse{Status: "Distributor permissions successfully assigned!"}
 	json.NewEncoder(w).Encode(&response)
 

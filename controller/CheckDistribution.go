@@ -2,11 +2,11 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/bsyed6/challenge2016/model"
+	"github.com/bsyed6/challenge2016/utils"
 )
 
 // CheckDistribution - Contains permission info
@@ -17,10 +17,9 @@ type CheckDistribution struct {
 }
 
 func (d *CheckDistribution) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "POST" {
+
 		decoder := json.NewDecoder(r.Body)
 		defer r.Body.Close()
 
@@ -30,15 +29,23 @@ func (d *CheckDistribution) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		if isError := utils.ValidateCheckPermission(w, authorize); isError {
+			return
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Content-Type", "application/json")
+
 		if _, ok := d.Distributors[authorize.For]; ok {
 			country := authorize.Country
 			city := authorize.City
 			province := authorize.Province
 			distributor := d.Distributors[authorize.For]
+
 			isCountryPresent := false
 			if len(distributor.Includes) == 0 && len(distributor.SubIncludes) > 0 {
+
 				for _, i := range distributor.SubIncludes {
-					fmt.Println(i)
 					if i.Country == country {
 						if i.City == city && i.Province == province {
 							response := model.CheckDistributionResponse{IsAuthorized: "yes"}
@@ -61,18 +68,9 @@ func (d *CheckDistribution) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					json.NewEncoder(w).Encode(&response)
 					return
 				} else {
-					isCityPresent := false
-					for _, c := range d.Cities[province] {
-						if c == city {
-							isCityPresent = true
-						}
-					}
-					if isCityPresent {
-						response := model.CheckDistributionResponse{IsAuthorized: "yes"}
-						json.NewEncoder(w).Encode(&response)
-						return
-					}
-
+					response := model.CheckDistributionResponse{IsAuthorized: "no"}
+					json.NewEncoder(w).Encode(&response)
+					return
 				}
 
 			}
@@ -113,6 +111,31 @@ func (d *CheckDistribution) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				response := model.CheckDistributionResponse{IsAuthorized: "no"}
 				json.NewEncoder(w).Encode(&response)
 				return
+			} else {
+				isValid := false
+				isProvincePresent := false
+				provinces := d.Countries[authorize.Country]
+				for _, p := range provinces {
+					if authorize.Province == p {
+						isProvincePresent = true
+						for _, c := range d.Cities[p] {
+							if authorize.City == c {
+								isValid = true
+							}
+						}
+
+					}
+				}
+				if isValid || isProvincePresent && authorize.City == "" {
+					response := model.CheckDistributionResponse{IsAuthorized: "yes"}
+					json.NewEncoder(w).Encode(&response)
+					return
+				} else {
+					response := model.CheckDistributionResponse{IsAuthorized: "no"}
+					json.NewEncoder(w).Encode(&response)
+					return
+				}
+
 			}
 
 		} else {
@@ -123,7 +146,7 @@ func (d *CheckDistribution) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 	} else {
-		w.WriteHeader(http.StatusNoContent)
+		w.WriteHeader(http.StatusBadRequest)
 		response := model.AssignResponse{Status: "Invalid Info!"}
 		json.NewEncoder(w).Encode(&response)
 	}
