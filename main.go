@@ -1,14 +1,14 @@
 package main
 
 import (
-	
 	"bufio"
 	"encoding/json"
 	"fmt"
 	"os"
-	"github.com/atyagi9006/challenge2016/models"
+
 	"github.com/atyagi9006/challenge2016/csvreader"
 	"github.com/atyagi9006/challenge2016/distributer"
+	"github.com/atyagi9006/challenge2016/models"
 	"github.com/atyagi9006/challenge2016/utilites"
 )
 
@@ -18,11 +18,11 @@ func main() {
 	countryStateMap := make(models.CountryMap)
 
 	csvreader.MakeDataStore(csvFileName, countryStateMap)
-	
+
 	//StaticInput(countryStateMap, distributerMap)
 	DynamicInput(countryStateMap, distributerMap)
 	mapJSON, _ := json.Marshal(distributerMap)
-	fmt.Println("OutPut : "+string(mapJSON))
+	fmt.Println("OutPut : " + string(mapJSON))
 }
 
 func StaticInput(countryMap models.CountryMap, distributerMap models.DistributerMap) {
@@ -45,7 +45,7 @@ func StaticInput(countryMap models.CountryMap, distributerMap models.Distributer
 		Permission: "Keelakarai-Tamil Nadu-India",
 		AuthType:   models.Exclude,
 	}
-	distributer.AddDistributer(input2, countryMap, distributerMap) 
+	distributer.AddDistributer(input2, countryMap, distributerMap)
 }
 func DynamicInput(countryMap models.CountryMap, distributerMap models.DistributerMap) {
 	inputSlice := make([]models.InputModel, 3)
@@ -59,7 +59,7 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 
 		if distributerInput == "0" {
 			break
-		}else if distributerInput != "" {
+		} else if distributerInput != "" {
 			fmt.Printf("Permissions for : %s \n", distributerInput)
 			for {
 				fmt.Printf("INCLUDE:")
@@ -67,7 +67,7 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 				csc := scanner.Text()
 				if csc == "0" {
 					break
-				}else if csc != "" {
+				} else if csc != "" {
 					input := models.InputModel{
 						Name:       distributerInput,
 						Permission: csc,
@@ -75,21 +75,20 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 					}
 					distributer.AddDistributer(input, countryMap, distributerMap)
 					inputSlice = append(inputSlice, input)
-				}else {
+				} else {
 					fmt.Println("enter a valid include permission")
 				}
-	
-				
+
 				fmt.Printf("\n")
 			}
 			for {
 				fmt.Printf("ExCLUDE:")
 				scanner.Scan()
 				csc := scanner.Text()
-	
+
 				if csc == "0" {
 					break
-				}else if csc != "" {
+				} else if csc != "" {
 					input := models.InputModel{
 						Name:       distributerInput,
 						Permission: csc,
@@ -97,24 +96,22 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 					}
 					distributer.AddDistributer(input, countryMap, distributerMap)
 					inputSlice = append(inputSlice, input)
-				}else {
+				} else {
 					fmt.Println("enter a valid include permission")
 				}
-				
+
 				fmt.Printf("\n")
 			}
 			if err := scanner.Err(); err != nil {
 				fmt.Fprintln(os.Stderr, "error:", err)
 				os.Exit(1)
 			}
-	
-		}else{
+
+		} else {
 			fmt.Println("enter a valid distributer")
 		}
-		}
-		
+	}
 
 	sliceJSON, _ := json.Marshal(inputSlice)
-	fmt.Println("INPUT : "+string(sliceJSON))
+	fmt.Println("INPUT : " + string(sliceJSON))
 }
-
