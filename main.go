@@ -26,8 +26,12 @@ func main() {
 		fmt.Print("Enter number of regions to exclude: ")
 		fmt.Scanf("%d", &ex)
 		auxilary.FillSlice(ex, &dist.Exlist)
-		fmt.Println(dist.CheckInclusion(dists))
-		fmt.Println(dist.CheckExclusion(dists))
+		fmt.Println("Result of CheckInclusion ", dist.CheckInclusion(dists))
+		fmt.Println("Result of checkExclusion ", dist.CheckExclusion(dists))
+		if dist.CheckInclusion(dists) == "Fine" && dist.CheckExclusion(dists) == "Fine" {
+			parent := file.GetParent(dist.ParentName, dists)
+			dist.AppendExlist(parent)
+		}
 		dists = append(dists, dist)
 	}
 	fmt.Println("Entered details of the distributors are:")
