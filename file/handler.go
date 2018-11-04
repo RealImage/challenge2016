@@ -54,42 +54,46 @@ func permErr(a, b string) string {
 }
 
 // CheckInclusion :child can't include regions that is not included in the parent
-func (d Distributor) CheckInclusion(list []Distributor) string {
-	parent := GetParent(d.ParentName, list)
+func CheckInclusion(ParentName string, d Distributor, list []Distributor) string {
+	parent := GetParent(ParentName, list)
 	if parent.Name == "" {
 		return "Fine"
 	}
+	flag := 0
 	for _, ch := range d.InList {
 		for _, pt := range parent.InList {
 			if ch.CountryName == pt.CountryName {
+				flag = 1
 				if ch.ProvinceName == pt.ProvinceName && pt.ProvinceName != "" {
 					if ch.CityName == pt.CityName && pt.CityName != "" {
-						return "Fine"
+						continue
 					} else if ch.CityName == pt.CityName && pt.CityName == "" {
-						return "Fine"
+						continue
 					} else if ch.CityName != pt.CityName && pt.CityName != "" {
 						return permErr(d.Name, ch.CityName)
 					} else if ch.CityName != pt.CityName && pt.CityName == "" {
-						return "Fine"
+						continue
 					}
 				} else if ch.ProvinceName == pt.ProvinceName && pt.ProvinceName == "" {
-					return "Fine"
+					continue
 				} else if ch.ProvinceName != pt.ProvinceName && pt.ProvinceName != "" {
 					return permErr(d.Name, pt.ProvinceName)
 				} else if ch.ProvinceName != pt.ProvinceName && pt.ProvinceName == "" {
-					return "Fine"
+					continue
 				}
 			}
 		}
 	}
-	return permErr(parent.Name, d.Name)
-
+	if flag == 1 {
+		fmt.Println("Reached last of checkInclusion")
+		return "Fine"
+	}
+	return permErr(ParentName, "Something")
 }
 
 // CheckExclusion: child can't include regions that is excluded in parent
-func (d Distributor) CheckExclusion(list []Distributor) string {
-	parent := GetParent(d.ParentName, list)
-	fmt.Println("Parent is: ", parent)
+func CheckExclusion(ParentName string, d Distributor, list []Distributor) string {
+	parent := GetParent(ParentName, list)
 	if parent.Name == "" {
 		return "Fine"
 	}

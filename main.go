@@ -10,7 +10,7 @@ import (
 func main() {
 	var csvSlice []file.Csv
 	go file.Readfile("cities.csv", &csvSlice)
-	var t, in, ex int
+	var t, in, ex, n int
 	var dists []file.Distributor
 	fmt.Println("Enter the number of inputs: ")
 	fmt.Scanf("%d", &t)
@@ -26,16 +26,32 @@ func main() {
 		fmt.Print("Enter number of regions to exclude: ")
 		fmt.Scanf("%d", &ex)
 		auxilary.FillSlice(ex, &dist.Exlist)
-		fmt.Println("Result of CheckInclusion ", dist.CheckInclusion(dists))
-		fmt.Println("Result of checkExclusion ", dist.CheckExclusion(dists))
-		if dist.CheckInclusion(dists) == "Fine" && dist.CheckExclusion(dists) == "Fine" {
+
+		if file.CheckInclusion(dist.ParentName, dist, dists) == "Fine" && file.CheckExclusion(dist.ParentName, dist, dists) == "Fine" {
 			parent := file.GetParent(dist.ParentName, dists)
 			dist.AppendExlist(parent)
+		} else {
+			file.CheckInclusion(dist.ParentName, dist, dists)
+			file.CheckExclusion(dist.ParentName, dist, dists)
 		}
 		dists = append(dists, dist)
 	}
-	fmt.Println("Entered details of the distributors are:")
-	for _, d := range dists {
-		fmt.Println(d)
+	fmt.Println("Enter number of regions to check: ")
+	fmt.Scanf("%d", &n)
+	for l := 0; l < n; l++ {
+		var regions file.Distributor
+		var name string
+		fmt.Print("Enter name: ")
+		fmt.Scanf("%s", &name)
+		auxilary.FillSlice(1, &regions.InList)
+		c := file.CheckInclusion(name, regions, dists)
+		d := file.CheckExclusion(name, regions, dists)
+		if c == "Fine" && d == "Fine" {
+			fmt.Printf("YES! %s has permissions \n", name)
+		} else {
+			fmt.Printf("NO! %s doesn't have permission: ", c, d)
+		}
+
 	}
+
 }
