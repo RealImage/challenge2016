@@ -89,6 +89,7 @@ func (d Distributor) CheckInclusion(list []Distributor) string {
 // CheckExclusion: child can't include regions that is excluded in parent
 func (d Distributor) CheckExclusion(list []Distributor) string {
 	parent := GetParent(d.ParentName, list)
+	fmt.Println("Parent is: ", parent)
 	if parent.Name == "" {
 		return "Fine"
 	}
@@ -101,29 +102,32 @@ func (d Distributor) CheckExclusion(list []Distributor) string {
 					} else if ch.CityName == pt.CityName && pt.CityName == "" {
 						return permErr(parent.Name, pt.ProvinceName)
 					} else if ch.CityName != pt.CityName && pt.CityName != "" && ch.CityName == "" {
-						return "Fine"
+						continue
 					} else if ch.CityName != pt.CityName && pt.CityName == "" && ch.CityName != "" {
 						return permErr(d.Name, ch.CityName)
 					} else if ch.CityName != pt.CityName && ch.CityName == "" && pt.CityName == "" {
 						return permErr(d.Name, ch.ProvinceName)
+					} else if ch.CityName != pt.CityName && ch.CityName != "" && pt.CityName != "" {
+						continue
 					} else if ch.CityName != pt.CityName {
-						return "Fine"
+						continue
 					}
 				} else if ch.ProvinceName == pt.ProvinceName && ch.ProvinceName == "" {
 					return permErr(parent.Name, pt.CountryName)
 				} else if ch.ProvinceName != pt.ProvinceName && pt.ProvinceName != "" && ch.ProvinceName == "" {
-					return "Fine"
+					continue
 				} else if ch.ProvinceName != pt.ProvinceName && pt.ProvinceName == "" && ch.ProvinceName != "" {
 					return permErr(parent.Name, ch.ProvinceName)
 				} else if ch.ProvinceName != pt.ProvinceName && pt.ProvinceName != "" && ch.ProvinceName != "" {
-					return "Fine"
+					continue
 				}
 			} else if ch.CountryName == pt.CountryName && ch.CountryName == "" {
-				return "Fine"
+				continue
 			} else {
-				return "Fine"
+				continue
 			}
 		}
 	}
-	return "Something Different"
+
+	return "Fine"
 }
