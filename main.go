@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/atyagi9006/challenge2016/csvreader"
@@ -17,7 +18,10 @@ func main() {
 	distributerMap := make(models.DistributerMap)
 	countryStateMap := make(models.CountryMap)
 
-	csvreader.MakeDataStore(csvFileName, countryStateMap)
+	err := csvreader.MakeDataStore(csvFileName, countryStateMap)
+	if err != nil {
+		log.Fatalf("error making Data Store: %v", err)
+	}
 
 	//StaticInput(countryStateMap, distributerMap)
 	DynamicInput(countryStateMap, distributerMap)
@@ -25,28 +29,6 @@ func main() {
 	fmt.Println("OutPut : " + string(mapJSON))
 }
 
-func StaticInput(countryMap models.CountryMap, distributerMap models.DistributerMap) {
-	input := models.InputModel{
-		Name:       utilites.UpperCaseNoSpace("distributer"),
-		Permission: "India",
-		AuthType:   models.Include,
-	}
-	distributer.AddDistributer(input, countryMap, distributerMap)
-
-	input1 := models.InputModel{
-		Name:       utilites.UpperCaseNoSpace("distributer"),
-		Permission: "Tamil Nadu-India",
-		AuthType:   models.Exclude,
-	}
-	distributer.AddDistributer(input1, countryMap, distributerMap)
-
-	input2 := models.InputModel{
-		Name:       utilites.UpperCaseNoSpace("distributer1 < distributer"),
-		Permission: "Keelakarai-Tamil Nadu-India",
-		AuthType:   models.Exclude,
-	}
-	distributer.AddDistributer(input2, countryMap, distributerMap)
-}
 func DynamicInput(countryMap models.CountryMap, distributerMap models.DistributerMap) {
 	inputSlice := make([]models.InputModel, 3)
 	//need to implement ho to take input from console
@@ -73,7 +55,10 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 						Permission: csc,
 						AuthType:   models.Include,
 					}
-					distributer.AddDistributer(input, countryMap, distributerMap)
+					err := distributer.AddDistributer(input, countryMap, distributerMap)
+					if err != nil {
+						fmt.Printf("Error : %v \n", err)
+					}
 					inputSlice = append(inputSlice, input)
 				} else {
 					fmt.Println("enter a valid include permission")
@@ -94,7 +79,10 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 						Permission: csc,
 						AuthType:   models.Exclude,
 					}
-					distributer.AddDistributer(input, countryMap, distributerMap)
+					err := distributer.AddDistributer(input, countryMap, distributerMap)
+					if err != nil {
+						fmt.Printf("Error : %v \n", err)
+					}
 					inputSlice = append(inputSlice, input)
 				} else {
 					fmt.Println("enter a valid include permission")

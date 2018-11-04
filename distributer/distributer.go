@@ -1,13 +1,14 @@
 package distributer
 
 import (
-	"fmt"
+	"errors"
 	"strings"
 
 	"github.com/atyagi9006/challenge2016/models"
 )
 
-func AddDistributer(input models.InputModel, countryMap models.CountryMap, distributerMap models.DistributerMap) {
+func AddDistributer(input models.InputModel, countryMap models.CountryMap, distributerMap models.DistributerMap) error {
+	var resultErr error
 	if validity(input.Permission, countryMap) {
 		countPC := strings.Count(input.Name, "<")
 		pcArr := strings.Split(input.Name, "<")
@@ -19,7 +20,7 @@ func AddDistributer(input models.InputModel, countryMap models.CountryMap, distr
 				InputPermission: input.Permission,
 				AuthType:        input.AuthType,
 			}
-			addAnyDist(distributer, distributerMap)
+			resultErr = addAnyDist(distributer, distributerMap)
 
 		default:
 
@@ -29,16 +30,18 @@ func AddDistributer(input models.InputModel, countryMap models.CountryMap, distr
 				AuthType:        input.AuthType,
 			}
 			parentPermission := distributerMap[pcArr[1]]
-			if checkPermission(distributer, parentPermission, countryMap) {
-
-				addAnyDist(distributer, distributerMap)
+			result, err := checkPermission(distributer, parentPermission, countryMap)
+			if err != nil {
+				resultErr = err
+			} else if result {
+				resultErr = addAnyDist(distributer, distributerMap)
 			}
 
 		}
 	} else {
-		fmt.Println("Invalid Input permission...." + input.Permission)
+		resultErr = errors.New("Invalid Input permission...." + input.Permission)
 	}
-
+	return resultErr
 }
 func directIncCheck(InputPermission string, parentPermission models.Permission) bool {
 	_, checkInclude := parentPermission.IncludeMap[InputPermission]
@@ -65,15 +68,16 @@ func validity(InputPermission string, countryStateMap models.CountryMap) bool {
 	return isvalid
 
 }
-func checkByPermissionTypeInc(InputPermission string, parentPermission models.Permission, countryStateMap models.CountryMap) bool {
+func checkByPermissionTypeInc(InputPermission string, parentPermission models.Permission, countryStateMap models.CountryMap) (bool, error) {
 	var result bool
+	var resultErr error
 	plist, ptype := getPermissionType(InputPermission)
 	switch ptype {
 	case models.CountryType:
 		if _, ccheck := countryStateMap[plist[0]]; ccheck {
 			result = true
 		} else {
-			fmt.Println("invalid input country " + InputPermission)
+			resultErr = errors.New("invalid input country " + InputPermission)
 		}
 	case models.StateType:
 		if _, childCountrycheck := parentPermission.IncludeMap[plist[1]]; childCountrycheck {
@@ -81,7 +85,7 @@ func checkByPermissionTypeInc(InputPermission string, parentPermission models.Pe
 			if _, scheck := smap[plist[0]]; scheck {
 				result = true
 			} else {
-				fmt.Println("invalid input state - " + InputPermission)
+				resultErr = errors.New("invalid input state - " + InputPermission)
 			}
 		}
 
@@ -91,7 +95,7 @@ func checkByPermissionTypeInc(InputPermission string, parentPermission models.Pe
 			if _, scheck := smap[plist[1]]; scheck {
 				result = true
 			} else {
-				fmt.Println("invalid input city l1 - " + InputPermission)
+				resultErr = errors.New("invalid input city l1 - " + InputPermission)
 			}
 		} else if _, childCountryCheck := parentPermission.IncludeMap[plist[2]]; childCountryCheck {
 			smap := countryStateMap[plist[2]]
@@ -99,26 +103,27 @@ func checkByPermissionTypeInc(InputPermission string, parentPermission models.Pe
 				if _, cityCheck := citymap[plist[0]]; cityCheck {
 					result = true
 				} else {
-					fmt.Println("invalid input city l3 - " + InputPermission)
+					resultErr = errors.New("invalid input city l3 - " + InputPermission)
 				}
 
 			} else {
-				fmt.Println("invalid input city l2 - " + InputPermission)
+				resultErr = errors.New("invalid input city l2 - " + InputPermission)
 			}
 		}
 
 	}
-	return result
+	return result, resultErr
 }
-func checkByPermissionTypeExc(InputPermission string, parentPermission models.Permission, countryStateMap models.CountryMap) bool {
+func checkByPermissionTypeExc(InputPermission string, parentPermission models.Permission, countryStateMap models.CountryMap) (bool, error) {
 	var result bool
+	var resultErr error
 	plist, ptype := getPermissionType(InputPermission)
 	switch ptype {
 	case models.CountryType:
 		if _, ccheck := countryStateMap[plist[0]]; ccheck {
 			result = true
 		} else {
-			fmt.Println("invalid input country" + InputPermission)
+			resultErr = errors.New("invalid input country" + InputPermission)
 		}
 	case models.StateType:
 		if _, childCountrycheck := parentPermission.ExcludeMap[plist[1]]; childCountrycheck {
@@ -126,7 +131,7 @@ func checkByPermissionTypeExc(InputPermission string, parentPermission models.Pe
 			if _, scheck := smap[plist[0]]; scheck {
 				result = true
 			} else {
-				fmt.Println("invalid input state -" + InputPermission)
+				resultErr = errors.New("invalid input state -" + InputPermission)
 			}
 		}
 
@@ -136,7 +141,7 @@ func checkByPermissionTypeExc(InputPermission string, parentPermission models.Pe
 			if _, scheck := smap[plist[1]]; scheck {
 				result = true
 			} else {
-				fmt.Println("invalid input city Ex l1 -  " + InputPermission)
+				resultErr = errors.New("invalid input city Ex l1 -  " + InputPermission)
 			}
 		} else if _, childCountryCheck := parentPermission.ExcludeMap[plist[2]]; childCountryCheck {
 			smap := countryStateMap[plist[2]]
@@ -144,21 +149,21 @@ func checkByPermissionTypeExc(InputPermission string, parentPermission models.Pe
 				if _, cityCheck := citymap[plist[0]]; cityCheck {
 					result = true
 				} else {
-					fmt.Println("invalid input city Ex l3 -" + InputPermission)
+					resultErr = errors.New("invalid input city Ex l3 -" + InputPermission)
 				}
 
 			} else {
-				fmt.Println("invalid input city Ex l2 - " + InputPermission)
+				resultErr = errors.New("invalid input city Ex l2 - " + InputPermission)
 			}
 		}
 
 	}
-	return result
+	return result, resultErr
 }
-func checkPermission(child models.Distributer, parentPermission models.Permission, countryStateMap models.CountryMap) bool {
+func checkPermission(child models.Distributer, parentPermission models.Permission, countryStateMap models.CountryMap) (bool, error) {
 	//check input inputpermission in parent permission after getting it
 	var result bool
-
+	var resultErr error
 	var directCheck bool
 	if child.AuthType == models.Include {
 		directCheck = directIncCheck(child.InputPermission, parentPermission)
@@ -166,10 +171,17 @@ func checkPermission(child models.Distributer, parentPermission models.Permissio
 		if directCheck { //country check
 			result = true
 		} else {
-			if checkByPermissionTypeExc(child.InputPermission, parentPermission, countryStateMap) {
+			resultExc, excErr := checkByPermissionTypeExc(child.InputPermission, parentPermission, countryStateMap)
+			if excErr != nil {
+				resultErr = excErr
+			} else if resultExc {
 				result = false
-				fmt.Println("Parent distributer dont have access to grant permission- " + child.InputPermission)
-			} else if checkByPermissionTypeInc(child.InputPermission, parentPermission, countryStateMap) {
+				resultErr = errors.New("Parent distributer dont have access to grant permission- " + child.InputPermission)
+			}
+			resultInc, incErr := checkByPermissionTypeInc(child.InputPermission, parentPermission, countryStateMap)
+			if incErr != nil {
+				resultErr = incErr
+			} else if resultInc {
 				result = true
 			}
 		}
@@ -179,18 +191,26 @@ func checkPermission(child models.Distributer, parentPermission models.Permissio
 		if directCheck { //country check
 			result = true
 		} else {
-			if checkByPermissionTypeExc(child.InputPermission, parentPermission, countryStateMap) {
+			resultExc, excErr := checkByPermissionTypeExc(child.InputPermission, parentPermission, countryStateMap)
+			if excErr != nil {
+				resultErr = excErr
+			} else if resultExc {
 				result = true
-			} else if checkByPermissionTypeInc(child.InputPermission, parentPermission, countryStateMap) {
+			}
+			resultInc, incErr := checkByPermissionTypeInc(child.InputPermission, parentPermission, countryStateMap)
+			if incErr != nil {
+				resultErr = incErr
+			} else if resultInc {
 				result = true
 			}
 		}
 	}
 
-	return result
+	return result, resultErr
 }
 
-func addAnyDist(distributer models.Distributer, distributerMap models.DistributerMap) {
+func addAnyDist(distributer models.Distributer, distributerMap models.DistributerMap) error {
+	var resultErr error
 	permission, ok := distributerMap[distributer.Name]
 	_, pType := getPermissionType(distributer.InputPermission)
 
@@ -199,14 +219,14 @@ func addAnyDist(distributer models.Distributer, distributerMap models.Distribute
 		if distributer.AuthType == models.Include {
 			_, iok := permission.IncludeMap[distributer.InputPermission]
 			if iok {
-				fmt.Println("permission Exist.. in include - " + distributer.InputPermission)
+				resultErr = errors.New("permission Exist.. in include - " + distributer.InputPermission)
 			} else {
 				permission.IncludeMap[distributer.InputPermission] = pType
 			}
 		} else {
 			_, eok := permission.ExcludeMap[distributer.InputPermission]
 			if eok {
-				fmt.Println("permission Exist.. in exclude - " + distributer.InputPermission)
+				resultErr = errors.New("permission Exist.. in exclude - " + distributer.InputPermission)
 			} else {
 				// if len(permission.ExcludeMap) == 0 {
 				// 	permission.ExcludeMap= map[string]models.PermissionType{}
@@ -231,6 +251,7 @@ func addAnyDist(distributer models.Distributer, distributerMap models.Distribute
 		distributerMap[distributer.Name] = permission
 		//fmt.Print("Dmap : %V", distributerMap)
 	}
+	return resultErr
 }
 
 func getPermissionType(permission string) ([]string, models.PermissionType) {

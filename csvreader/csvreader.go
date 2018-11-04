@@ -4,19 +4,18 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/csv"
-	"log"
 	"os"
 	"strings"
 
 	"github.com/atyagi9006/challenge2016/models"
 )
 
-func MakeDataStore(csvFileName string, countryStateMap models.CountryMap) {
+func MakeDataStore(csvFileName string, countryStateMap models.CountryMap) error {
 	/* lines, err := csvreder(csvFileName)
 	if err != nil {
 		log.Fatalf("error reading all lines: %v", err)
 	} */
-	lines := Readfile(csvFileName)
+	lines, err := Readfile(csvFileName)
 	for i, linesp := range lines {
 		line := strings.Split(linesp, ",")
 		if i == 0 {
@@ -63,6 +62,7 @@ func MakeDataStore(csvFileName string, countryStateMap models.CountryMap) {
 			countryStateMap[line[5]] = stateM
 		}
 	}
+	return err
 }
 
 func csvreder(csvFileName string) ([][]string, error) {
@@ -72,16 +72,16 @@ func csvreder(csvFileName string) ([][]string, error) {
 	return reader.ReadAll()
 }
 
-func Readfile(csvFileName string) []string {
+func Readfile(csvFileName string) ([]string, error) {
 	filerc, err := os.Open(csvFileName)
-	if err != nil {
+	/* if err != nil {
 		log.Fatal(err)
-	}
+	} */
 	defer filerc.Close()
 
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(filerc)
 	contents := buf.String()
 	splitcontent := strings.Split(contents, "\n")
-	return splitcontent
+	return splitcontent, err
 }
