@@ -59,35 +59,30 @@ func CheckInclusion(ParentName string, d Distributor, list []Distributor) string
 	if parent.Name == "" {
 		return "Fine"
 	}
-	flag := 0
 	for _, ch := range d.InList {
 		for _, pt := range parent.InList {
 			if ch.CountryName == pt.CountryName {
-				flag = 1
 				if ch.ProvinceName == pt.ProvinceName && pt.ProvinceName != "" {
 					if ch.CityName == pt.CityName && pt.CityName != "" {
-						continue
+						return "Fine"
 					} else if ch.CityName == pt.CityName && pt.CityName == "" {
-						continue
-					} else if ch.CityName != pt.CityName && pt.CityName != "" {
-						return permErr(d.Name, ch.CityName)
+						return "Fine"
 					} else if ch.CityName != pt.CityName && pt.CityName == "" {
-						continue
+						return "Fine"
+					} else if ch.CityName != pt.CityName {
+						return permErr(d.Name, ch.CityName)
 					}
 				} else if ch.ProvinceName == pt.ProvinceName && pt.ProvinceName == "" {
-					continue
+					return "Fine"
 				} else if ch.ProvinceName != pt.ProvinceName && pt.ProvinceName != "" {
 					return permErr(d.Name, pt.ProvinceName)
 				} else if ch.ProvinceName != pt.ProvinceName && pt.ProvinceName == "" {
-					continue
+					return "Fine"
 				}
 			}
 		}
 	}
-	if flag == 1 {
-		fmt.Println("Reached last of checkInclusion")
-		return "Fine"
-	}
+	fmt.Println("country not included in parent")
 	return permErr(ParentName, "Something")
 }
 

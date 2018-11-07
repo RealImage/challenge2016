@@ -9,6 +9,7 @@ import (
 func FillSlice(size int, list *[]file.Csv) {
 	var d file.Csv
 	for i := 0; i < size; i++ {
+		fmt.Printf("Seriel No.: %d \n", i+1)
 		fmt.Println("Enter the city code:")
 		fmt.Scanf("%s", &d.CityCode)
 
@@ -26,6 +27,7 @@ func FillSlice(size int, list *[]file.Csv) {
 
 		fmt.Println("Enter the country name:")
 		fmt.Scanf("%s", &d.CountryName)
+		fmt.Println()
 
 		*list = append(*list, d)
 	}

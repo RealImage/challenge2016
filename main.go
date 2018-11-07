@@ -47,9 +47,9 @@ func main() {
 		c := file.CheckInclusion(name, regions, dists)
 		d := file.CheckExclusion(name, regions, dists)
 		if c == "Fine" && d == "Fine" {
-			fmt.Printf("YES! %s has permissions \n", name)
+			fmt.Printf("YES\n")
 		} else {
-			fmt.Printf("NO! %s doesn't have permission: ", c, d)
+			fmt.Printf("NO\n")
 		}
 
 	}
