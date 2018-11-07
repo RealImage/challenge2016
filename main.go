@@ -12,9 +12,10 @@ func main() {
 	go file.Readfile("cities.csv", &csvSlice)
 	var t, in, ex, n int
 	var dists []file.Distributor
-	fmt.Println("Enter the number of inputs: ")
+	fmt.Println("Enter the number of distributors: ")
 	fmt.Scanf("%d", &t)
 	for i := 0; i < t; i++ {
+		fmt.Printf("%d) \n", i+1)
 		var dist file.Distributor
 		fmt.Print("Enter name: ")
 		fmt.Scanf("%s", &dist.Name)
@@ -26,30 +27,43 @@ func main() {
 		fmt.Print("Enter number of regions to exclude: ")
 		fmt.Scanf("%d", &ex)
 		auxilary.FillSlice(ex, &dist.Exlist)
+		a := file.CheckInclusion(dist.ParentName, dist, dists)
+		b := file.CheckExclusion(dist.ParentName, dist, dists)
 
-		if file.CheckInclusion(dist.ParentName, dist, dists) == "Fine" && file.CheckExclusion(dist.ParentName, dist, dists) == "Fine" {
+		if a == "Fine" && b == "Fine" {
+			if dist.ParentName != "" {
+				fmt.Printf("%s can distrubute work to %s \n", dist.ParentName, dist.Name)
+			}
 			parent := file.GetParent(dist.ParentName, dists)
 			dist.AppendExlist(parent)
+			dists = append(dists, dist)
 		} else {
-			file.CheckInclusion(dist.ParentName, dist, dists)
-			file.CheckExclusion(dist.ParentName, dist, dists)
+			if a == "Fine" && b != "Fine" {
+				fmt.Println("Permission Error! Child can't include regions that is excluded in parent: ", b)
+			} else {
+				fmt.Println("Permission Error! Child can't include regions that is not included in the parent: ", a)
+			}
 		}
-		dists = append(dists, dist)
+
 	}
 	fmt.Println("Enter number of regions to check: ")
 	fmt.Scanf("%d", &n)
 	for l := 0; l < n; l++ {
 		var regions file.Distributor
 		var name string
-		fmt.Print("Enter name: ")
+		fmt.Println("Enter name: ")
 		fmt.Scanf("%s", &name)
 		auxilary.FillSlice(1, &regions.InList)
 		c := file.CheckInclusion(name, regions, dists)
 		d := file.CheckExclusion(name, regions, dists)
 		if c == "Fine" && d == "Fine" {
-			fmt.Printf("YES\n")
+			fmt.Printf("YES. %s has permissions.\n", name)
+		} else if c == "Fine" && d != "Fine" {
+			fmt.Printf("NO. %s doesn't have required permissions. %s \n", name, d)
+		} else if c != "Fine" && d == "Fine" {
+			fmt.Printf("NO. %s doesn't have required permissions. %s \n", name, c)
 		} else {
-			fmt.Printf("NO\n")
+			fmt.Printf("NO. %s doesn't have required permissions.\n", name)
 		}
 
 	}

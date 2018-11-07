@@ -82,7 +82,6 @@ func CheckInclusion(ParentName string, d Distributor, list []Distributor) string
 			}
 		}
 	}
-	fmt.Println("country not included in parent")
 	return permErr(ParentName, "Something")
 }
 
