@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	var csvSlice []file.Csv
+	var csvSlice []file.FileCsv
 	go file.Readfile("cities.csv", &csvSlice)
 	var t, in, ex, n int
 	var dists []file.Distributor
@@ -29,7 +29,8 @@ func main() {
 		auxilary.FillSlice(ex, &dist.Exlist)
 		a := file.CheckInclusion(dist.ParentName, dist, dists)
 		b := file.CheckExclusion(dist.ParentName, dist, dists)
-
+		fmt.Println("Distributor: ", dist)
+		fmt.Println(a, b)
 		if a == "Fine" && b == "Fine" {
 			if dist.ParentName != "" {
 				fmt.Printf("%s can distrubute work to %s \n", dist.ParentName, dist.Name)
@@ -46,6 +47,7 @@ func main() {
 		}
 
 	}
+	fmt.Println("All distributors: ", dists)
 	fmt.Println("Enter number of regions to check: ")
 	fmt.Scanf("%d", &n)
 	for l := 0; l < n; l++ {

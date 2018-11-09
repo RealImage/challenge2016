@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Readfile(path string, csvSlice *[]Csv) error {
+func Readfile(path string, csvSlice *[]FileCsv) error {
 	file, er := os.Open(path)
 	if er != nil {
 		log.Println(er)
@@ -19,7 +19,7 @@ func Readfile(path string, csvSlice *[]Csv) error {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		det := strings.Split(scanner.Text(), ",")
-		c := Csv{
+		c := FileCsv{
 			det[0],
 			det[1],
 			det[2],
@@ -91,6 +91,7 @@ func CheckExclusion(ParentName string, d Distributor, list []Distributor) string
 	if parent.Name == "" {
 		return "Fine"
 	}
+	fmt.Println("exlist ", parent.Exlist)
 	for _, ch := range d.InList {
 		for _, pt := range parent.Exlist {
 			if ch.CountryName == pt.CountryName && ch.CountryName != "" {
