@@ -24,7 +24,7 @@ func TestStaticInput(t *testing.T) {
 		AuthType:   models.Include,
 	}
 
-	err := distributer.AddDistributer(input, countryStateMap, distributerMap)
+	_, err := distributer.AddDistributer(input, countryStateMap, distributerMap)
 
 	if err != nil {
 		log.Printf("Error : %v \n", err)
@@ -36,7 +36,7 @@ func TestStaticInput(t *testing.T) {
 		AuthType:   models.Exclude,
 	}
 
-	err = distributer.AddDistributer(input1, countryStateMap, distributerMap)
+	_, err = distributer.AddDistributer(input1, countryStateMap, distributerMap)
 
 	if err != nil {
 		log.Printf("Error : %v \n", err)
@@ -48,7 +48,7 @@ func TestStaticInput(t *testing.T) {
 		AuthType:   models.Include,
 	}
 
-	err = distributer.AddDistributer(input2, countryStateMap, distributerMap)
+	_, err = distributer.AddDistributer(input2, countryStateMap, distributerMap)
 
 	if err != nil {
 		log.Printf("Error : %v \n", err)
@@ -58,7 +58,8 @@ func TestStaticInput(t *testing.T) {
 func TestAddDistributer(t *testing.T) {
 
 	testScenrio := []struct {
-		input models.InputModel
+		input          models.InputModel
+		expectedResult string
 	}{
 		{
 			input: models.InputModel{
@@ -66,18 +67,21 @@ func TestAddDistributer(t *testing.T) {
 				Permission: "India",
 				AuthType:   models.Include,
 			},
+			expectedResult: "sucess",
 		}, {
 			input: models.InputModel{
 				Name:       utilites.UpperCaseNoSpace("distributer"),
 				Permission: "Tamil Nadu-India",
 				AuthType:   models.Exclude,
 			},
+			expectedResult: "sucess",
 		}, {
 			input: models.InputModel{
 				Name:       utilites.UpperCaseNoSpace("distributer1 < distributer"),
 				Permission: "Keelakarai-Tamil Nadu-India",
 				AuthType:   models.Include,
 			},
+			expectedResult: "Parent distributer dont have access to grant permission- Keelakarai-Tamil Nadu-India",
 		},
 	}
 	csvFileName := "cities.csv"
@@ -89,10 +93,12 @@ func TestAddDistributer(t *testing.T) {
 	for i, scenrio := range testScenrio {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 
-			errmsg := distributer.AddDistributer(scenrio.input, countryStateMap, distributerMap)
-
-			if errmsg != nil {
-				log.Println("Error is : ", errmsg)
+			result, _ := distributer.AddDistributer(scenrio.input, countryStateMap, distributerMap)
+			//3.1expects error message
+			if want, got := scenrio.expectedResult, result; want != got {
+				t.Errorf("expected result %#v, but got %#v", want, got)
+				return
+			} else if result != "" {
 				return //expected error; done here
 			}
 

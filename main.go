@@ -23,7 +23,6 @@ func main() {
 		log.Fatalf("error making Data Store: %v", err)
 	}
 
-	//StaticInput(countryStateMap, distributerMap)
 	DynamicInput(countryStateMap, distributerMap)
 	mapJSON, _ := json.Marshal(distributerMap)
 	fmt.Println("OutPut : " + string(mapJSON))
@@ -55,7 +54,7 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 						Permission: csc,
 						AuthType:   models.Include,
 					}
-					err := distributer.AddDistributer(input, countryMap, distributerMap)
+					_, err := distributer.AddDistributer(input, countryMap, distributerMap)
 					if err != nil {
 						fmt.Printf("Error : %v \n", err)
 					}
@@ -79,7 +78,7 @@ func DynamicInput(countryMap models.CountryMap, distributerMap models.Distribute
 						Permission: csc,
 						AuthType:   models.Exclude,
 					}
-					err := distributer.AddDistributer(input, countryMap, distributerMap)
+					_, err := distributer.AddDistributer(input, countryMap, distributerMap)
 					if err != nil {
 						fmt.Printf("Error : %v \n", err)
 					}

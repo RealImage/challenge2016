@@ -7,8 +7,9 @@ import (
 	"github.com/atyagi9006/challenge2016/models"
 )
 
-func AddDistributer(input models.InputModel, countryMap models.CountryMap, distributerMap models.DistributerMap) error {
+func AddDistributer(input models.InputModel, countryMap models.CountryMap, distributerMap models.DistributerMap) (string, error) {
 	var resultErr error
+	result := "sucess"
 	if validity(input.Permission, countryMap) {
 		countPC := strings.Count(input.Name, "<")
 		pcArr := strings.Split(input.Name, "<")
@@ -41,7 +42,10 @@ func AddDistributer(input models.InputModel, countryMap models.CountryMap, distr
 	} else {
 		resultErr = errors.New("Invalid Input permission...." + input.Permission)
 	}
-	return resultErr
+	if resultErr != nil {
+		result = resultErr.Error()
+	}
+	return result, resultErr
 }
 func directIncCheck(InputPermission string, parentPermission models.Permission) bool {
 	_, checkInclude := parentPermission.IncludeMap[InputPermission]
