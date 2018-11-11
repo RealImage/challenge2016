@@ -1,0 +1,149 @@
+Hi, I have designed this program like a complete product, I have implemented using multilevel linked list (this how hashmap implemented),
+This program can be done using hashmap easily but I have not used any built-in data structures but I have used
+data structure concept to solve this problem.
+
+I covered most of the test cases, you can exclude and include any time, based on that distributors and its sub-distributors will
+updated automatically, any exclusion in parent level distributor will update all of its sub-distributors also.
+
+you can add any number of distributors and sub-distributors at any time, and I am maintaining a hierarchy of permissions also,
+(e.g) if all cities are excluded from province then province will be removed for that distributor, same case for province also,
+      When all province is removed then the country will be removed for its distributors. and these changes will be updated in its all sub-distributors also
+
+Also distributors also well organized like when you try to assign sub-distributor for non-existing distributor then it will throw an error
+
+Implementation is little complex but this how hashmap internally work
+
+
+Note: To create new distributor or switch to already existing distributor use option "1" in the main menu
+      if distributor not exist then it will create a new one, else switch to already existing distributor
+
+How to give input:
+
+
+1.Distributor
+2.exit
+Enter your choice=1
+Enter the distributor name=DISTRIBUTOR1
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=1
+Enter the include string=INDIA
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=1
+Enter the include string=UNITEDSTATES
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=2
+Enter the exclude string=KARNATAKA-INDIA
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=2
+Enter the exclude string=CHENNAI-TAMILNADU-INDIA
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=3
+Enter the permission to check=CHICAGO-ILLINOIS-UNITEDSTATES
+*** YES ***
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=3
+Enter the permission to check=CHENNAI-TAMILNADU-INDIA
+*** NO ***
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=3
+Enter the permission to check=BANGALORE-KARNATAKA-INDIA
+*** NO ***
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=4
+
+1.Distributor
+2.exit
+Enter your choice=1                          
+Enter the distributor name=DISTRIBUTOR2 < DISTRIBUTOR1
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=1
+Enter the include string=INDIA
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=2
+Enter the exclude string=TAMILNADU-INDIA
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=3
+Enter the permission to check=TAMILNADU-INDIA 
+*** NO ***
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=3
+Enter the permission to check=KARNATAKA-INDIA - DISTRIBUTOR2
+*** NO ***
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=4
+
+1.Distributor
+2.exit
+Enter your choice=1
+Enter the distributor name=DISTRIBUTOR3 < DISTRIBUTOR2 < DISTRIBUTOR1
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=1
+Enter the include string=HUBLI-KARNATAKA-INDIA
+!! Given province name not present in country or it is excluded
+
+1.INCLUDE
+2.EXCLUDE
+3.Check Permission
+4.Main Menu
+Enter your choice=4
+
+1.Distributor
+2.exit
+Enter your choice=2
+
