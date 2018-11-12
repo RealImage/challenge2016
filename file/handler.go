@@ -91,7 +91,6 @@ func CheckExclusion(ParentName string, d Distributor, list []Distributor) string
 	if parent.Name == "" {
 		return "Fine"
 	}
-	fmt.Println("exlist ", parent.Exlist)
 	for _, ch := range d.InList {
 		for _, pt := range parent.Exlist {
 			if ch.CountryName == pt.CountryName && ch.CountryName != "" {
