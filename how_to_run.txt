@@ -146,4 +146,3 @@ Enter your choice=4
 1.Distributor
 2.exit
 Enter your choice=2
-
