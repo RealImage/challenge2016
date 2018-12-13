@@ -1,0 +1,14 @@
+Permissions for D1
+INCLUDE: IN
+INCLUDE: US
+EXCLUDE: KA-IN
+EXCLUDE: CENAI-TN-IN
+
+Permissions for D2 < D1
+INCLUDE: IN
+EXCLUDE: TG-IN
+
+Permissions for D3 < D2 < D1
+EXCLUDE: HR-IN
+
+
