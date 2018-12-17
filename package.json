@@ -1,0 +1,30 @@
+{
+  "name": "cinema",
+  "version": "1.0.0",
+  "description": "An allocation system for cinema distributors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepanuchiha/challenge2016.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deepanuchiha/challenge2016/issues"
+  },
+  "homepage": "https://github.com/deepanuchiha/challenge2016#readme",
+  "dependencies": {
+    "csvtojson": "^2.0.8"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}
