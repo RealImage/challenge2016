@@ -4,7 +4,8 @@
   "description": "In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/bisho1995/challenge2016/issues"
   },
-  "homepage": "https://github.com/bisho1995/challenge2016#readme"
+  "homepage": "https://github.com/bisho1995/challenge2016#readme",
+  "dependencies": {
+    "line-by-line": "^0.1.6",
+    "mocha": "^5.2.0",
+    "winston": "^3.1.0"
+  }
 }
