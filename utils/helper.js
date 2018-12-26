@@ -27,6 +27,15 @@ class Helper {
   }
 
   /**
+   * Check if the code for a place does actually exist in the system
+   * or not
+   * @param {String} code The code for a place
+   */
+  doesCodeExist(code) {
+    return code in Cities || code in Provinces || code in Countries;
+  }
+
+  /**
    * Check if the parent is actually a parent of the element
    * @param {EntityObject} element The entity object whose parent is to be tracked
    * @param {String} parent The code for the parent

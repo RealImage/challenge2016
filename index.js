@@ -4,6 +4,7 @@ const helper = require("./utils/helper");
 createWorld()
   .then(world => {
     console.log(helper.isHierarchyCorrect("TN-KA".split("-")));
+    console.log(helper.doesCodeExist("KANA"));
   })
   .catch(err => {
     console.log(err);
