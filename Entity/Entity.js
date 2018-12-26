@@ -3,7 +3,7 @@ class Entity {
     this.name = name;
     this.code = code;
     this.parent = parent;
-    this.children = [];
+    this.children = {};
   }
 
   getParent() {
@@ -21,8 +21,8 @@ class Entity {
   display() {
     console.log(`Name: ${this.name} Code: ${this.code}`);
   }
-  addChild(entity) {
-    this.children.push(entity);
+  addChild(code, entity) {
+    this.children[code] = entity;
   }
 }
 

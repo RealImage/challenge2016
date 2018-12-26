@@ -45,7 +45,7 @@ function processLine(line) {
 function createNewEntry(history, code, ClassName, name, parent) {
   if (!history[code]) {
     history[code] = new ClassName(name, code, parent);
-    parent.children.push(history[code]);
+    parent.children[code] = history[code];
   }
   return history[code];
 }
