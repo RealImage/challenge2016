@@ -1,13 +1,9 @@
-const path = require("path");
-const helper = require("./utils/helper");
+const createWorld = require("./createWorld");
 
-helper
-  .readFile(path.join(__dirname, "cities.csv"), line => {
-    console.log(line);
-  })
-  .then(() => {
-    console.log("COMPLETE");
+createWorld()
+  .then(world => {
+    console.log(world);
   })
   .catch(err => {
-    console.log({ err });
+    console.log(err);
   });

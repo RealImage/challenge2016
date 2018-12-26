@@ -21,6 +21,9 @@ class Entity {
   display() {
     console.log(`Name: ${this.name} Code: ${this.code}`);
   }
+  addChild(entity) {
+    this.children.push(entity);
+  }
 }
 
 module.exports = Entity;
