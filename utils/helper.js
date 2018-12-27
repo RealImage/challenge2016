@@ -3,6 +3,9 @@ const Provinces = require("../EntitiesNoted/Provinces");
 const Cities = require("../EntitiesNoted/Cities");
 
 const LineByLineReader = require("line-by-line");
+
+const stdin = process.openStdin();
+
 /**
  * A set of helper methods which is needed throught the project
  */
@@ -24,6 +27,14 @@ class Helper {
       }
       return true;
     }
+  }
+
+  getUserInput() {
+    return new Promise(resolve => {
+      stdin.once("data", function(d) {
+        return resolve(d.toString().trim());
+      });
+    });
   }
 
   /**
