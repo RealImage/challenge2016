@@ -3,6 +3,7 @@ const createWorld = require("./createWorld");
 const helper = require("./utils/helper");
 const config = require("./config");
 const logger = require("./utils/logger");
+const distributor = require("./Distributor/Distributor");
 
 createWorld()
   .then(async world => {
@@ -49,7 +50,7 @@ async function mainMenu() {
 /**
  * Add a new distributor into the system
  */
-async function createNewDistributorWrapper() {
+async function createNewDistributor() {
   return new Promise(async (resolve, reject) => {
     console.log(chalk.yellow(config.add_distributor));
     console.log(`Enter distributor name`);
@@ -63,8 +64,16 @@ async function createNewDistributorWrapper() {
       .split(",")
       .map(e => e.trim());
 
-    console.log({ name, includes, excludes });
-    resolve();
+    const result = distributor.createDistributor(name, includes, excludes);
+    if (result) {
+      console.log("Success");
+      resolve();
+    } else {
+      console.log(
+        "Sorry something went wrong, please make sure the codes match the codes from csv and the distributor does not exist already."
+      );
+      return createNewDistributorWrapper();
+    }
   });
 }
 
@@ -80,7 +89,7 @@ async function createDistributorMenu() {
         mainMenu();
         return;
       case "1":
-        await createNewDistributorWrapper();
+        await createNewDistributor();
         mainMenu();
         break;
     }
@@ -90,7 +99,10 @@ async function createDistributorMenu() {
   }
 }
 async function relateDistributorMenu() {}
-async function listDistributorMenu() {}
+async function listDistributorMenu() {
+  distributor.listDistributors();
+  mainMenu();
+}
 async function queryDistributorMenu() {}
 
 /**

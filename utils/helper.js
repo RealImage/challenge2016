@@ -29,6 +29,9 @@ class Helper {
     }
   }
 
+  /**
+   * Get a user input from the user via command line
+   */
   getUserInput() {
     return new Promise(resolve => {
       stdin.once("data", function(d) {
@@ -75,6 +78,23 @@ class Helper {
       obj = Countries[code];
     }
     return obj;
+  }
+
+  /**
+   *
+   * @param {String[]} ar The sequence of hierarchy like [CHENI,TN,IN]
+   */
+  getObjFromSequence(ar) {
+    switch (ar.length) {
+      case 3:
+        return Cities[ar[0]];
+      case 2:
+        return Provinces[ar[0]] || Cities[ar[0]];
+      case 1:
+        return Countries[ar[0]] || Provinces[ar[0]] || Cities[ar[0]];
+      default:
+        return {};
+    }
   }
 
   /**

@@ -1,15 +1,15 @@
 class DistributorClass {
-  constructor(parent) {
+  constructor(parent = null) {
     this.parent = parent;
-    this.includes = [];
-    this.excludes = [];
+    this.includes = {};
+    this.excludes = {};
     this.children = [];
   }
   addIncludes(code) {
-    this.includes.push(code);
+    this.includes[code] = true;
   }
   addExcludes(code) {
-    this.excludes.push(code);
+    delete this.excludes[code];
   }
   getParent() {
     return this.parent;
