@@ -7,9 +7,11 @@ class DistributorClass {
   }
   addIncludes(code) {
     this.includes[code] = true;
+    delete this.excludes[code];
   }
   addExcludes(code) {
-    delete this.excludes[code];
+    delete this.includes[code];
+    this.excludes[code] = true;
   }
   getParent() {
     return this.parent;

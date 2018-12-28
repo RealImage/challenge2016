@@ -14,25 +14,40 @@ class Distributor {
    */
   createDistributor(name, includes, excludes) {
     if (name in distributors) return false;
-    for (let i = 0; i < includes.length; i++)
-      if (
-        helper.doesCodeExist(includes[i]) === false ||
-        !helper.isHierarchyCorrect(includes[i].split("-"))
-      )
+    for (let i = 0; i < includes.length; i++) {
+      let tmp = includes[i].split("-");
+      for (let j = 0; j < tmp.length; j++) {
+        if (!helper.doesCodeExist(tmp[j])) {
+          return false;
+        }
+      }
+      if (!helper.isHierarchyCorrect(includes[i].split("-"))) {
         return false;
+      }
+    }
 
-    for (let i = 0; i < excludes.length; i++)
-      if (
-        !helper.doesCodeExist(excludes[i]) ||
-        !helper.isHierarchyCorrect(excludes[i])
-      )
-        return false;
+    for (let i = 0; i < excludes.length; i++) {
+      let tmp = excludes[i].split("-");
+      for (let j = 0; j < tmp.length; j++) {
+        if (!helper.doesCodeExist(tmp[i])) {
+          //   console.log("here1");
+          return false;
+        }
+      }
+      if (!helper.isHierarchyCorrect(excludes[i].split("-"))) {
+        {
+          //   console.log("here2");
+          return false;
+        }
+      }
+    }
 
     const dist = new DistributorClass();
     for (let i = 0; i < includes.length; i++)
-      dist.addIncludes(helper.getObjFromSequence(includes[i].split("-")));
-    for (let i = 0; i < excludes.length; i++)
-      dist.addIncludes(helper.getObjFromSequence(excludes[i].split("-")));
+      dist.addIncludes(helper.getObjFromSequence(includes[i].split("-")).code);
+    for (let i = 0; i < excludes.length; i++) {
+      dist.addExcludes(helper.getObjFromSequence(excludes[i].split("-")).code);
+    }
 
     distributors[name] = dist;
     return true;
@@ -66,6 +81,58 @@ class Distributor {
    */
   getDistributor(name) {
     return distributors[name];
+  }
+
+  /**
+   * Create a relationship between two distributors
+   * @param {String} d1 The name of distributor1
+   * @param {String} d2 The name of distributor2
+   */
+  relateDistributors(d2, d1) {
+    if (!this.distributorPresent(d1) || !this.distributorPresent(d2))
+      return false;
+    const distrib1 = getDistributor(d1);
+    const distrib2 = getDistributor(d2);
+
+    // if distrib2 already has parent then return false
+    if (distrib2.parent != null) return false;
+
+    const includesObjectd1 = Object.keys(distrib1.includes);
+    const includesObjectd2 = Object.keys(distrib2.includes);
+
+    // each include of distributor2 <= distributor1 include
+    for (let i = 0; i < includesObjectd2.length; i++) {
+      if (!(includesObjectd2[i] in distrib1.includes)) {
+        let b = false;
+        for (let j = 0; j < includesObjectd1.length; j++) {
+          if (
+            helper.isHierarchyCorrect(includesObjectd2[i], includesObjectd1[j])
+          )
+            b = true;
+        }
+        if (b === false) return false;
+      }
+    }
+
+    // each include of distributor2 not in exclude of distributor1 or its parents
+    let tmp = distrib1;
+    while (tmp != null) {
+      for (let i = 0; i < includesObjectd2.length; i++) {
+        if (includesObjectd2[i] in tmp.excludes) {
+          return false;
+        } else {
+          let tmpAr = Object.keys(tmp.excludes);
+          for (let j = 0; j < tmpAr.length; j++) {
+            if (helper.isHierarchyCorrect(includesObjectd2[i], tmpAr[j]))
+              return false;
+          }
+        }
+      }
+      tmp = tmp.parent;
+    } // while!
+
+    distrib2.parent = distrib1;
+    return true;
   }
 }
 

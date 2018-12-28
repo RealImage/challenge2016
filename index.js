@@ -72,7 +72,7 @@ async function createNewDistributor() {
       console.log(
         "Sorry something went wrong, please make sure the codes match the codes from csv and the distributor does not exist already."
       );
-      return createNewDistributorWrapper();
+      return createNewDistributor();
     }
   });
 }
