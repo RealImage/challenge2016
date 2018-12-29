@@ -144,10 +144,71 @@ class Distributor {
     } // while!
 
     distrib2.parent = distrib1;
+    distrib1.children.push(distrib2);
     return true;
+  }
+
+  /**
+   * Check if the distributor is allowed to sell in the place
+   * @param {String} distributor The distributor name to query
+   * @param {String} place The name of the place to query
+   */
+  queryDistributor(distributor, place) {
+    if (!this.distributorPresent(distributor)) {
+      console.log(`The distributor does not exist ${distributor}`);
+      return;
+    }
+    // check if all the code actually exist
+    let tmp = place.split("-");
+    for (let j = 0; j < tmp.length; j++) {
+      if (!helper.doesCodeExist(tmp[j])) {
+        {
+          console.log(`${tmp[j]} does not exist in system`);
+          return;
+        }
+      }
+    }
+    // check if the hierarchy is correct
+    if (!helper.isHierarchyCorrect(place.split("-"))) {
+      console.log(`The hierarchy of code is not correct ${place}`);
+      return;
+    }
+
+    const placeName = place.split("-");
+
+    const distributorObj = this.getDistributor(distributor);
+    const includesObjects = Object.keys(distributorObj.includes);
+    console.log(includesObjects, placeName);
+    // check if code is <= includes of distributor
+    if (!includesObjects.includes(placeName[0])) {
+      let b = false;
+      for (let i = 0; i < includesObjects.length; i++) {
+        if (helper.isHierarchyCorrect(placeName[0], includesObjects[i]))
+          b = true;
+      }
+      if (b === false) {
+        console.log(
+          "The place is not a direct or sub relation with distributor's includes"
+        );
+        return;
+      }
+    }
+
+    // check the excludes
+    tmp = distributorObj;
+    while (tmp != null) {
+      if (placeName[0] in tmp.excludes) {
+        console.log(`Sorry the place is excluded by ${tmp.name}`);
+        return;
+      }
+      tmp = tmp.parent;
+    }
+
+    console.log("YES");
   }
 }
 
+// Singelton pattern
 const distributor = new Distributor();
 
 module.exports = distributor;

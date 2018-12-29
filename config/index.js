@@ -39,6 +39,15 @@ Example
   For example if you want Distributor3 <  Distributor2 < Distributor1
   Then do Distributor2 < Distributor1
   Then Distributor3 < Distributor2
+  `,
+  query_distributor: `
+  =================Welcome to Query Distributor menu==================
+  Enter a distributor name to query. Followed by the place to query
+  Example
+  Enter distributor name
+  d1
+  Enter place to query
+  CHICAGO-ILLINOIS-UNITEDSTATES
   `
 };
 

@@ -118,7 +118,15 @@ async function listDistributorMenu() {
   distributor.listDistributors();
   mainMenu();
 }
-async function queryDistributorMenu() {}
+async function queryDistributorMenu() {
+  console.log(chalk.yellow(config.query_distributor));
+  console.log("Enter distributor name");
+  const distributorName = await helper.getUserInput();
+  console.log("Enter place to query");
+  const place = await helper.getUserInput();
+  distributor.queryDistributor(distributorName, place);
+  mainMenu();
+}
 
 /**
  * Ask user for
