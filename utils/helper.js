@@ -12,21 +12,18 @@ const stdin = process.openStdin();
 class Helper {
   /**
    * Check if the hierarchy between city province and country is correct or not.
-   * Works for all combinations
-   * @param {String[]} ar The array of relationships between places
+   * @param {String} code The entered place code
+   * @param {String} compare The code to compare to
    */
-  isHierarchyCorrect(ar) {
-    if (ar.length === 0) return false;
-    else if (ar.length === 1) {
-      return this.getEntityObject(ar[0]) != null ? true : false;
-    } else {
-      for (let i = 0; i < ar.length - 1; i++) {
-        let obj = this.getEntityObject(ar[i]);
-        let parent = ar[i + 1];
-        if (!this.isParent(obj, parent)) return false;
-      }
-      return true;
-    }
+  isHierarchyCorrect(code, compare) {
+    if (code === compare) return true;
+    /**
+     * BLORE-KA-IN & KA-IN
+     * Blore-KA-IN & IN
+     * KA-IN & IN
+     * Should result in true
+     */
+    return code.includes(compare);
   }
 
   /**
@@ -85,16 +82,10 @@ class Helper {
    * @param {String[]} ar The sequence of hierarchy like [CHENI,TN,IN]
    */
   getObjFromSequence(ar) {
-    switch (ar.length) {
-      case 3:
-        return Cities[ar[0]];
-      case 2:
-        return Provinces[ar[0]] || Cities[ar[0]];
-      case 1:
-        return Countries[ar[0]] || Provinces[ar[0]] || Cities[ar[0]];
-      default:
-        return {};
-    }
+    if (ar in Cities) return Cities[ar];
+    if (ar in Provinces) return Provinces[ar];
+    if (ar in Countries) return Countries[ar];
+    return null;
   }
 
   /**

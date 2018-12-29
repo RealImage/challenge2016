@@ -51,30 +51,24 @@ async function mainMenu() {
  * Add a new distributor into the system
  */
 async function createNewDistributor() {
-  return new Promise(async (resolve, reject) => {
-    console.log(chalk.yellow(config.add_distributor));
-    console.log(`Enter distributor name`);
-    const name = await helper.getUserInput();
-    console.log(`INCLUDES`);
-    const includes = (await helper.getUserInput())
-      .split(",")
-      .map(e => e.trim());
-    console.log(`EXCLUDES`);
-    const excludes = (await helper.getUserInput())
-      .split(",")
-      .map(e => e.trim());
+  console.log(chalk.yellow(config.add_distributor));
+  console.log(`Enter distributor name`);
+  const name = await helper.getUserInput();
+  console.log(`INCLUDES`);
+  const includes = (await helper.getUserInput()).split(",").map(e => e.trim());
+  console.log(`EXCLUDES`);
+  const excludes = (await helper.getUserInput()).split(",").map(e => e.trim());
 
-    const result = distributor.createDistributor(name, includes, excludes);
-    if (result) {
-      console.log("Success");
-      resolve();
-    } else {
-      console.log(
-        "Sorry something went wrong, please make sure the codes match the codes from csv and the distributor does not exist already."
-      );
-      return createNewDistributor();
-    }
-  });
+  const result = distributor.createDistributor(name, includes, excludes);
+  if (result) {
+    console.log("Success");
+    mainMenu();
+  } else {
+    console.log(
+      "Sorry something went wrong, please make sure the codes match the codes from csv and the distributor does not exist already."
+    );
+    createNewDistributor();
+  }
 }
 
 /**
@@ -89,8 +83,7 @@ async function createDistributorMenu() {
         mainMenu();
         return;
       case "1":
-        await createNewDistributor();
-        mainMenu();
+        createNewDistributor();
         break;
     }
   } else {

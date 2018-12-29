@@ -37,13 +37,19 @@ function processLine(line) {
 
   provinceObj = createNewEntry(
     provinces,
-    provinceCode,
+    `${provinceCode}-${countryCode}`,
     Entity,
     provinceName,
     countryObj
   );
 
-  cityObj = createNewEntry(cities, cityCode, Entity, cityName, provinceObj);
+  cityObj = createNewEntry(
+    cities,
+    `${cityCode}-${provinceCode}-${countryCode}`,
+    Entity,
+    cityName,
+    provinceObj
+  );
 }
 
 /**

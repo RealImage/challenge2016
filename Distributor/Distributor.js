@@ -14,29 +14,25 @@ class Distributor {
    */
   createDistributor(name, includes, excludes) {
     if (name in distributors) return false;
+    if (includes.length === 0) {
+      console.log(
+        `The distributor ${name} must have access to some locations. None provided here.`
+      );
+      return false;
+    }
     for (let i = 0; i < includes.length; i++) {
-      let tmp = includes[i].split("-");
-      for (let j = 0; j < tmp.length; j++) {
-        if (!helper.doesCodeExist(tmp[j])) {
-          return false;
-        }
-      }
-      if (!helper.isHierarchyCorrect(includes[i].split("-"))) {
+      if (!helper.doesCodeExist(includes[i])) {
+        console.log(`The code ${includes[i]} does not exist`);
         return false;
       }
     }
-
-    for (let i = 0; i < excludes.length; i++) {
-      let tmp = excludes[i].split("-");
-      for (let j = 0; j < tmp.length; j++) {
-        if (!helper.doesCodeExist(tmp[i])) {
-          //   console.log("here1");
-          return false;
-        }
-      }
-      if (!helper.isHierarchyCorrect(excludes[i].split("-"))) {
-        {
-          //   console.log("here2");
+    if (
+      excludes.length > 0 &&
+      (excludes.length === 1 && excludes[0].length > 0)
+    ) {
+      for (let i = 0; i < excludes.length; i++) {
+        if (!helper.doesCodeExist(excludes[i])) {
+          console.log(`The code ${excludes[i]} does not exist`);
           return false;
         }
       }
@@ -44,9 +40,10 @@ class Distributor {
 
     const dist = new DistributorClass(name);
     for (let i = 0; i < includes.length; i++)
-      dist.addIncludes(helper.getObjFromSequence(includes[i].split("-")).code);
+      dist.addIncludes(helper.getObjFromSequence(includes[i]).code);
     for (let i = 0; i < excludes.length; i++) {
-      dist.addExcludes(helper.getObjFromSequence(excludes[i].split("-")).code);
+      if (helper.getObjFromSequence(excludes[i]))
+        dist.addExcludes(helper.getObjFromSequence(excludes[i]).code);
     }
 
     distributors[name] = dist;
@@ -156,49 +153,40 @@ class Distributor {
   queryDistributor(distributor, place) {
     if (!this.distributorPresent(distributor)) {
       console.log(`The distributor does not exist ${distributor}`);
+      console.log("NO");
       return;
     }
     // check if all the code actually exist
-    let tmp = place.split("-");
-    for (let j = 0; j < tmp.length; j++) {
-      if (!helper.doesCodeExist(tmp[j])) {
-        {
-          console.log(`${tmp[j]} does not exist in system`);
-          return;
-        }
-      }
-    }
-    // check if the hierarchy is correct
-    if (!helper.isHierarchyCorrect(place.split("-"))) {
-      console.log(`The hierarchy of code is not correct ${place}`);
+    if (!helper.doesCodeExist(place)) {
+      console.log(`${place} does not exist in system`);
+      console.log("NO");
       return;
     }
 
-    const placeName = place.split("-");
-
     const distributorObj = this.getDistributor(distributor);
     const includesObjects = Object.keys(distributorObj.includes);
-    console.log(includesObjects, placeName);
+
     // check if code is <= includes of distributor
-    if (!includesObjects.includes(placeName[0])) {
+    if (!includesObjects.includes(place)) {
       let b = false;
       for (let i = 0; i < includesObjects.length; i++) {
-        if (helper.isHierarchyCorrect(placeName[0], includesObjects[i]))
-          b = true;
+        if (helper.isHierarchyCorrect(place, includesObjects[i])) b = true;
       }
       if (b === false) {
         console.log(
           "The place is not a direct or sub relation with distributor's includes"
         );
+        console.log("NO");
         return;
       }
     }
 
     // check the excludes
-    tmp = distributorObj;
+    let tmp = distributorObj;
     while (tmp != null) {
-      if (placeName[0] in tmp.excludes) {
+      if (place in tmp.excludes) {
         console.log(`Sorry the place is excluded by ${tmp.name}`);
+        console.log("NO");
         return;
       }
       tmp = tmp.parent;
