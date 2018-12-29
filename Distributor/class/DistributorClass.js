@@ -1,5 +1,6 @@
 class DistributorClass {
-  constructor(parent = null) {
+  constructor(name, parent = null) {
+    this.name = name;
     this.parent = parent;
     this.includes = {};
     this.excludes = {};

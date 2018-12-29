@@ -30,6 +30,15 @@ Example
   INDIA,UNITEDSTATES
   EXCLUDES
   KARNATAKA-INDIA,CHENNAI-TAMILNADU-INDIA
+  `,
+  relate_distributor: `
+  ==================Welcome to Relate Distributor menu===============
+  Enter the relationship like Distributor2 < Distributor1 which means
+  Distributor2 has permissions less than Distributor1
+  If there are multi level relations then do them one after another
+  For example if you want Distributor3 <  Distributor2 < Distributor1
+  Then do Distributor2 < Distributor1
+  Then Distributor3 < Distributor2
   `
 };
 

@@ -98,7 +98,22 @@ async function createDistributorMenu() {
     createDistributorMenu();
   }
 }
-async function relateDistributorMenu() {}
+async function relateDistributorMenu() {
+  console.log(chalk.yellow(config.relate_distributor));
+  console.log("Enter relationship");
+  const input = await helper.getUserInput();
+  const ar = input.split("<").map(a => a.trim());
+  if (ar.length !== 2) {
+    console.log("Please make sure the number of distributors is 2");
+    relateDistributorMenu();
+  } else {
+    const result = distributor.relateDistributors(ar[0], ar[1]);
+    if (!result) {
+      console.log("Sorry the relation could not be established");
+    }
+    mainMenu();
+  }
+}
 async function listDistributorMenu() {
   distributor.listDistributors();
   mainMenu();

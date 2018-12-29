@@ -42,7 +42,7 @@ class Distributor {
       }
     }
 
-    const dist = new DistributorClass();
+    const dist = new DistributorClass(name);
     for (let i = 0; i < includes.length; i++)
       dist.addIncludes(helper.getObjFromSequence(includes[i].split("-")).code);
     for (let i = 0; i < excludes.length; i++) {
@@ -89,13 +89,18 @@ class Distributor {
    * @param {String} d2 The name of distributor2
    */
   relateDistributors(d2, d1) {
-    if (!this.distributorPresent(d1) || !this.distributorPresent(d2))
+    if (!this.distributorPresent(d1) || !this.distributorPresent(d2)) {
+      console.log(`Either ${d2} or ${d1} does not exist`);
       return false;
-    const distrib1 = getDistributor(d1);
-    const distrib2 = getDistributor(d2);
+    }
+    const distrib1 = this.getDistributor(d1);
+    const distrib2 = this.getDistributor(d2);
 
     // if distrib2 already has parent then return false
-    if (distrib2.parent != null) return false;
+    if (distrib2.parent != null) {
+      console.log(`${d2} already has a parent`);
+      return false;
+    }
 
     const includesObjectd1 = Object.keys(distrib1.includes);
     const includesObjectd2 = Object.keys(distrib2.includes);
@@ -110,7 +115,10 @@ class Distributor {
           )
             b = true;
         }
-        if (b === false) return false;
+        if (b === false) {
+          console.log("Each include of distributor2 <= distributor1 include");
+          return false;
+        }
       }
     }
 
@@ -123,8 +131,12 @@ class Distributor {
         } else {
           let tmpAr = Object.keys(tmp.excludes);
           for (let j = 0; j < tmpAr.length; j++) {
-            if (helper.isHierarchyCorrect(includesObjectd2[i], tmpAr[j]))
+            if (helper.isHierarchyCorrect(includesObjectd2[i], tmpAr[j])) {
+              console.log(
+                "Each include of distributor2 not in exclude of distributor1 or its parents"
+              );
               return false;
+            }
           }
         }
       }
