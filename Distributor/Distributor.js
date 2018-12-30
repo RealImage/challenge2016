@@ -57,10 +57,12 @@ class Distributor {
     const keys = Object.keys(distributors);
     if (keys.length === 0) {
       console.log("Sorry, there are no distributors in the system yet.");
+      return 0;
     } else {
       for (let i = 0; i < keys.length; i++) {
         console.log(distributors[keys[i]]);
       }
+      return distributors;
     }
   }
 
@@ -154,13 +156,13 @@ class Distributor {
     if (!this.distributorPresent(distributor)) {
       console.log(`The distributor does not exist ${distributor}`);
       console.log("NO");
-      return;
+      return "NO";
     }
     // check if all the code actually exist
     if (!helper.doesCodeExist(place)) {
       console.log(`${place} does not exist in system`);
       console.log("NO");
-      return;
+      return "NO";
     }
 
     const distributorObj = this.getDistributor(distributor);
@@ -177,7 +179,7 @@ class Distributor {
           "The place is not a direct or sub relation with distributor's includes"
         );
         console.log("NO");
-        return;
+        return "NO";
       }
     }
 
@@ -187,12 +189,13 @@ class Distributor {
       if (place in tmp.excludes) {
         console.log(`Sorry the place is excluded by ${tmp.name}`);
         console.log("NO");
-        return;
+        return "NO";
       }
       tmp = tmp.parent;
     }
 
     console.log("YES");
+    return "YES";
   }
 }
 
