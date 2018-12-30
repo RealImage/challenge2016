@@ -4,6 +4,7 @@ const Countries = require("../EntitiesNoted/Countries");
 const helper = require("../utils/helper");
 const distributors = require("../EntitiesNoted/Distributors");
 const DistributorClass = require("./class/DistributorClass");
+const chalk = require("chalk");
 class Distributor {
   /**
    * Create a new Distributor
@@ -59,8 +60,9 @@ class Distributor {
       console.log("Sorry, there are no distributors in the system yet.");
       return 0;
     } else {
+      console.log("List:");
       for (let i = 0; i < keys.length; i++) {
-        console.log(distributors[keys[i]]);
+        console.log(chalk.green(distributors[keys[i]].name));
       }
       return distributors;
     }
@@ -154,13 +156,13 @@ class Distributor {
    */
   queryDistributor(distributor, place) {
     if (!this.distributorPresent(distributor)) {
-      console.log(`The distributor does not exist ${distributor}`);
+      // console.log(`The distributor does not exist ${distributor}`);
       console.log("NO");
       return "NO";
     }
     // check if all the code actually exist
     if (!helper.doesCodeExist(place)) {
-      console.log(`${place} does not exist in system`);
+      // console.log(`${place} does not exist in system`);
       console.log("NO");
       return "NO";
     }
@@ -175,9 +177,9 @@ class Distributor {
         if (helper.isHierarchyCorrect(place, includesObjects[i])) b = true;
       }
       if (b === false) {
-        console.log(
-          "The place is not a direct or sub relation with distributor's includes"
-        );
+        // console.log(
+        //   "The place is not a direct or sub relation with distributor's includes"
+        // );
         console.log("NO");
         return "NO";
       }
@@ -187,7 +189,7 @@ class Distributor {
     let tmp = distributorObj;
     while (tmp != null) {
       if (place in tmp.excludes) {
-        console.log(`Sorry the place is excluded by ${tmp.name}`);
+        // console.log(`Sorry the place is excluded by ${tmp.name}`);
         console.log("NO");
         return "NO";
       }
