@@ -1,0 +1,141 @@
+    <section class="suite">
+      <h1>Testing of world object</h1>
+      <dl>
+        <dt>should create the world</dt>
+        <dd><pre><code>expect(world).to.not.be.null;</code></pre></dd>
+        <dt>should create the world object</dt>
+        <dd><pre><code>expect(world.name).to.equal(&#x22;World&#x22;);
+expect(world.code).to.equal(&#x22;WORLD&#x22;);
+expect(world.parent).to.be.null;
+expect(Object.keys(world.children).length).to.be.greaterThan(0);</code></pre></dd>
+        <dt>should have India as country</dt>
+        <dd><pre><code>expect(world.children[&#x22;IN&#x22;]).to.not.be.null;
+expect(world.children[&#x22;IN&#x22;].name).to.be.equal(&#x22;India&#x22;);
+expect(world.children[&#x22;IN&#x22;].code).to.be.equal(&#x22;IN&#x22;);
+expect(Object.keys(world.children[&#x22;IN&#x22;].children).length).to.be.greaterThan(
+  0
+);</code></pre></dd>
+        <dt>India should have Tamil Nadu</dt>
+        <dd><pre><code>expect(world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;]).to.not.be.null;
+expect(world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;].name).to.be.equal(
+  &#x22;Tamil Nadu&#x22;
+);
+expect(world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;].code).to.be.equal(&#x22;TN-IN&#x22;);
+expect(
+  Object.keys(world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;].children).length
+).to.be.greaterThan(0);</code></pre></dd>
+        <dt>Tamil Nadu should have Chennai</dt>
+        <dd><pre><code>expect(world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;].children[&#x22;CENAI-TN-IN&#x22;]).to
+  .not.be.null;
+expect(
+  world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;].children[&#x22;CENAI-TN-IN&#x22;].name
+).to.be.equal(&#x22;Chennai&#x22;);
+expect(
+  world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;].children[&#x22;CENAI-TN-IN&#x22;].code
+).to.be.equal(&#x22;CENAI-TN-IN&#x22;);
+expect(
+  Object.keys(
+    world.children[&#x22;IN&#x22;].children[&#x22;TN-IN&#x22;].children[&#x22;CENAI-TN-IN&#x22;].children
+  ).length
+).to.be.equal(0);</code></pre></dd>
+        <dt>India should be able to access World through its parent</dt>
+        <dd><pre><code>expect(world.children[&#x22;IN&#x22;].parent.name).to.be.equal(&#x22;World&#x22;);
+expect(world.children[&#x22;IN&#x22;].parent.code).to.be.equal(&#x22;WORLD&#x22;);</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>DistributorClass tests</h1>
+      <dl>
+        <dt>object should be created</dt>
+        <dd><pre><code>const obj = new DistributorClass(&#x22;name&#x22;);
+expect(obj).to.not.be.null;
+expect(obj.name).to.be.eq(&#x22;name&#x22;);</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>Create distributor tests</h1>
+      <dl>
+        <section class="suite">
+          <h1>Create new distributor</h1>
+          <dl>
+            <dt>createDistributor should be true after successful creation</dt>
+            <dd><pre><code>const name = &#x22;d1&#x22;;
+const includes = &#x22;IN,US,KA-IN&#x22;.split(&#x22;,&#x22;).map(e =&#x3E; e.trim());
+const excludes = &#x22;CENAI-TN-IN&#x22;.split(&#x22;,&#x22;).map(e =&#x3E; e.trim());
+expect(distributor.createDistributor(name, includes, excludes)).to.be
+  .true;</code></pre></dd>
+            <dt>createDistributor should be false after failed creation</dt>
+            <dd><pre><code>const name = &#x22;d1&#x22;;
+const includes = &#x22;IN,US,KA-FOO-BAR&#x22;.split(&#x22;,&#x22;).map(e =&#x3E; e.trim());
+const excludes = &#x22;CENAI-TN-IN&#x22;.split(&#x22;,&#x22;).map(e =&#x3E; e.trim());
+expect(distributor.createDistributor(name, includes, excludes)).to.be
+  .false;</code></pre></dd>
+            <dt>After successful creation of a distributor the distributor list should have the new distributor</dt>
+            <dd><pre><code>const name = &#x22;d10&#x22;;
+const includes = &#x22;IN,US,KA-IN&#x22;.split(&#x22;,&#x22;).map(e =&#x3E; e.trim());
+const excludes = &#x22;CENAI-TN-IN&#x22;.split(&#x22;,&#x22;).map(e =&#x3E; e.trim());
+expect(distributor.createDistributor(name, includes, excludes)).to.be
+  .true;
+expect(distributors[name]).to.not.be.undefined;</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>List distributors</h1>
+          <dl>
+List:
+d1
+d10
+            <dt>Should have more than 0 distributors</dt>
+            <dd><pre><code>expect(
+  Object.keys(distributor.listDistributors()).length
+).to.be.greaterThan(0);</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>Check distributor</h1>
+          <dl>
+            <dt>Should return true if distributor is present</dt>
+            <dd><pre><code>expect(distributor.distributorPresent(&#x22;d1&#x22;)).to.be.true;</code></pre></dd>
+            <dt>Should return false if distributor is notpresent</dt>
+            <dd><pre><code>expect(distributor.distributorPresent(&#x22;foo-bar&#x22;)).to.be.false;</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>Relate distributor</h1>
+          <dl>
+            <dt>should relate d2 and d1 as d2&#x3C;d1</dt>
+            <dd><pre><code>const d2 = &#x22;d2&#x22;;
+const d1 = &#x22;d1&#x22;;
+expect(distributor.relateDistributors(d2, d1)).to.be.true;</code></pre></dd>
+            <dt>should have parent of d2 as d1</dt>
+            <dd><pre><code>const d2 = &#x22;d2&#x22;;
+const d1 = &#x22;d1&#x22;;
+expect(distributors[d2].parent.name).to.be.equal(&#x22;d1&#x22;);</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>Query distributor</h1>
+          <dl>
+YES
+            <dt>CHICAGO-ILLINOIS-UNITEDSTATES should be YES for d1</dt>
+            <dd><pre><code>const name = &#x22;d1&#x22;;
+const code = &#x22;CHIAO-IL-US&#x22;;
+expect(distributor.queryDistributor(name, code)).to.equal(&#x22;YES&#x22;);</code></pre></dd>
+NO
+            <dt>CHENNAI-TAMILNADU-INDIA should be NO for d1</dt>
+            <dd><pre><code>const name = &#x22;d1&#x22;;
+const code = &#x22;CENAI-TN-IN&#x22;;
+expect(distributor.queryDistributor(name, code)).to.equal(&#x22;NO&#x22;);</code></pre></dd>
+          </dl>
+        </section>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>Entity tests</h1>
+      <dl>
+        <dt>object should be created</dt>
+        <dd><pre><code>const obj = new Entity(&#x22;name&#x22;);
+expect(obj).to.not.be.null;
+expect(obj.name).to.be.eq(&#x22;name&#x22;);</code></pre></dd>
+      </dl>
+    </section>
