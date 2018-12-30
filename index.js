@@ -28,6 +28,7 @@ async function mainMenu() {
     mainMenu();
   } else {
     console.log(chalk.green(`User selected ${input}`));
+    logger.info(`User selected ${input} in main menu`);
     switch (input) {
       case "0":
         process.exit(0);
@@ -58,12 +59,17 @@ async function createNewDistributor() {
   const includes = (await helper.getUserInput()).split(",").map(e => e.trim());
   console.log(`EXCLUDES`);
   const excludes = (await helper.getUserInput()).split(",").map(e => e.trim());
+  logger.info(
+    `User selected ${name}, ${includes}, ${excludes} in createNewDistributor menu`
+  );
 
   const result = distributor.createDistributor(name, includes, excludes);
   if (result) {
     console.log("Success");
+    logger.info(`Result was success`);
     mainMenu();
   } else {
+    logger.info(`Result was failure`);
     console.log(
       "Sorry something went wrong, please make sure the codes match the codes from csv and the distributor does not exist already."
     );
@@ -120,11 +126,3 @@ async function queryDistributorMenu() {
   distributor.queryDistributor(distributorName, place);
   mainMenu();
 }
-
-/**
- * Ask user for
- * 1. Create distributor(with includes and excludes)
- * 2. Relate distrubutors
- * 3. List distributors
- * 4. Query distributor to entity code
- */
