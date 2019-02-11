@@ -30,3 +30,11 @@ func (s *session) getFromSessionMap(authToken string) (credential, bool) {
 
 	return credential{}, false
 }
+
+func (s *session) deleteFromSessionMap(authToken string) {
+
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	delete(s.sessionMap, authToken)
+}

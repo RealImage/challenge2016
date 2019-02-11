@@ -46,7 +46,7 @@ func isAlreadyLoggedIn(req *http.Request) (bool, credential, error) {
 	if len(req.Cookies()) == 0 {
 		return false, credential{}, nil
 	}
-	authToken, err := getAuthToken(req)
+	_, authToken, err := getCookieAndValue(req, authenticationToken)
 	if err != nil {
 		return false, credential{}, err
 	}
@@ -55,13 +55,13 @@ func isAlreadyLoggedIn(req *http.Request) (bool, credential, error) {
 	return ok, creds, nil
 }
 
-func getAuthToken(req *http.Request) (string, error) {
+func getCookieAndValue(req *http.Request, cookieName string) (*http.Cookie, string, error) {
 
-	authCookie, err := req.Cookie(authorizationToken)
+	authCookie, err := req.Cookie(cookieName)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
-	return authCookie.Value, nil
+	return authCookie, authCookie.Value, nil
 }
 
 func isValidCreds(inputCreds *credential) bool {

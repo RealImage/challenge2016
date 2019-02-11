@@ -1,6 +1,11 @@
 package main
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
+
+var u userProcessor
 
 func userController(w http.ResponseWriter, req *http.Request) {
 	ok, creds, err := isAlreadyLoggedIn(req)
@@ -15,11 +20,11 @@ func userController(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if req.Method == "GET" {
-		getUsers(w, req, creds)
+		getUsers(w, req, &creds)
 		return
 	}
 	if req.Method == "POST" {
-		createUser(w, req, creds)
+		createUser(w, req, &creds)
 		return
 	}
 
@@ -27,12 +32,32 @@ func userController(w http.ResponseWriter, req *http.Request) {
 
 }
 
-func getUsers(w http.ResponseWriter, req *http.Request, creds credential) {
-	var u userProcessor
-	outUser := u.getUsers(creds)
+func getUsers(w http.ResponseWriter, req *http.Request, creds *credential) {
+
+	outUser, err := u.getUsers(creds)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
 	respondJSON(w, http.StatusOK, outUser)
 
 }
 
-func createUser(w http.ResponseWriter, req *http.Request, creds credential) {
+func createUser(w http.ResponseWriter, req *http.Request, creds *credential) {
+	newUser := user{}
+
+	err := json.NewDecoder(req.Body).Decode(&newUser)
+	defer req.Body.Close()
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = u.createUser(creds.Username, &newUser)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	respondJSON(w, http.StatusCreated, message{Message: userCreated})
 }

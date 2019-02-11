@@ -21,3 +21,9 @@ func (a *authProcessor) getAuthenticationToken(creds credential) (string, error)
 	return authToken, nil
 
 }
+
+func (a *authProcessor) removeAuthenticationToken(creds *credential, authToken string) {
+
+	sessionObject.deleteFromSessionMap(authToken)
+
+}

@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+var a authProcessor
+
 func getAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method != "POST" {
@@ -17,13 +19,13 @@ func getAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 	err := json.NewDecoder(req.Body).Decode(&creds)
 	defer req.Body.Close()
 	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
+		respondError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	ok := isValidCreds(&creds)
 	if !ok {
-		respondError(w, http.StatusUnauthorized, err.Error())
+		respondError(w, http.StatusUnauthorized, invalidCreds)
 		return
 	}
 
@@ -37,7 +39,6 @@ func getAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 		respondError(w, http.StatusBadRequest, alreadyLogin)
 		return
 	}
-	var a authProcessor
 
 	authToken, err := a.getAuthenticationToken(creds)
 	if err != nil {
@@ -50,7 +51,7 @@ func getAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 	}
 
 	authCookie := &http.Cookie{
-		Name:     authorizationToken,
+		Name:     authenticationToken,
 		Value:    authToken,
 		Path:     "/",
 		Domain:   domain,
@@ -60,5 +61,43 @@ func getAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 	http.SetCookie(w, authCookie)
 
 	respondJSON(w, http.StatusOK, message{Message: successfulLogin})
+
+}
+
+func removeAuthenticationToken(w http.ResponseWriter, req *http.Request) {
+	if req.Method != "POST" {
+		respondError(w, http.StatusMethodNotAllowed, methodNotAllowed)
+		return
+	}
+	ok, creds, err := isAlreadyLoggedIn(req)
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if !ok {
+		respondError(w, http.StatusBadRequest, loginFirst)
+		return
+	}
+
+	_, authToken, err := getCookieAndValue(req, authenticationToken)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	a.removeAuthenticationToken(&creds, authToken)
+
+	authCookie := &http.Cookie{
+		Name:     authenticationToken,
+		Value:    "",
+		Path:     "/",
+		Domain:   domain,
+		HttpOnly: true,
+		MaxAge:   -1,
+	}
+	http.SetCookie(w, authCookie)
+
+	respondJSON(w, http.StatusNoContent, nil)
 
 }

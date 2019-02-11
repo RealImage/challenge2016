@@ -2,11 +2,6 @@ package main
 
 import "sync"
 
-var sessionObject session
-var credentialsObject credentials
-var users = make([]*user, 0)
-var countries = make([]*country, 0)
-
 type country struct {
 	Code      string      `json:"country_code,omitempty"`
 	Name      string      `json:"country_name,omitempty"`
