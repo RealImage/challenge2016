@@ -1,9 +1,5 @@
 package main
 
-import (
-	"log"
-)
-
 func initAdminCredsAndHashes() (err error) {
 
 	adminUser := user{
@@ -11,14 +7,14 @@ func initAdminCredsAndHashes() (err error) {
 		Role: adminRole,
 	}
 
-	defaultAdminHash, err = getPasswordHash("admin")
+	defaultAdminHash, err = getPasswordHash(adminRole)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	defaultDistributorHash, err = getPasswordHash("distributor")
+	defaultDistributorHash, err = getPasswordHash(distributorRole)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	adminCredential := credential{Username: adminUser.Name, EncryptedPassword: defaultAdminHash}
@@ -42,12 +38,12 @@ func (c *credentials) putIntoCredentialMap(creds credential) error {
 
 }
 
-func (c *credentials) getFromCredentialMap(authToken string) (credential, bool) {
+func (c *credentials) getFromCredentialMap(username string) (credential, bool) {
 
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
 
-	if creds, ok := c.credentialMap[authToken]; ok {
+	if creds, ok := c.credentialMap[username]; ok {
 		return creds, true
 	}
 

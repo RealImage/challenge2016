@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -23,15 +24,21 @@ func getAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	err = validateCredsRequestBody(&creds)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
 	ok := isValidCreds(&creds)
 	if !ok {
-		respondError(w, http.StatusUnauthorized, invalidCreds)
+		respondError(w, http.StatusUnauthorized, invalidCredentials)
 		return
 	}
 
 	ok, _, err = isAlreadyLoggedIn(req)
 	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
+		respondError(w, http.StatusBadRequest, loginFirst)
 		return
 	}
 
@@ -43,7 +50,7 @@ func getAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 	authToken, err := a.getAuthenticationToken(creds)
 	if err != nil {
 		status := http.StatusInternalServerError
-		if err.Error() == invalidPassword {
+		if err.Error() == invalidCredentials {
 			status = http.StatusUnauthorized
 		}
 		respondError(w, status, err.Error())
@@ -69,24 +76,15 @@ func removeAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 		respondError(w, http.StatusMethodNotAllowed, methodNotAllowed)
 		return
 	}
-	ok, creds, err := isAlreadyLoggedIn(req)
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	if !ok {
+	ok, _, err := isAlreadyLoggedIn(req)
+	if err != nil || !ok {
 		respondError(w, http.StatusBadRequest, loginFirst)
 		return
 	}
 
-	_, authToken, err := getCookieAndValue(req, authenticationToken)
-	if err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
+	authToken, _ := getCookieValue(req, authenticationToken)
 
-	a.removeAuthenticationToken(&creds, authToken)
+	a.removeAuthenticationToken(authToken)
 
 	authCookie := &http.Cookie{
 		Name:     authenticationToken,
@@ -99,5 +97,14 @@ func removeAuthenticationToken(w http.ResponseWriter, req *http.Request) {
 	http.SetCookie(w, authCookie)
 
 	respondJSON(w, http.StatusNoContent, nil)
+
+}
+
+func validateCredsRequestBody(creds *credential) error {
+
+	if creds.Username == "" || creds.Password == "" {
+		return errors.New(invalidCredentials)
+	}
+	return nil
 
 }

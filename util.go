@@ -29,7 +29,7 @@ func respondError(w http.ResponseWriter, status int, err string) {
 func getPasswordHash(password string) ([]byte, error) {
 
 	if len(password) == 0 {
-		return nil, errors.New("Empty Password")
+		return nil, errors.New(emptyPassword)
 	}
 
 	hashBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
@@ -46,7 +46,7 @@ func isAlreadyLoggedIn(req *http.Request) (bool, credential, error) {
 	if len(req.Cookies()) == 0 {
 		return false, credential{}, nil
 	}
-	_, authToken, err := getCookieAndValue(req, authenticationToken)
+	authToken, err := getCookieValue(req, authenticationToken)
 	if err != nil {
 		return false, credential{}, err
 	}
@@ -55,13 +55,13 @@ func isAlreadyLoggedIn(req *http.Request) (bool, credential, error) {
 	return ok, creds, nil
 }
 
-func getCookieAndValue(req *http.Request, cookieName string) (*http.Cookie, string, error) {
+func getCookieValue(req *http.Request, cookieName string) (string, error) {
 
 	authCookie, err := req.Cookie(cookieName)
 	if err != nil {
-		return nil, "", err
+		return "", err
 	}
-	return authCookie, authCookie.Value, nil
+	return authCookie.Value, nil
 }
 
 func isValidCreds(inputCreds *credential) bool {

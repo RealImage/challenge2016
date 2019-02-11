@@ -12,7 +12,7 @@ func (a *authProcessor) getAuthenticationToken(creds credential) (string, error)
 
 	err := bcrypt.CompareHashAndPassword(creds.EncryptedPassword, []byte(creds.Password))
 	if err != nil {
-		return "", errors.New(invalidPassword)
+		return "", errors.New(invalidCredentials)
 	}
 	authToken, err := sessionObject.putIntoSessionMap(creds)
 	if err != nil {
@@ -22,7 +22,7 @@ func (a *authProcessor) getAuthenticationToken(creds credential) (string, error)
 
 }
 
-func (a *authProcessor) removeAuthenticationToken(creds *credential, authToken string) {
+func (a *authProcessor) removeAuthenticationToken(authToken string) {
 
 	sessionObject.deleteFromSessionMap(authToken)
 

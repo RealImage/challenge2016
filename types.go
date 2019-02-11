@@ -50,10 +50,10 @@ type errorMessage struct {
 }
 
 type user struct {
-	Name     string   `json:"name,omitempty"`
-	Role     string   `json:"role,omitempty"`
-	Parent   string   `json:"parent,omitempty"`
-	Includes []string `json:"includes_region,omitempty"`
-	Excludes []string `json:"excludes_region,omitempty"`
-	Children []*user  `json:"children,omitempty"`
+	Name     string     `json:"name,omitempty"`
+	Role     string     `json:"role,omitempty"`
+	Parent   string     `json:"parent,omitempty"`
+	Includes []location `json:"includes_region,omitempty"`
+	Excludes []location `json:"excludes_region,omitempty"`
+	Children []*user    `json:"children,omitempty"`
 }

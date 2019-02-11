@@ -19,8 +19,8 @@ func init() {
 		log.Fatal(err)
 	}
 
-	credentialsObject.credentialMap = make(map[string]credential, 1)
-	sessionObject.sessionMap = make(map[string]credential, 1)
+	credentialsObject.credentialMap = make(map[string]credential, 0)
+	sessionObject.sessionMap = make(map[string]credential, 0)
 
 	err = initAdminCredsAndHashes()
 	if err != nil {

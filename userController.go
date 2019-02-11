@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -9,13 +10,8 @@ var u userProcessor
 
 func userController(w http.ResponseWriter, req *http.Request) {
 	ok, creds, err := isAlreadyLoggedIn(req)
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	if !ok {
-		respondError(w, http.StatusUnauthorized, loginFirst)
+	if err != nil || !ok {
+		respondError(w, http.StatusBadRequest, loginFirst)
 		return
 	}
 
@@ -34,11 +30,7 @@ func userController(w http.ResponseWriter, req *http.Request) {
 
 func getUsers(w http.ResponseWriter, req *http.Request, creds *credential) {
 
-	outUser, err := u.getUsers(creds)
-	if err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
+	outUser := u.getUsers(creds)
 	respondJSON(w, http.StatusOK, outUser)
 
 }
@@ -53,6 +45,12 @@ func createUser(w http.ResponseWriter, req *http.Request, creds *credential) {
 		return
 	}
 
+	err = validateUserRequestBody(&newUser)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
 	err = u.createUser(creds.Username, &newUser)
 	if err != nil {
 		respondError(w, http.StatusBadRequest, err.Error())
@@ -60,4 +58,16 @@ func createUser(w http.ResponseWriter, req *http.Request, creds *credential) {
 	}
 
 	respondJSON(w, http.StatusCreated, message{Message: userCreated})
+}
+
+func validateUserRequestBody(newUser *user) error {
+
+	if newUser.Name == "" {
+		return errors.New(nameCannotBeEmpty)
+	}
+	if newUser.Role == "" {
+		return errors.New(roleCannotBeEmpty)
+	}
+	return nil
+
 }

@@ -4,13 +4,9 @@ import "errors"
 
 type userProcessor int
 
-func (u *userProcessor) getUsers(creds *credential) (*user, error) {
+func (u *userProcessor) getUsers(creds *credential) *user {
 
-	if creds == nil || creds.Username == "" {
-		return nil, errors.New(invalidCreds)
-	}
-
-	return getUserFromUsers(creds.Username), nil
+	return getUserFromUsers(creds.Username)
 
 }
 
@@ -20,8 +16,6 @@ func (u *userProcessor) createUser(loginUsername string, newUser *user) error {
 	if isUserExist {
 		return errors.New(nameAlreadyExists)
 	}
-
-	//TODO: include role in session
 
 	loginUser := getUserFromUsers(loginUsername)
 
@@ -74,11 +68,11 @@ func (u *userProcessor) getRoleBasedValidationAndFields(loginUser, newUser *user
 			newUser.Parent = ""
 		}
 		if len(newUser.Includes) != 0 {
-			newUser.Includes = []string{}
+			newUser.Includes = []location{}
 		}
 
 		if len(newUser.Excludes) != 0 {
-			newUser.Excludes = []string{}
+			newUser.Excludes = []location{}
 		}
 		newHash = defaultAdminHash
 	}
@@ -98,12 +92,15 @@ func (u *userProcessor) getNewUserParent(loginUser, newUser *user) *user {
 		return loginUser
 	}
 
-	loginUserName := loginUser.Parent
+	loginUserName := loginUser.Name
 	if newUserParent == loginUserName {
 		return loginUser
 	}
 
-	//TODO: check in user map. Change auth token -> username, username ->credential
+	_, ok := credentialsObject.getFromCredentialMap(newUserParent)
+	if !ok {
+		return nil
+	}
 
 	parent := getUserFromUsersHelper(loginUser, newUserParent)
 	if parent != nil {
