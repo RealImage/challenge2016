@@ -29,6 +29,12 @@ func validateDistribution(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	err = validateLocation(newLocation)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
 	err = d.validateDistribution(&newLocation, creds.Username)
 	if err != nil {
 		respondError(w, http.StatusForbidden, err.Error())

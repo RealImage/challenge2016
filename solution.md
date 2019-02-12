@@ -27,6 +27,12 @@ Two roles are used
                  Can create only distributors and assign them include or exclude regions they are entitled to.
 
 ```
+A default admin user is created.
+```
+Username: admin
+Password: admin
+
+```
 The data structures used can be viewed from types.go file.
 Error message are saved in constants.go file.
 Postman colletion is attahced for both roles with sample requests.
