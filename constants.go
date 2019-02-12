@@ -18,4 +18,5 @@ const (
 	emptyPassword              = "Empty Password"
 	nameCannotBeEmpty          = "Name cannot be empty"
 	roleCannotBeEmpty          = "Role cannot be empty"
+	internalServerError        = "Internal Server error"
 )
