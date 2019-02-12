@@ -209,20 +209,21 @@ func getUserCountries(u *user) ([]*country, error) {
 		i, c, cok := getCountryFromCountries(userCountries, coun.Name)
 		if cok {
 			if loc.ProvinceName == "" {
-				userCountries = append(userCountries[:i], userCountries[:i+1]...)
+
+				userCountries = append(userCountries[:i], userCountries[i+1:]...)
 				continue
 			}
 
 			j, p, pok := getProvinceFromCountry(c, coun.Provinces[0].Name)
 			if pok {
 				if loc.CityName == "" {
-					c.Provinces = append(c.Provinces[:j], c.Provinces[:j+1]...)
+					c.Provinces = append(c.Provinces[:j], c.Provinces[j+1:]...)
 					continue
 				}
 
 				k, _, ciok := getCityFromProvince(p, coun.Provinces[0].Cities[0].Name)
 				if ciok {
-					p.Cities = append(p.Cities[:k], p.Cities[:k+1]...)
+					p.Cities = append(p.Cities[:k], p.Cities[k+1:]...)
 				}
 
 			}
