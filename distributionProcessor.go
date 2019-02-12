@@ -7,11 +7,6 @@ type distributionProcessor int
 func (d *distributionProcessor) validateDistribution(newLocation *location, loginUsername string) error {
 
 	distributionUserName := newLocation.Username
-	_, ok := credentialsObject.getFromCredentialMap(distributionUserName)
-	if !ok {
-		return errors.New(invalidCredentials)
-	}
-
 	loginUser := getUserFromUsers(loginUsername)
 	loginUserRole := loginUser.Role
 	distributionUser := loginUser
@@ -20,6 +15,10 @@ func (d *distributionProcessor) validateDistribution(newLocation *location, logi
 	if distributionUserName == "" {
 		distributionUserName = loginUsername
 	} else {
+		_, ok := credentialsObject.getFromCredentialMap(distributionUserName)
+		if !ok {
+			return errors.New(invalidCredentials)
+		}
 		distributionUser = getUserFromUsers(distributionUserName)
 		distributionUserRole = distributionUser.Role
 	}
