@@ -68,6 +68,9 @@ func validateUserRequestBody(newUser *user) error {
 	if newUser.Role == "" {
 		return errors.New(roleCannotBeEmpty)
 	}
+	if newUser.Role == distributorRole && len(newUser.Includes) == 0 && len(newUser.Excludes) != 0 {
+		return errors.New(cannotExcludeWithoutInclude)
+	}
 	return nil
 
 }

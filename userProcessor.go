@@ -29,6 +29,11 @@ func (u *userProcessor) createUser(loginUsername string, newUser *user) error {
 		return errors.New(invalidParent)
 	}
 
+	err = u.validateIncludeAndExcludeLocations(parentUser, newUser)
+	if err != nil {
+		return err
+	}
+
 	creds := credential{}
 	creds.Username = newUser.Name
 	creds.EncryptedPassword = newHash
@@ -39,15 +44,15 @@ func (u *userProcessor) createUser(loginUsername string, newUser *user) error {
 	return nil
 }
 
-func (u *userProcessor) appendUsers(loginUser, newUser *user) {
+func (u *userProcessor) appendUsers(parentUser, newUser *user) {
 
-	if loginUser.Role == adminRole && newUser.Role == adminRole {
+	if parentUser.Role == adminRole && newUser.Role == adminRole {
 
 		users = append(users, newUser)
 		return
 	}
 
-	loginUser.Children = append(loginUser.Children, newUser)
+	parentUser.Children = append(parentUser.Children, newUser)
 
 }
 
@@ -105,6 +110,57 @@ func (u *userProcessor) getNewUserParent(loginUser, newUser *user) *user {
 	parent := getUserFromUsersHelper(loginUser, newUserParent)
 	if parent != nil {
 		return parent
+	}
+
+	return nil
+
+}
+
+func (u *userProcessor) validateIncludeAndExcludeLocations(parentUser, newUser *user) (err error) {
+
+	if len(newUser.Includes) == 0 {
+		return nil
+	}
+
+	checkUser := parentUser
+
+	if parentUser.Role == adminRole {
+		checkUser = nil
+	}
+
+	err = u.validateLocations(newUser.Includes)
+	if err != nil {
+		return
+	}
+
+	err = u.validateLocations(newUser.Excludes)
+	if err != nil {
+		return
+	}
+
+	for _, loc := range newUser.Includes {
+		if !isValidLocation(checkUser, loc) {
+			err = errors.New(invalidExcludeLocation + loc.String())
+		}
+	}
+
+	for _, loc := range newUser.Excludes {
+		if !isValidLocation(checkUser, loc) {
+			err = errors.New(invalidExcludeLocation + loc.String())
+		}
+
+	}
+
+	return
+}
+
+func (u *userProcessor) validateLocations(inLoc []location) error {
+
+	for _, loc := range inLoc {
+		err := validateLocation(loc)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

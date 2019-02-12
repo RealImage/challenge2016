@@ -50,6 +50,7 @@ func main() {
 
 	router.HandleFunc("/v1/authenticate-token", getAuthenticationToken)
 	router.HandleFunc("/v1/users", userController)
+	router.HandleFunc("/v1/distribution", validateDistribution)
 	router.HandleFunc("/v1/invalidate-token", removeAuthenticationToken)
 
 	handler := panciHandle(router)
@@ -65,8 +66,4 @@ func main() {
 	}()
 
 	log.Fatal(http.ListenAndServe(":8080", handler))
-
-	//TODO:
-	//get users with query params
-	//the important function
 }

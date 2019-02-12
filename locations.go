@@ -61,9 +61,9 @@ func addToLocation(line []string) {
 	var currentProvince *province
 	var currentCity *city
 
-	for _, country := range countries {
-		if country.Name == countryName {
-			currentCountry = country
+	for _, c := range countries {
+		if c.Name == countryName {
+			currentCountry = c
 		}
 	}
 
@@ -75,9 +75,9 @@ func addToLocation(line []string) {
 		return
 	}
 
-	for _, province := range currentCountry.Provinces {
-		if province.Name == provinceName {
-			currentProvince = province
+	for _, p := range currentCountry.Provinces {
+		if p.Name == provinceName {
+			currentProvince = p
 		}
 	}
 
@@ -88,13 +88,66 @@ func addToLocation(line []string) {
 		return
 	}
 
-	for _, city := range currentProvince.Cities {
-		if city.Name == cityName {
+	for _, ci := range currentProvince.Cities {
+		if ci.Name == cityName {
 			return
 		}
 	}
 
 	currentCity = &city{Code: cityCode, Name: cityName}
 	currentProvince.Cities = append(currentProvince.Cities, currentCity)
+
+}
+
+func (loc location) String() string {
+
+	return fmt.Sprintf("Country: %s, Province: %s, City: %s", loc.CountryName, loc.ProvinceName, loc.CityName)
+
+}
+
+func getCountry(countryName, provinceName, cityName string) (country, error) {
+
+	for _, c := range countries {
+
+		if countryName != "" && c.Name == countryName {
+
+			if provinceName == "" {
+				return *c, nil
+			}
+			outCountry := country{}
+			outCountry.Name = c.Name
+			outCountry.Code = c.Code
+
+			for _, p := range c.Provinces {
+				if p.Name == provinceName {
+					if cityName == "" {
+						outCountry.Provinces = append(outCountry.Provinces, p)
+						return outCountry, nil
+					}
+
+					outProvince := province{}
+					outProvince.Name = p.Name
+					outProvince.Code = p.Code
+
+					for _, ci := range p.Cities {
+						if ci.Name == cityName {
+							outCity := city{}
+							outCity.Name = ci.Name
+							outCity.Code = ci.Code
+							outProvince.Cities = append(outProvince.Cities, &outCity)
+							outCountry.Provinces = append(outCountry.Provinces, &outProvince)
+							return outCountry, nil
+						}
+
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+	return country{}, errors.New(locationNotFound)
 
 }

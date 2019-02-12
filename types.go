@@ -20,6 +20,7 @@ type city struct {
 }
 
 type location struct {
+	Username     string `json:"username,omitempty"`
 	CityName     string `json:"city_name,omitempty"`
 	ProvinceName string `json:"province_name,omitempty"`
 	CountryName  string `json:"country_name,omitempty"`
