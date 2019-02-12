@@ -21,6 +21,8 @@ func init() {
 		log.Fatal(err)
 	}
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 	credentialsObject.credentialMap = make(map[string]credential, 0)
 	sessionObject.sessionMap = make(map[string]credential, 0)
 

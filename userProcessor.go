@@ -141,12 +141,14 @@ func (u *userProcessor) validateIncludeAndExcludeLocations(parentUser, newUser *
 	for _, loc := range newUser.Includes {
 		if !isValidLocation(checkUser, loc) {
 			err = errors.New(invalidIncludeLocation + loc.String())
+			return
 		}
 	}
 
 	for _, loc := range newUser.Excludes {
 		if !isValidLocation(checkUser, loc) {
 			err = errors.New(invalidExcludeLocation + loc.String())
+			return
 		}
 
 	}
