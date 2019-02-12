@@ -19,7 +19,7 @@ go run ./
 
 ```
 
-Solution is designed as API server with four endpoints.
+Solution is designed as API server running at 8080 port with four endpoints.
 Two roles are used
 ```
 1. admin - Can view all users, create admin and distributor users but dont have distribution rights.
