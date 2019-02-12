@@ -113,10 +113,7 @@ func validateLocation(loc location) error {
 	}
 	if loc.ProvinceName == "" && loc.CityName != "" {
 		return errors.New(cannotGiveCityWithoutProvince)
-	}
 
-	if loc.CityName == "" {
-		return errors.New(countryProvinceCityCannotBeEmpty)
 	}
 	return nil
 }
@@ -163,12 +160,17 @@ func isValidLocation(inCheckUser *user, inLoc location) bool {
 
 func getUserCountries(u *user) ([]*country, error) {
 
-	userCountries := make([]*country, 1)
+	userCountries := make([]*country, 0)
 
-	for _, loc := range u.Includes {
+	for i, loc := range u.Includes {
 		coun, err := getCountry(loc.CountryName, loc.ProvinceName, loc.CityName)
 		if err != nil {
 			return nil, err
+		}
+
+		if i == 0 {
+			userCountries = append(userCountries, &coun)
+			continue
 		}
 
 		// appendToUserCountries(userCountries, c, true)
@@ -197,18 +199,42 @@ func getUserCountries(u *user) ([]*country, error) {
 	}
 
 	for _, loc := range u.Excludes {
-		c, err := getCountry(loc.CountryName, loc.ProvinceName, loc.CityName)
+		coun, err := getCountry(loc.CountryName, loc.ProvinceName, loc.CityName)
 		if err != nil {
 			return nil, err
 		}
 
-		removeFromUserCountries(userCountries, c)
+		// removeFromUserCountries(userCountries, c)
+
+		i, c, cok := getCountryFromCountries(userCountries, coun.Name)
+		if cok {
+			if len(coun.Provinces) == 0 {
+				userCountries = append(userCountries[:i], userCountries[:i+1]...)
+				continue
+			}
+
+			j, p, pok := getProvinceFromCountry(c, coun.Provinces[0].Name)
+			if pok {
+				if len(coun.Provinces[0].Cities) == 0 {
+					c.Provinces = append(c.Provinces[:j], c.Provinces[:j+1]...)
+					continue
+				}
+
+				k, _, ciok := getCityFromProvince(p, coun.Provinces[0].Cities[0].Name)
+				if ciok {
+					p.Cities = append(p.Cities[:k], p.Cities[:k+1]...)
+				}
+
+			}
+		}
 
 	}
 
 	return userCountries, nil
 
 }
+
+//TODO: Commented for refactoring - Refactor
 
 // func appendToUserCountries(inUserCountries []*country, inCountry country, append bool) bool {
 
@@ -245,31 +271,31 @@ func getUserCountries(u *user) ([]*country, error) {
 
 // }
 
-func removeFromUserCountries(inUserCountries []*country, inCountry country) {
+// func removeFromUserCountries(inUserCountries []*country, inCountry country) {
 
-	i, c, cok := getCountryFromCountries(inUserCountries, inCountry.Name)
-	if cok {
-		if len(inCountry.Provinces) == 0 {
-			inUserCountries = append(inUserCountries[:i], inUserCountries[:i+1]...)
-			return
-		}
+// 	i, c, cok := getCountryFromCountries(inUserCountries, inCountry.Name)
+// 	if cok {
+// 		if len(inCountry.Provinces) == 0 {
+// 			inUserCountries = append(inUserCountries[:i], inUserCountries[:i+1]...)
+// 			return
+// 		}
 
-		j, p, pok := getProvinceFromCountry(c, inCountry.Provinces[0].Name)
-		if pok {
-			if len(inCountry.Provinces[0].Cities) == 0 {
-				c.Provinces = append(c.Provinces[:j], c.Provinces[:j+1]...)
-				return
-			}
+// 		j, p, pok := getProvinceFromCountry(c, inCountry.Provinces[0].Name)
+// 		if pok {
+// 			if len(inCountry.Provinces[0].Cities) == 0 {
+// 				c.Provinces = append(c.Provinces[:j], c.Provinces[:j+1]...)
+// 				return
+// 			}
 
-			k, _, ciok := getCityFromProvince(p, inCountry.Provinces[0].Cities[0].Name)
-			if ciok {
-				p.Cities = append(p.Cities[:k], p.Cities[:k+1]...)
-			}
+// 			k, _, ciok := getCityFromProvince(p, inCountry.Provinces[0].Cities[0].Name)
+// 			if ciok {
+// 				p.Cities = append(p.Cities[:k], p.Cities[:k+1]...)
+// 			}
 
-		}
-	}
-	return
-}
+// 		}
+// 	}
+// 	return
+// }
 
 func getCountryFromCountries(inCountries []*country, countryName string) (int, *country, bool) {
 
