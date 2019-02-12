@@ -325,7 +325,7 @@ func getProvinceFromCountry(inCountry *country, provinceName string) (int, *prov
 
 func getCityFromProvince(inProvince *province, cityName string) (int, *city, bool) {
 
-	if inProvince == nil {
+	if inProvince != nil {
 
 		for i, ci := range inProvince.Cities {
 			if ci.Name == cityName {
