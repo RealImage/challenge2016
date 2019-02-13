@@ -160,16 +160,7 @@ func copyCountry(c country) country {
 	tempCountry.Name = c.Name
 	for _, p := range c.Provinces {
 
-		tempProvince := province{}
-		tempProvince.Name = p.Name
-		tempProvince.Code = p.Code
-		for _, ci := range p.Cities {
-			tempCity := city{}
-			tempCity.Name = ci.Name
-			tempCity.Code = ci.Code
-			tempProvince.Cities = append(tempProvince.Cities, &tempCity)
-
-		}
+		tempProvince := copyProvince(*p)
 		tempCountry.Provinces = append(tempCountry.Provinces, &tempProvince)
 	}
 	return tempCountry
