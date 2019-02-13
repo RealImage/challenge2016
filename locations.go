@@ -112,7 +112,8 @@ func getCountry(countryName, provinceName, cityName string) (country, error) {
 		if countryName != "" && c.Name == countryName {
 
 			if provinceName == "" {
-				return *c, nil
+				tempCountry := copyCountry(*c)
+				return tempCountry, nil
 			}
 			outCountry := country{}
 			outCountry.Name = c.Name
@@ -121,7 +122,8 @@ func getCountry(countryName, provinceName, cityName string) (country, error) {
 			for _, p := range c.Provinces {
 				if p.Name == provinceName {
 					if cityName == "" {
-						outCountry.Provinces = append(outCountry.Provinces, p)
+						tempProvince := copyProvince(*p)
+						outCountry.Provinces = append(outCountry.Provinces, &tempProvince)
 						return outCountry, nil
 					}
 
@@ -150,4 +152,40 @@ func getCountry(countryName, provinceName, cityName string) (country, error) {
 
 	return country{}, errors.New(locationNotFound)
 
+}
+
+func copyCountry(c country) country {
+	tempCountry := country{}
+	tempCountry.Code = c.Code
+	tempCountry.Name = c.Name
+	for _, p := range c.Provinces {
+
+		tempProvince := province{}
+		tempProvince.Name = p.Name
+		tempProvince.Code = p.Code
+		for _, ci := range p.Cities {
+			tempCity := city{}
+			tempCity.Name = ci.Name
+			tempCity.Code = ci.Code
+			tempProvince.Cities = append(tempProvince.Cities, &tempCity)
+
+		}
+		tempCountry.Provinces = append(tempCountry.Provinces, &tempProvince)
+	}
+	return tempCountry
+}
+
+func copyProvince(p province) province {
+
+	tempProvince := province{}
+	tempProvince.Name = p.Name
+	tempProvince.Code = p.Code
+	for _, ci := range p.Cities {
+		tempCity := city{}
+		tempCity.Name = ci.Name
+		tempCity.Code = ci.Code
+		tempProvince.Cities = append(tempProvince.Cities, &tempCity)
+
+	}
+	return tempProvince
 }
