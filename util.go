@@ -141,13 +141,13 @@ func isValidLocation(inCheckUser *user, inLoc location) bool {
 		return false
 	}
 	if len(coun.Provinces) == 1 {
-		_, p, pok := getProvinceFromCountry(c, coun.Provinces[0].Name)
+		_, p, pok := getProvinceFromCountry(c.Provinces, coun.Provinces[0].Name)
 		if !pok {
 			return false
 		}
 
 		if len(coun.Provinces[0].Cities) == 1 {
-			_, _, ciok := getCityFromProvince(p, coun.Provinces[0].Cities[0].Name)
+			_, _, ciok := getCityFromProvince(p.Cities, coun.Provinces[0].Cities[0].Name)
 			if !ciok {
 				return false
 
@@ -181,14 +181,14 @@ func getUserCountries(u *user) ([]*country, error) {
 			continue
 		}
 		if len(coun.Provinces) == 1 {
-			_, p, pok := getProvinceFromCountry(c, coun.Provinces[0].Name)
+			_, p, pok := getProvinceFromCountry(c.Provinces, coun.Provinces[0].Name)
 			if !pok {
 				c.Provinces = append(c.Provinces, coun.Provinces[0])
 				continue
 			}
 
 			if len(coun.Provinces[0].Cities) == 1 {
-				_, _, ciok := getCityFromProvince(p, coun.Provinces[0].Cities[0].Name)
+				_, _, ciok := getCityFromProvince(p.Cities, coun.Provinces[0].Cities[0].Name)
 				if !ciok {
 					p.Cities = append(p.Cities, coun.Provinces[0].Cities[0])
 
@@ -214,14 +214,14 @@ func getUserCountries(u *user) ([]*country, error) {
 				continue
 			}
 
-			j, p, pok := getProvinceFromCountry(c, coun.Provinces[0].Name)
+			j, p, pok := getProvinceFromCountry(c.Provinces, coun.Provinces[0].Name)
 			if pok {
 				if loc.CityName == "" {
 					c.Provinces = append(c.Provinces[:j], c.Provinces[j+1:]...)
 					continue
 				}
 
-				k, _, ciok := getCityFromProvince(p, coun.Provinces[0].Cities[0].Name)
+				k, _, ciok := getCityFromProvince(p.Cities, coun.Provinces[0].Cities[0].Name)
 				if ciok {
 					p.Cities = append(p.Cities[:k], p.Cities[k+1:]...)
 				}
@@ -297,42 +297,3 @@ func getUserCountries(u *user) ([]*country, error) {
 // 	}
 // 	return
 // }
-
-func getCountryFromCountries(inCountries []*country, countryName string) (int, *country, bool) {
-
-	for i, c := range inCountries {
-		if c.Name == countryName {
-			return i, c, true
-		}
-	}
-
-	return 0, nil, false
-
-}
-
-func getProvinceFromCountry(inCountry *country, provinceName string) (int, *province, bool) {
-	if inCountry != nil {
-
-		for i, p := range inCountry.Provinces {
-			if p.Name == provinceName {
-				return i, p, true
-			}
-		}
-	}
-
-	return 0, nil, false
-}
-
-func getCityFromProvince(inProvince *province, cityName string) (int, *city, bool) {
-
-	if inProvince != nil {
-
-		for i, ci := range inProvince.Cities {
-			if ci.Name == cityName {
-				return i, ci, true
-			}
-		}
-	}
-
-	return 0, nil, false
-}
