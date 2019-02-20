@@ -19,7 +19,7 @@ go run ./
 
 ```
 
-When go run command is used server will be started. To stop the server presee `Cmd + C` or `Ctrl + C`
+When go run command is used server will be started. To stop the server press `Cmd + C` or `Ctrl + C`
 Solution is designed as API server running at 8080 port with four endpoints.
 
 Two roles are used
