@@ -6,21 +6,22 @@ type distributionProcessor int
 
 func (d *distributionProcessor) validateDistribution(newLocation *location, loginUsername string) error {
 
-	distributionUserName := newLocation.Username
+	inUser := newLocation.Username
 	loginUser := getUserFromUsers(loginUsername)
 	loginUserRole := loginUser.Role
 	distributionUser := loginUser
 	distributionUserRole := loginUserRole
+	distributionUserName := loginUsername
 
-	if distributionUserName == "" {
-		distributionUserName = loginUsername
-	} else {
+	if inUser != "" {
+		distributionUserName = inUser
 		_, ok := credentialsObject.getFromCredentialMap(distributionUserName)
 		if !ok {
 			return errors.New(invalidCredentials)
 		}
 		distributionUser = getUserFromUsers(distributionUserName)
 		distributionUserRole = distributionUser.Role
+
 	}
 
 	if loginUserRole == adminRole && distributionUserRole == adminRole {
@@ -33,13 +34,26 @@ func (d *distributionProcessor) validateDistribution(newLocation *location, logi
 		return errors.New(notAuthorized)
 	}
 
-	parent := getUserFromUsersHelper(loginUser, distributionUserName)
-	if parent == nil {
-		return errors.New(notAuthorized)
+	if distributionUserName != loginUsername {
+		child := getUserFromUsersHelper(loginUser, distributionUserName)
+		if child == nil {
+			return errors.New(notAuthorized)
+		}
 	}
 
-	if !isValidLocation(distributionUser, *newLocation) {
-		return errors.New(notAuthorizedToDistribute)
+	for {
+
+		if !isValidLocation(distributionUser, *newLocation) {
+			return errors.New(notAuthorizedToDistribute)
+		}
+
+		parent := getUserFromUsers(distributionUser.Parent)
+		if parent.Role == adminRole {
+			break
+		}
+
+		distributionUser = parent
+
 	}
 
 	return nil

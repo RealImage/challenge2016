@@ -93,11 +93,12 @@ func (u *userProcessor) getRoleBasedValidationAndFields(loginUser, newUser *user
 func (u *userProcessor) getNewUserParent(loginUser, newUser *user) *user {
 
 	newUserParent := newUser.Parent
+	loginUserName := loginUser.Name
 	if newUserParent == "" {
+		newUser.Parent = loginUserName
 		return loginUser
 	}
 
-	loginUserName := loginUser.Name
 	if newUserParent == loginUserName {
 		return loginUser
 	}

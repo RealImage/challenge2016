@@ -181,50 +181,45 @@ func getCityFromProvince(inCities []*city, cityName string) (int, *city, bool) {
 
 func getCountry(countryName, provinceName, cityName string) (country, error) {
 
-	for _, c := range countries {
-
-		if countryName != "" && c.Name == countryName {
-
-			if provinceName == "" {
-				tempCountry := copyCountry(*c)
-				return tempCountry, nil
-			}
-			outCountry := country{}
-			outCountry.Name = c.Name
-			outCountry.Code = c.Code
-
-			for _, p := range c.Provinces {
-				if p.Name == provinceName {
-					if cityName == "" {
-						tempProvince := copyProvince(*p)
-						outCountry.Provinces = append(outCountry.Provinces, &tempProvince)
-						return outCountry, nil
-					}
-
-					outProvince := province{}
-					outProvince.Name = p.Name
-					outProvince.Code = p.Code
-
-					for _, ci := range p.Cities {
-						if ci.Name == cityName {
-							outCity := city{}
-							outCity.Name = ci.Name
-							outCity.Code = ci.Code
-							outProvince.Cities = append(outProvince.Cities, &outCity)
-							outCountry.Provinces = append(outCountry.Provinces, &outProvince)
-							return outCountry, nil
-						}
-
-					}
-				}
-
-			}
-
-		}
-
+	_, c, _ := getCountryFromCountries(countries, countryName)
+	if c == nil {
+		return country{}, errors.New(locationNotFound)
 	}
 
-	return country{}, errors.New(locationNotFound)
+	if provinceName == "" {
+		return copyCountry(*c), nil
+	}
+
+	outCountry := country{}
+	outCountry.Name = c.Name
+	outCountry.Code = c.Code
+
+	_, p, _ := getProvinceFromCountry(c.Provinces, provinceName)
+	if p == nil {
+		return country{}, errors.New(locationNotFound)
+	}
+
+	if cityName == "" {
+		tempProvince := copyProvince(*p)
+		outCountry.Provinces = append(outCountry.Provinces, &tempProvince)
+		return outCountry, nil
+
+	}
+	outProvince := province{}
+	outProvince.Name = p.Name
+	outProvince.Code = p.Code
+
+	_, ci, _ := getCityFromProvince(p.Cities, cityName)
+	if ci == nil {
+		return country{}, errors.New(locationNotFound)
+	}
+
+	outCity := city{}
+	outCity.Name = ci.Name
+	outCity.Code = ci.Code
+	outProvince.Cities = append(outProvince.Cities, &outCity)
+	outCountry.Provinces = append(outCountry.Provinces, &outProvince)
+	return outCountry, nil
 
 }
 
