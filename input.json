@@ -1,0 +1,39 @@
+{
+ "distributor1":
+  {
+  	"includes": ["India","United States"],
+  	"excludes": ["Karnataka$India","Chennai$Tamil Nadu$India"],
+  	"sub_distributors": {
+  		"distributor1_sub" : {
+  		  "includes": ["Vasco Da Gama$Goa$India"],
+  		  "excludes": ["Thangadh$Gujarat$India"]
+  	  },
+  	  "distributor1_sub_1" : {
+  		  "includes": ["Tezpur$Assam$India"],
+  		  "excludes": ["Thalassery$Kerala$India"]
+  	  }
+    }
+  },
+  "distributor2":
+  {
+    "includes": ["Espumoso$Rio Grande do Sul$Brazil","United States"],
+    "excludes": ["Fate$Texas$United States"],
+    "sub_distributors": {
+      "distributor2_sub_1" : {
+        "includes": ["Taylor$Michigan$United States"],
+        "excludes": ["East Syracuse$New York$United States"]
+      }      
+    }
+  },
+  "distributor3":
+  {
+    "includes": ["China"],
+    "excludes": ["Xiazhu$Fujian$China"],
+    "sub_distributors": {
+      "distributor3_sub_1" : {
+        "includes": ["Xiaqiaotou$Yunnan$China","Xiaqiao$Guangdong$China"],
+        "excludes": ["Shakou$Hubei$China"]
+      }      
+    }
+  }
+}

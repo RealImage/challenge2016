@@ -1,0 +1,5 @@
+Read Me:
+
+1. Please Assign Permission to distributors in the input JSON file. (format: city$state$country(seperated by $))
+2. Go To Qube.rb file and give the input path of json.
+3. Run the code from the command line.
