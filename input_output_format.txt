@@ -1,0 +1,178 @@
+Assumptions:
+	1. Code is given always in CITY-PROVINCE-COUNTRY order with codes given in the CSV.
+	   e.g. PUNCH-JK-IN
+	2. app.py and cities.csv in same directory.
+	3. Include locations never be empty.
+Requirements:
+	1. python3
+
+Executing Application:
+	1. execute the command in terminal as 'python3 app.py'
+
+Input/Output:
+	1. To include or exclude the locations the input format would be as following.
+	   comma(,) spereated codes, (-) seperated cities.
+	   e.g. PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORA-AYA-PE
+
+	2. When testing the permission against the distributor:
+		True means - YES distributor has the permission.
+		False means - NO distributor dont have the peremission.
+
+	3. Distributor IDs start with 0.
+
+----------------------------Sample Execution---------------------------------------
+Loading the Data from CSV.
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+1
+Please enter the list(comma seperated) locations to include in '-' seperated format
+Example: PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORAS-AYA-PE
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+IN,US
+Please enter the list(comma seperated) locations to exclude in '-' seperated format
+	
+Distributor created successfully with id: 0 and the following permissions
+{'exclude': {'IN': {'TN': ['CENAI'], 'KA': []}}, 'include': {'IN': {}, 'US': {}}}
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+2
+Please enter the list(comma seperated) locations to include in '-' seperated format
+Example: PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORAS-AYA-PE
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+IN
+Please enter the list(comma seperated) locations to exclude in '-' seperated format
+TN-IN
+Enter the distributor id0
+Distributor created successfully with the id: 1 and following permissions
+{'exclude': {'IN': {'TN': []}}, 'include': {'IN': {}}}
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+2
+Please enter the list(comma seperated) locations to include in '-' seperated format
+Example: PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORAS-AYA-PE
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+SIRSI-KA-IN
+Please enter the list(comma seperated) locations to exclude in '-' seperated format
+
+Enter the distributor id1
+Sorry the distributor dont have permissions to assign this location: 	SIRSI-KA-IN
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+3
+Please enter the distributor id: 
+1
+Please enter the location to check the permissions with '-' seperated:
+Example: PUNCH-JK-IN or TN-IN
+++++++++++++++++++++++++++
+CHIAO-IL-US
+False
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+3
+Please enter the distributor id: 
+0
+Please enter the location to check the permissions with '-' seperated:
+Example: PUNCH-JK-IN or TN-IN
+++++++++++++++++++++++++++
+CHIAO-IL-US
+True
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+4
+Distributor ID: 0 
+
+Distributor permissions: {'exclude': {'IN': {'TN': ['CENAI'], 'KA': []}}, 'include': {'IN': {}, 'US': {}}} 
+
+Distributor parent ID None
+
+Distributor ID: 1 
+
+Distributor permissions: {'exclude': {'IN': {'TN': []}}, 'include': {'IN': {}}} 
+
+Distributor parent ID 0
+
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+3
+Please enter the distributor id: 
+CENAI-TN-IN
+Please enter the location to check the permissions with '-' seperated:
+Example: PUNCH-JK-IN or TN-IN
+++++++++++++++++++++++++++
+
+Sorry, Invalid ID type.
+
+
+
+Loading the Data from CSV.
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+3
+Please enter the distributor id: 
+0
+Please enter the location to check the permissions with '-' seperated:
+Example: PUNCH-JK-IN or TN-IN
+++++++++++++++++++++++++++
+CENAI-TN-IN
+False
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+5      
+Exiting....
