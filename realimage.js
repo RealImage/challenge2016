@@ -1,5 +1,5 @@
 var fs = require('fs');
-
+fs.writeFileSync('output.txt','');
 fs.readFile('./cities.csv',function (citiesErr, citiesBuf) {
     if(citiesErr){
         console.error(citiesErr);
@@ -69,7 +69,6 @@ fs.readFile('./cities.csv',function (citiesErr, citiesBuf) {
                                         break;
                                     } else if(parInclude.includes(tempCheck[0])||parInclude.includes(tempCheck[1])){
                                         checkFlag=true;
-                                        console.log('include true',tempCheck[1],tempCheck[0]);
                                     } else{
                                         checkFlag=false;
                                         break;
@@ -77,7 +76,7 @@ fs.readFile('./cities.csv',function (citiesErr, citiesBuf) {
                                 }
                             }
                         }else{
-                            console.log('No corrrect record for',parentDis);
+                            fs.appendFileSync('output.txt', 'No corrrect record for '+parentDis+"\n");
                             checkFlag=false;
                         }
                     }    
@@ -87,12 +86,12 @@ fs.readFile('./cities.csv',function (citiesErr, citiesBuf) {
                             exclude=exclude.concat(parExclude);
                         }
                         sampleval[disname]={'include':include,'exclude':exclude};
-                        console.log(disname,'permission');
+                        fs.appendFileSync('output.txt', disname+' permission'+"\n");
                         for(j in check){
                             if(exclude.includes(check[j])){
-                                console.log("No",check[j]);
+                                fs.appendFileSync('output.txt', "No "+check[j]+"\n");
                             } else if(include.includes(check[j])){
-                                console.log("Yes",check[j]);
+                                fs.appendFileSync('output.txt', "Yes "+check[j]+"\n");
                             } else{
                                 let citiesVal=[];
                                 if(cites.split(','+check[j]+',').length>1){
@@ -102,18 +101,17 @@ fs.readFile('./cities.csv',function (citiesErr, citiesBuf) {
                                 }
                                 const couCode = citiesVal[1];
                                 const stateCode = citiesVal[0];
-                                //console.log(couCode,stateCode);
                                 if(exclude.includes(stateCode)||exclude.includes(couCode)){
-                                    console.log("No",check[j]);
+                                    fs.appendFileSync('output.txt', "No "+check[j]+"\n");
                                 } else if(include.includes(stateCode)|| include.includes(couCode)){
-                                    console.log("Yes",check[j]);
+                                    fs.appendFileSync('output.txt', "Yes "+check[j]+"\n");
                                 } else {
-                                    console.log("No",check[j]);
+                                    fs.appendFileSync('output.txt', "No "+check[j]+"\n");
                                 }
                             }
                         }
                     } else{
-                        console.log(parentDis, 'cannot authorize', disname ,'with a region that they themselves do not have access to.');
+                        fs.appendFileSync('output.txt', parentDis + ' cannot authorize '+ disname +' with a region that they themselves do not have access to.'+"\n");
                     }
             }
         }
