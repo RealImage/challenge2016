@@ -34,9 +34,9 @@ Example: PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORAS-AYA-PE
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 IN,US
 Please enter the list(comma seperated) locations to exclude in '-' seperated format
-	
+CENAI-TN-IN,KA-IN
 Distributor created successfully with id: 0 and the following permissions
-{'exclude': {'IN': {'TN': ['CENAI'], 'KA': []}}, 'include': {'IN': {}, 'US': {}}}
+{'exclude': {'IN': {'TN': ['CENAI'], 'KA': []}}, 'include': {'US': {}, 'IN': {}}}
 
 
 
@@ -47,13 +47,14 @@ Enter the choice:
 4. To see all the distributors
 5. To exit
 2
+Enter the parent distributor id:
+0
 Please enter the list(comma seperated) locations to include in '-' seperated format
 Example: PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORAS-AYA-PE
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 IN
 Please enter the list(comma seperated) locations to exclude in '-' seperated format
 TN-IN
-Enter the distributor id0
 Distributor created successfully with the id: 1 and following permissions
 {'exclude': {'IN': {'TN': []}}, 'include': {'IN': {}}}
 
@@ -66,14 +67,34 @@ Enter the choice:
 4. To see all the distributors
 5. To exit
 2
+Enter the parent distributor id:
+1
 Please enter the list(comma seperated) locations to include in '-' seperated format
 Example: PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORAS-AYA-PE
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 SIRSI-KA-IN
 Please enter the list(comma seperated) locations to exclude in '-' seperated format
 
-Enter the distributor id1
 Sorry the distributor dont have permissions to assign this location: 	SIRSI-KA-IN
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+2
+Enter the parent distributor id:
+1
+Please enter the list(comma seperated) locations to include in '-' seperated format
+Example: PUNCH-JK-IN,TN-IN,SUTAC-JUN-PE,SORAS-AYA-PE
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+KLFL
+Please enter the list(comma seperated) locations to exclude in '-' seperated format
+
+KLFL code is invalid, no city exists with that data.
 
 
 
@@ -88,7 +109,7 @@ Please enter the distributor id:
 1
 Please enter the location to check the permissions with '-' seperated:
 Example: PUNCH-JK-IN or TN-IN
-++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++
 CHIAO-IL-US
 False
 
@@ -105,7 +126,7 @@ Please enter the distributor id:
 0
 Please enter the location to check the permissions with '-' seperated:
 Example: PUNCH-JK-IN or TN-IN
-++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++
 CHIAO-IL-US
 True
 
@@ -120,16 +141,18 @@ Enter the choice:
 4
 Distributor ID: 0 
 
-Distributor permissions: {'exclude': {'IN': {'TN': ['CENAI'], 'KA': []}}, 'include': {'IN': {}, 'US': {}}} 
+Distributor permissions: {'exclude': {'IN': {'TN': ['CENAI'], 'KA': []}}, 'include': {'US': {}, 'IN': {}}} 
 
-Distributor parent ID None
+Distributor parent ID: None
 
+++++++++++++++++++++++++++++++++++++++++++++++++++++
 Distributor ID: 1 
 
 Distributor permissions: {'exclude': {'IN': {'TN': []}}, 'include': {'IN': {}}} 
 
-Distributor parent ID 0
+Distributor parent ID: 0
 
+++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -141,16 +164,11 @@ Enter the choice:
 5. To exit
 3
 Please enter the distributor id: 
-CENAI-TN-IN
-Please enter the location to check the permissions with '-' seperated:
-Example: PUNCH-JK-IN or TN-IN
-++++++++++++++++++++++++++
-
+ui
 Sorry, Invalid ID type.
 
 
 
-Loading the Data from CSV.
 Enter the choice:
 1. To create the Primary Distributor
 2. To create the sub-distributor 
@@ -162,7 +180,7 @@ Please enter the distributor id:
 0
 Please enter the location to check the permissions with '-' seperated:
 Example: PUNCH-JK-IN or TN-IN
-++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++
 CENAI-TN-IN
 False
 
@@ -174,5 +192,22 @@ Enter the choice:
 3. To check the permissions
 4. To see all the distributors
 5. To exit
-5      
+3
+Please enter the distributor id: 
+1
+Please enter the location to check the permissions with '-' seperated:
+Example: PUNCH-JK-IN or TN-IN
+++++++++++++++++++++++++++++++++++++
+CENAI-TN-IN
+False
+
+
+
+Enter the choice:
+1. To create the Primary Distributor
+2. To create the sub-distributor 
+3. To check the permissions
+4. To see all the distributors
+5. To exit
+5
 Exiting....
