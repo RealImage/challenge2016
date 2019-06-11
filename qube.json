@@ -1,0 +1,43 @@
+[
+  {
+    "distributor": {
+      "dist_name": "Distributor",
+      "include_dist": {
+        "include": [
+          "india",
+          "united states"
+        ],
+        "exclude": [
+          "karnataka-india",
+          "chennai-tamil nadu-india"
+        ]
+      }
+    }
+  },
+  {
+    "sub_distributor": {
+      "dist_name": "Sub-dis-1",
+      "include_dist": {
+        "include": [
+          "india"
+        ],
+        "exclude": [
+          "tamil nadu-india"
+        ]
+      }
+    }
+  },
+  {
+    "sub_distributor": {
+      "dist_name": "Sub-dis-2",
+      "include_dist": {
+        "include": [
+          "magadi-karnataka-india"
+        ],
+        "exclude": [
+          "kerala-india"
+        ]
+      }
+    }
+  }
+]
