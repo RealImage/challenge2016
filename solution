@@ -22,7 +22,7 @@ class Distributor1
 };
 int main(){
     int k;
-    cout<<"Enter the no of distributor"<<"/n";
+    cout<<"Enter the no of distributor"<<"\n";
     cin>>k;
     Distributor1 Distributor[100];
 //The txt file is attached along with the mail
