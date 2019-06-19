@@ -1,3 +1,27 @@
+# Install dependencies
+
+ `npm install`
+
+
+# Input
+
+  Edit the input.json as 
+
+  Include: takes list of countries  i.e grant permissions.
+
+  Exclude: takes list of countries, provinces, cities  i.e restrict permissions.
+
+# Test 
+
+  `npm run test`
+
+  You will be asked to enter a valid city code, enter a valid city code from the csv.
+
+  It will print `Yes {cityCode} has permission` or `No {cityCode} dont have permission`.
+
+
+
+
 # Real Image Challenge 2016
 
 In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
