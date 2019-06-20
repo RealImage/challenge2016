@@ -3,5 +3,5 @@
 
 Will run the program.
 
-Sample input is in `driver.rb`. Please add more inputs to test.
-Sample configs are in `simulations/config.rb`. Please add more to it if needed.
+Sample input to execute the program is in `driver.rb`. Please add more inputs to test.<br/>
+Sample input configs are in `simulations/config.rb`. Please add more configs it if needed.
