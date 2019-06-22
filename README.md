@@ -5,19 +5,34 @@
 
 # Input
 
-  Edit the input.json as 
+  Edit the `input.json` as 
 
-  Include: takes list of countries  i.e grant permissions.
-
-  Exclude: takes list of countries, provinces, cities  i.e restrict permissions.
+  ```
+  {
+    "DistributorName": "Dist1",
+    "Include": ["IN","US"],
+    "Exclude":{
+        "ExcludeCountries":["US"],
+        "ExcludeProvinces":["OR"],
+        "ExcludeCities":["WLGTN"]
+    }
+    
+}
+  ```
 
 # Test 
 
   `npm run test`
 
-  You will be asked to enter a valid city code, enter a valid city code from the csv.
+  You will be asked to enter a valid `City Code`, enter a valid `City Code` from the csv.
 
-  It will print `Yes {cityCode} has permission` or `No {cityCode} dont have permission`.
+* Sample Output
+  ```
+    Enter a City Code to check permissions
+    SRLAM
+    Checking Permissions for SRLAM
+    SRLAM has permissions
+  ```
 
 
 

@@ -11,21 +11,21 @@ const readline = require('readline').createInterface({
 
 async function Stratprocess() {
 
-    console.log("Extracting data from csv")
+    // console.log("Extracting data from csv")
     let rows = await DataProcessor.extract()
         .catch((err) => {
             console.log("caught")
         })
 
-    console.log("Loading Data into memory")
+    // console.log("Loading Data into memory")
     let StructuredData = await DataProcessor.formatdata(rows).catch((err) => {
         console.error("Error Handled")
     })
 
 
-    console.log("Data is loaded and ready to take instructions")
+    // console.log("Data is loaded and ready to take instructions")
 
-    console.log("Reading Input Fields From input.JSON")
+    // console.log("Reading Input Fields From input.JSON")
 
     const permitedCities = []
 
@@ -33,7 +33,7 @@ async function Stratprocess() {
         let FileData = fs.readFileSync('input.JSON')
 
         let permissionJSON = JSON.parse(FileData.toString())
-        console.log(` Distributors Name: ${permissionJSON.DistributorName} \n INCLUDE: ${permissionJSON.Include} \n Exclude: ${JSON.stringify(permissionJSON.Exclude)}`)
+        // console.log(` Distributors Name: ${permissionJSON.DistributorName} \n INCLUDE: ${permissionJSON.Include} \n Exclude: ${JSON.stringify(permissionJSON.Exclude)}`)
 
         for (let ind in permissionJSON.Include) {
 
@@ -44,7 +44,7 @@ async function Stratprocess() {
 
                 for (let [provinceId, pValue] of StructuredData.get(permissionJSON.Include[ind]).get('Provinces')) {
                     if (permissionJSON.Exclude.ExcludeProvinces.includes(provinceId)) {
-                        console.log(`Skipping ${provinceId}`)
+                        // console.log(`Skipping ${provinceId}`)
                         break
                     } else {
                         pValue.get('cities').map((city) => {
@@ -65,13 +65,15 @@ async function Stratprocess() {
         // console.log(permitedCities)
 
 
-        readline.question(`Enter a City Code to check permissions`, (city) => {
-            console.log(`Checking Permissions for ${city}!`)
+        readline.question(`Enter a City Code to check permissions \n`, (city) => {
+            console.log(`Checking Permissions for ${city}`)
 
             if (permitedCities.includes(city.trim())) {
                 console.log(`${city} has permissions`)
+                process.exit(0)
             } else {
                 console.log(`${city} do not have permissions`)
+                process.exit(0)
             }
             readline.close()
         })
