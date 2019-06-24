@@ -37,4 +37,7 @@ const checkDistributorAccess = qsn => {
   }
 };
 
+// I'm using places codes for saving distributor data
+// Testing the availability with string of places code
+
 checkDistributorAccess("TN-IN");
