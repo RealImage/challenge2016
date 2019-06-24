@@ -32,8 +32,9 @@ const checkDistributorAccess = qsn => {
 
   if (qsnArray.some(inIn) && !qsnArray.some(inEx)) {
     console.log("The given area is allocated for d1");
+  } else {
+    console.log("The given area is not allocated for d1");
   }
-  console.log("The given area is not allocated for d1");
 };
 
 checkDistributorAccess("TN-IN");
