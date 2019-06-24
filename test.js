@@ -2,25 +2,38 @@ const checkFn = (exArray, str) => {
   return exArray.includes(str);
 };
 
-const test = (include, exclude, qsn) => {
-  const ins = ["IN", "US"];
-  const exc = ["KA-IN", "CH-TN-IN"];
+const checkDistributorAccess = qsn => {
+  const dist1 = {
+    name: "d1",
+    includedPlaces: ["IN", "US"],
+    excludedPlaces: ["KA-IN", "CH-TN-IN"]
+  };
 
-  const qsnStr = "SE-TN-IN";
-  const qsnArray = ["SE-TN-IN", "TN-IN", "IN"];
+  const qsnSplit = qsn.split("-").reverse();
+  const qsnArray = [];
 
-  const inEx = (ele) => {
-    return exc.includes(ele);
+  let initS = "";
+
+  for (const i of qsnSplit) {
+    if (qsnSplit.indexOf(i) == 0) {
+      initS = i;
+    } else {
+      initS = `${i}-${initS}`;
+    }
+    qsnArray.push(i);
   }
-  const inIn = (ele) => {
-    return ins.includes(ele);
-  }
 
-  console.log(qsnArray.some(inEx))
-  console.log(qsnArray.some(inIn))
+  const inEx = ele => {
+    return dist1.excludedPlaces.includes(ele);
+  };
+  const inIn = ele => {
+    return dist1.includedPlaces.includes(ele);
+  };
+
+  if (qsnArray.some(inIn) && !qsnArray.some(inEx)) {
+    console.log("The given area is allocated for d1");
+  }
+  console.log("The given area is not allocated for d1");
 };
 
-
-const saveDistributor = ()
-
-////test();
+checkDistributorAccess("TN-IN");
