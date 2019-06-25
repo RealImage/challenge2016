@@ -1,0 +1,10 @@
+{
+    "DistributorName": "Dist1",
+    "Include": ["IN","US"],
+    "Exclude":{
+        "ExcludeCountries":["US"],
+        "ExcludeProvinces":["OR"],
+        "ExcludeCities":["WLGTN"]
+    }
+    
+}

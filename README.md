@@ -1,3 +1,42 @@
+# Install dependencies
+
+ `npm install`
+
+
+# Input
+
+  Edit the `input.json` as 
+
+  ```
+  {
+    "DistributorName": "Dist1",
+    "Include": ["IN","US"],
+    "Exclude":{
+        "ExcludeCountries":["US"],
+        "ExcludeProvinces":["OR"],
+        "ExcludeCities":["WLGTN"]
+    }
+    
+}
+  ```
+
+# Test 
+
+  `npm run test`
+
+  You will be asked to enter a valid `City Code`, enter a valid `City Code` from the csv.
+
+* Sample Output
+  ```
+    Enter a City Code to check permissions
+    SRLAM
+    Checking Permissions for SRLAM
+    SRLAM has permissions
+  ```
+
+
+
+
 # Real Image Challenge 2016
 
 In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
