@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  distributor_id: 
+  country_code: MyString
+  province_code: MyString
+  city_code: MyString
+  is_included: false
+
+two:
+  distributor_id: 
+  country_code: MyString
+  province_code: MyString
+  city_code: MyString
+  is_included: false

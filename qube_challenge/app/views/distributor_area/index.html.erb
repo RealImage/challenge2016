@@ -1,0 +1,12 @@
+Please enter distributor name and areas
+
+<%= form_tag(:action => 'search', :controller => :distributor_area, :method => 'post',) do %>
+
+  <%= label_tag :distributor_name %>
+  <%= text_field_tag :distributor_name %>
+
+  <%= label_tag :area %>
+  <%= text_field_tag :area %>
+
+  <%= submit_tag "Submit" %>
+<% end %>
