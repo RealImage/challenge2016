@@ -1,0 +1,10 @@
+{
+  "name": "qube-cinemas",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "dependencies": {
+    "cli-progress": "^3.0.0",
+    "csvtojson": "^2.0.10"
+  }
+}
