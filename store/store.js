@@ -1,12 +1,13 @@
 const csv = require('csvtojson')
 const _cliProgress = require('cli-progress')
-const loader = new _cliProgress.SingleBar({}, _cliProgress.Presets.shades_classic);
+const loader = new _cliProgress.SingleBar({clearOnComplete: true}, _cliProgress.Presets.shades_classic);
 
 const store = {
     distributors: [],
     meta: {},
     processedData: {},
-    listeners: {}
+    listeners: {},
+    locations: []
 }
 
 const fetchFileAndProcess = async () => {
@@ -23,9 +24,14 @@ const fetchFileAndProcess = async () => {
         const provinceCode = row["Province Code"].toLowerCase()
         const countryCode = row["Country Code"].toLowerCase()
         
+        // need to remove befor commiting
         store.processedData[`${cityName}-${provinceName}-${countryName}`] = `${cityCode}-${provinceCode}-${countryCode}`
         store.processedData[`${provinceName}-${countryName}`] = `${provinceCode}-${countryCode}`
         store.processedData[`${countryName}`] = `${countryCode}`
+
+        store.locations.push(`${countryName}`)
+        store.locations.push(`${provinceName}-${countryName}`)
+        store.locations.push(`${cityName}-${provinceName}-${countryName}`)
 
         if (!store.meta[`${countryName}`]) {
             store.meta[`${countryName}`] = {}
@@ -43,11 +49,15 @@ const fetchFileAndProcess = async () => {
 fetchFileAndProcess()
 
 const set = (key, value) => {
-
+    store[key] = value
 }
 
-const get = (key) => {
-    return store[key]
+const get = (key, clone) => {
+    let response = store[key]
+    if (clone) {
+        response = JSON.parse(JSON.stringify(response))
+    }
+    return response
 }
 
 const listen = (eventName, callback) => {
@@ -56,7 +66,7 @@ const listen = (eventName, callback) => {
 
 const trigger = (eventName) => {
     if (store.listeners[eventName]) {
-        store.listeners[eventName](store)
+        setTimeout(()=>{ store.listeners[eventName](store) }, 1000)
     }
 }
 

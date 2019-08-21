@@ -4,7 +4,12 @@
   "main": "main.js",
   "license": "MIT",
   "dependencies": {
-    "cli-progress": "^3.0.0",
-    "csvtojson": "^2.0.10"
+    "autocomplete-cli": "0.0.1",
+    "cli-progress": "3.0.0",
+    "csvtojson": "2.0.10",
+    "inquirer": "6.5.1"
+  },
+  "scripts": {
+    "start": " node main.js"
   }
 }
