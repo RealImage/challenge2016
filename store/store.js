@@ -5,7 +5,6 @@ const loader = new _cliProgress.SingleBar({clearOnComplete: true}, _cliProgress.
 const store = {
     distributors: [],
     meta: {},
-    processedData: {},
     listeners: {},
     locations: []
 }
@@ -24,11 +23,6 @@ const fetchFileAndProcess = async () => {
         const provinceCode = row["Province Code"].toLowerCase()
         const countryCode = row["Country Code"].toLowerCase()
         
-        // need to remove befor commiting
-        store.processedData[`${cityName}-${provinceName}-${countryName}`] = `${cityCode}-${provinceCode}-${countryCode}`
-        store.processedData[`${provinceName}-${countryName}`] = `${provinceCode}-${countryCode}`
-        store.processedData[`${countryName}`] = `${countryCode}`
-
         store.locations.push(`${countryName}`)
         store.locations.push(`${provinceName}-${countryName}`)
         store.locations.push(`${cityName}-${provinceName}-${countryName}`)
