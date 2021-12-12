@@ -1,0 +1,6 @@
+How to run this program:
+
+There is a executable file named "DistributorMapping.exe" , Double click on it to run the application.
+
+"DistributorMapping.py"   can also be run with a proper python interpreter.
+
