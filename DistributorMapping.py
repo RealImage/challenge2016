@@ -1,21 +1,7 @@
-from os import access
 import pandas as pd
 import json
 
 cityData = pd.read_csv("cities.csv")
-
-citymap = {}
-provincemap = {}
-countrymap = {}
-for i in range(len(cityData)):
-    countrymap[str(cityData['Country Code'][i])] = cityData['Country Name'][i]
-    countrymap[cityData['Country Name'][i]] = cityData['Country Name'][i]
-
-    provincemap[str(cityData['Province Code'][i])] = cityData['Province Name'][i]
-    provincemap[cityData['Province Name'][i]] = cityData['Province Name'][i]
-
-    citymap[str(cityData['City Code'][i])] = cityData['City Name'][i]
-    citymap[cityData['City Name'][i]] = cityData['City Name'][i]
     
 
 data = cityData[['City Name','Country Name','Province Name']]
@@ -153,44 +139,47 @@ def displayAccess():
 print("Add Distributors")
 while(1):
     distributor = input('ENTER DISTRIBUTOR NAME:   ')
-    inheritCheck = input('Get Access from Parent Distributor(Y/N): ')
-    if inheritCheck.lower() == 'y' or inheritCheck.lower() == 'yes':
-        while(1):
-            parentDistributor = input('ENTER PARENT DISTRIBUTOR NAME :   ')
-            if parentDistributor in permissions.keys():
-                print('Adding Permissions from Parent Distributor : ',parentDistributor)
-                break
-            else:
-                print('The Specified Parent doesnt have any Access')
-                if not int(input('Do you want to add access from another parent distributor?(1/0)')):
-                    parentDistributor = ''
+    if distributor not in permissions.keys():
+        inheritCheck = input('Get Access from Parent Distributor(Y/N): ')
+        if inheritCheck.lower() == 'y' or inheritCheck.lower() == 'yes':
+            while(1):
+                parentDistributor = input('ENTER PARENT DISTRIBUTOR NAME :   ')
+                if parentDistributor in permissions.keys():
+                    print('Adding Permissions from Parent Distributor : ',parentDistributor)
                     break
-    else:
-        print('Proceeding to add a new distributor')
-        parentDistributor = ''
-
-
-    while(1):
-        IncOrExc = int(input('1 for Inclusion , 2 for Exclusion : '))
-        if IncOrExc == 1:
-            addAccess(distributor,parentDistributor)
+                else:
+                    print('The Specified Parent doesnt have any Access')
+                    if not int(input('Do you want to add access from another parent distributor?(1/0)')):
+                        parentDistributor = ''
+                        break
         else:
-            removeAccess(distributor,parentDistributor)
-        if not int(input('Do you want to add another Permission?(1/0)')):
-            break
-    
-    addDistributorComplete = 0
-    cancloseexecution = 0
-    
-    if not int(input('Do you want to add another Distributor?(1/0)')):
-        addDistributorComplete = 1
-    
-    if addDistributorComplete:
-        while(1):
-            displayAccess()
-            if not int(input('Do you want to check permission again?(1/0)')):
-                cancloseexecution = 1
-                break
+            print('Proceeding to add a new distributor')
+            parentDistributor = ''
 
-    if cancloseexecution:
-        break
+
+        while(1):
+            IncOrExc = int(input('1 for Inclusion , 2 for Exclusion : '))
+            if IncOrExc == 1:
+                addAccess(distributor,parentDistributor)
+            else:
+                removeAccess(distributor,parentDistributor)
+            if not int(input('Do you want to add another Permission?(1/0)')):
+                break
+        
+        addDistributorComplete = 0
+        cancloseexecution = 0
+        
+        if not int(input('Do you want to add another Distributor?(1/0)')):
+            addDistributorComplete = 1
+        
+        if addDistributorComplete:
+            while(1):
+                displayAccess()
+                if not int(input('Do you want to check permission again?(1/0)')):
+                    cancloseexecution = 1
+                    break
+
+        if cancloseexecution:
+            break
+    else:
+        print('Access for this distributor is already set....')
