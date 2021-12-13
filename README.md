@@ -39,3 +39,37 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
 
+/////////// HOW TO RUN ///////////////
+1. Create a table named "distributors" 
+    a. Query: "CREATE TABLE QUERY
+	CREATE TABLE distributors(  
+    	id int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
+   	distributorname VARCHAR(255) NOT NULL UNIQUE,
+    	included VARCHAR(255),
+   	excluded VARCHAR(255),
+   	subdistributor VARCHAR(255),
+       seniority VARCHAR(255)
+	);"
+
+2. go run main.go
+
+2. You will receice 3 endpoints, with "POST" method (Can use postman to hit the endpoints)
+    a. localhost:8080/qubecinema/checkalldistributor - To check the distributors present in database
+    b. localhost:8080/qubecinema/insertdistributor - To insert the distributor
+    c. localhost:8080/qubecinema/checkpermission - TO check for permission
+
+3. The parameters while inserting the values- (localhost:8080/qubecinema/insertdistributor)
+    a. Distributorname - DISTRIBUTOR1
+    b. Included        - INDIA, UNITEDSTATES
+    c. Excluded        - KARNATAKA-INDIA, CHENNAI-TAMILNADU-INDIA
+    d. Subdistributor  - (OPTIONAL)
+    e. Seniority       - High/Medium/Low (Based on the Sub-ditributor level)
+
+4. To check the inserted values, we can directly hit the endppoint. No parameters required
+
+5. The paramaters required to check permission - (localhost:8080/qubecinema/checkpermission)
+    a. Distributorname - DISTRIBUTOR1
+    b. Permission      - CHICAGO-ILLINOIS-UNITEDSTATES 
+
+    Output:
+     "Values": "yes" 
