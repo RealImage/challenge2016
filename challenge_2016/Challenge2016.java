@@ -31,7 +31,6 @@ public class Challenge2016 {
 	public static Boolean[] subDistributorValid = new Boolean[2];
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		int input = -1;
 		
 		try {
@@ -72,7 +71,7 @@ public class Challenge2016 {
 					deleteDistributor();
 					break;
 				case 6:
-					System.out.println("Existing Process");
+					System.out.println("Exiting Process");
 					break;
 				default:
 					System.out.println("Please select the valid action");
@@ -82,9 +81,6 @@ public class Challenge2016 {
 			System.out.println("exception caught: "+e);
 			
 		}
-		
-		
-
 	}
 	
 	/*
@@ -99,11 +95,8 @@ public class Challenge2016 {
 		if(name.contains("<")) {
 			System.out.println("name: "+name);
 			String[] nameSplit = name.split("<");
-//			String subDistributor = nameSplit[0].trim();
 			String parentDistributor = setParentDistributorForSub(nameSplit);
-//			System.out.println("parent fomr subdis set: "+parentDistributor);
-			
-//			Boolean valid = true;
+
 			if(Distributors.contains(parentDistributor)) {
 				if(checkPermission()) {
 					if(includePerm.size()==0 && excludePerm.size()==0) {
@@ -121,8 +114,6 @@ public class Challenge2016 {
 							if(!subDistributorValid[0] || subDistributorValid[1]) {
 								tempIncludePerm.remove(string);
 								System.out.println("Permission denied for "+string);
-//								valid = false;
-
 							}
 						}
 						IncludeMap.put(name, tempIncludePerm);
@@ -437,7 +428,6 @@ public class Challenge2016 {
 			BufferedReader br = new BufferedReader(new FileReader("./Resource/cities.csv"));
 			while ((line = br.readLine()) != null)   
 			{  
-
 				cities.add(line.replace(",", ", "));
 			}  
 		}catch(Exception ex) {
