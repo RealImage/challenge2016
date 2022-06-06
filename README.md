@@ -1,5 +1,43 @@
 # Real Image Challenge 2016
 
+## Instruction
+
+### Build 
+```shell
+# for go 1.10 and below
+go build -o ./perms ./main.go
+
+# for go 1.11+
+GO111MODULE=off; go build -o ./perms ./main.go
+```
+
+### Run CLI Daemon
+
+Before using Client the daemon should be started
+
+```shell
+./perms -daemon
+```
+
+### CLI Client Commands
+
+- `command` - Name of a command that will be called:
+  - `create` - Creates new permissions. Requires: `newDist`, `include`. Optional: `dist` (parent), `exclude`
+  - `has` - Gets permissions by distributor. Requires: `dist`
+  - `has` - Checks if a distributor has permissions to a region. Requires: `dist`, `region`
+  - `update` - Updates permissions by distributor. Requires: `dist`, `include` or/both `exclude`
+  - `remove` - Removes permissions by distributor. Requires: `dist`
+- `dist` - Name of existing distributor
+- `exclude` - List of regions\` deltas separated by `,`. If the region exists, it will be deleted, if it does not exist, it will be created. Example: `-exclude=CHENNAI-TAMILNADU-INDIA,UNITEDSTATES`
+- `help` - Shows info about the program
+- `include` - List of regions\` deltas separated by `,`. If the region exists, it will be deleted, if it does not exist, it will be created. Example: `-include=CHENNAI-TAMILNADU-INDIA,UNITEDSTATES`
+- `new`Dist - Name for new child distributor
+- `region` - Name of a region
+
+Examples of usage could be found in the `runExamples.sh` file
+
+## Problem Description
+
 In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
 
 Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
