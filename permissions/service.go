@@ -15,8 +15,7 @@ type (
 		mDistributors *sync.Mutex
 		distributors  []*Distributor
 
-		KnownRegions []*RegionInfo
-		perms        *permissionTable
+		perms *permissionTable
 	}
 )
 
@@ -24,7 +23,6 @@ func NewService() *Service {
 	return &Service{
 		mDistributors: &sync.Mutex{},
 		distributors:  make([]*Distributor, 0),
-		//KnownRegions:  regions,
 		perms: &permissionTable{
 			m:     &sync.Mutex{},
 			table: map[string]Permissions{},
