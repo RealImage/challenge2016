@@ -58,17 +58,6 @@ func (r *regions) Contains(fullRegion string, strict bool) bool {
 
 	subRegions := strings.Join(splitRegions[:len(splitRegions)-1], separator)
 	return sub.Contains(subRegions, strict)
-
-	//if !strict || !ok {
-	//	return ok
-	//}
-	//
-	//if len(splitRegions) == 1 && len(sub.table) == 0 {
-	//	return true
-	//}
-	//
-	//subRegions := strings.Join(splitRegions[:len(splitRegions)-1], separator)
-	//return sub.Contains(subRegions, strict)
 }
 
 func (r *regions) Remove(fullRegion string) {
