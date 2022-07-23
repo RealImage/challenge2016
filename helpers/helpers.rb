@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pry'
 require_relative '../class/distributors'
 require_relative '../class/sub_distributors'
 

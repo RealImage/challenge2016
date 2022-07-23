@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'JSON'
+require 'json'
 require_relative '../helpers/helpers'
 
 # Distributor class to hold the distributor data
