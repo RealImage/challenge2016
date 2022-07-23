@@ -167,12 +167,3 @@ def main_dist_permissible_data(main_dist, input_option)
     end
   end
 end
-
-# Display message if the distributor is authorised or not.
-def display_message(region_to_display, authorised)
-  if authorised
-    puts "Congratulations!! The distributor can distribute in the region #{region_to_display}"
-  else
-    puts "The distributor is not authorised to distribute in the region #{region_to_display}"
-  end
-end
