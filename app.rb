@@ -2,14 +2,15 @@
 
 require 'json'
 require_relative 'helpers/csv_helper'
-require_relative 'helpers/helpers'
+require_relative 'helpers/input_helper'
+require_relative 'helpers/permission_helper'
 
 # The MainApp class to run the script.
 class MainApp
   attr_reader :distributors_list, :sub_distributors_list
 
   # Create a hash of the given CSV
-  File.write('class/temp.json', csv_to_hash('cities.csv').to_json) unless File.file?('class/temp.json')
+  File.write('class/cities.json', csv_to_hash('cities.csv').to_json) unless File.file?('class/cities.json')
 
   @distributors_list = []
 
