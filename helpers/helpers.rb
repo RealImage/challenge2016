@@ -50,17 +50,17 @@ end
 def input_distributor_data
   puts 'Please enter distributor name:'
   input_dist_name = gets.chomp.downcase
-  include_list = get_input_list('Include')
-  exclude_list = get_input_list('Exclude')
+  include_list = get_input_list('Included')
+  exclude_list = get_input_list('Excluded')
   puts 'Please select if you want to enter sub distributor data if available (y/n):'
   sub_dist_data_available = gets.chomp.downcase
   if sub_dist_data_available == 'y'
     puts 'Please enter name of sub distributor:'
     input_sub_distributor_name = gets.chomp.downcase
     puts 'Please enter included area of sub distributor:'
-    input_sub_dist_include_list = get_input_list('Include', 'subdistributor')
+    input_sub_dist_include_list = get_input_list('Included', 'subdistributor')
     puts 'Please enter exluded area of sub distributor:'
-    input_sub_dist_exclude_list = get_input_list('Exclude', 'subdistributor')
+    input_sub_dist_exclude_list = get_input_list('Excluded', 'subdistributor')
     @distributors_list <<
       Distributors.new(
         input_dist_name.to_s, include_list, exclude_list, input_sub_distributor_name
@@ -68,7 +68,8 @@ def input_distributor_data
     @sub_distributors_list <<
       Subdistributors.new(
         input_sub_distributor_name.to_s, input_sub_dist_include_list, input_sub_dist_exclude_list,
-        main_dist_permissible_data(input_dist_name.to_s))
+        main_dist_permissible_data(input_dist_name.to_s)
+      )
   else
     input_sub_distributor_name = nil
     @distributors_list <<
@@ -100,17 +101,18 @@ def input_sub_distributor_data
     next unless dist.name == input_main_distributor.to_s
 
     dist.sub_distributors << input_sub_distributor_name.to_s
-    Subdistributors.new(
-      input_sub_distributor_name.to_s, input_sub_dist_include_list, input_sub_dist_exclude_list,
-      main_dist_permissible_data(input_main_distributor.to_s))
+    @sub_distributors_list <<
+      Subdistributors.new(
+        input_sub_distributor_name.to_s, input_sub_dist_include_list, input_sub_dist_exclude_list,
+        main_dist_permissible_data(input_main_distributor.to_s)
+      )
   end
 end
 
+# Gets the allowed data for the main distributer to pass to subdistributor object
 def main_dist_permissible_data(main_dist)
   @distributors_list.each do |dist|
-    if dist.name == main_dist
-      return dist.permissible_data
-    end
+    return dist.permissible_data if dist.name == main_dist
   end
 end
 
@@ -120,61 +122,70 @@ def input_check_distributor_permission_input
   puts 'Press 2 to check permission for an sub distributor'
   check_type = gets.chomp
   if check_type.to_i == 1
-    if @distributors_list.empty?
-      puts 'The distributors list is empty. Please enter the data first and try again'
-      puts
-      puts
-      return
-    end
-    puts 'Please select the distributor from the list'
-    @distributors_list.each do |distributor|
-      puts distributor.name
-    end
-    puts '-------------------'
-    input_distributor = gets.chomp.downcase
-    if @distributors_list.select do |distributor|
-         distributor.name == input_distributor
-       end.empty?
-      puts 'Please enter valid data from list and try again'
-      return
-    end
-    input_dist_check_list = get_input_list('check', 'checking_flow')
-    if input_dist_check_list.empty?
-      puts 'Data not present to check'
-      return
-    end
-    check_permission_for_distributor(input_distributor, input_dist_check_list, type = 'main')
+    check_distributor_permission
   else
-    if @sub_distributors_list.empty?
-      puts 'The sub distributor list is empty. Please enter the data first and try again'
-      puts
-      puts
-      return
-    end
-    puts 'Please select the sub distributor from the list'
-    @sub_distributors_list.each do |sub_distributor|
-      puts sub_distributor.name
-    end
-    puts '-------------------'
-    input_sub_distributor = gets.chomp
-    if @sub_distributors_list.select do |distributor|
-         distributor.name == input_sub_distributor
-       end.empty?
-      puts 'Please enter valid data from list and try again'
-      return
-    end
-    input_sub_dist_check_list = get_input_list('check', 'checking_flow')
-    if input_sub_dist_check_list.empty?
-      puts 'Data not present to check'
-      return
-    end
-    check_permission_for_distributor(input_sub_distributor, input_sub_dist_check_list, type = 'sub')
+    check_sub_distributor_permission
   end
 end
 
+# Check permission for a distributor
+def check_distributor_permission
+  if @distributors_list.empty?
+    puts 'The distributors list is empty. Please enter the data first and try again'
+    puts
+    puts
+    return
+  end
+  puts 'Please select the distributor from the list'
+  @distributors_list.each do |distributor|
+    puts distributor.name
+  end
+  puts '-------------------'
+  input_distributor = gets.chomp.downcase
+  if @distributors_list.select do |distributor|
+       distributor.name == input_distributor
+     end.empty?
+    puts 'Please enter valid data from list and try again'
+    return
+  end
+  input_dist_check_list = get_input_list('check', 'checking_flow')
+  if input_dist_check_list.empty?
+    puts 'Data not present to check'
+    return
+  end
+  check_permission_for_distributor(input_distributor, input_dist_check_list, 'main')
+end
+
+# Check permission for a sub distributor
+def check_sub_distributor_permission
+  if @sub_distributors_list.empty?
+    puts 'The sub distributor list is empty. Please enter the data first and try again'
+    puts
+    puts
+    return
+  end
+  puts 'Please select the sub distributor from the list'
+  @sub_distributors_list.each do |sub_distributor|
+    puts sub_distributor.name
+  end
+  puts '-------------------'
+  input_sub_distributor = gets.chomp
+  if @sub_distributors_list.select do |distributor|
+       distributor.name == input_sub_distributor
+     end.empty?
+    puts 'Please enter valid data from list and try again'
+    return
+  end
+  input_sub_dist_check_list = get_input_list('check', 'checking_flow')
+  if input_sub_dist_check_list.empty?
+    puts 'Data not present to check'
+    return
+  end
+  check_permission_for_distributor(input_sub_distributor, input_sub_dist_check_list, 'sub')
+end
+
 # Check if the distributor has permission
-def check_permission_for_distributor(distributor_name, check_list, type)
-  binding.pry
+def check_permission_for_distributor(distributor_name, check_list, type = 'main')
   if type == 'main'
     @distributors_list.select do |distributor|
       distributor.name == distributor_name
@@ -182,7 +193,7 @@ def check_permission_for_distributor(distributor_name, check_list, type)
   else
     @sub_distributors_list.select do |sub_distributor|
       sub_distributor.name == distributor_name
-    end.first.check_distributor_data(check_list)
+    end.first.check_sub_distributor_data(check_list)
   end
 end
 
@@ -194,19 +205,3 @@ def display_message(region_to_display, authorised)
     puts "The distributor is not authorised to distribute in the region #{region_to_display}"
   end
 end
-
-# # Checks if the distributor object has permission or not.
-# def check_distributor_data(check_list)
-#   binding.pry
-#   region_to_check = check_list.first
-#   if permissible_data[region_to_check['countries']].nil?
-#     display_message(region_to_check['countries'], false)
-#   elsif region_to_check['province'] && permissible_data[region_to_check['countries']][region_to_check['province']].nil?
-#     display_message(region_to_check['province'], false)
-#   elsif region_to_check['cities'] && permissible_data[region_to_check['countries']][region_to_check['province']][region_to_check['cities']].nil?
-#     display_message(region_to_check['cities'], false)
-#   else
-#     display_message(region_to_check['countries'], true)
-#   end
-#   nil
-# end

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pry'
 require 'json'
 require_relative 'helpers/csv_helper'
 require_relative 'helpers/helpers'
@@ -10,10 +9,7 @@ class MainApp
   attr_reader :distributors_list, :sub_distributors_list
 
   # Create a hash of the given CSV
-  unless File.file?("class/temp.json")
-    binding.pry
-    File.write("class/temp.json",csv_to_hash('cities.csv').to_json)
-  end
+  File.write('class/temp.json', csv_to_hash('cities.csv').to_json) unless File.file?('class/temp.json')
 
   @distributors_list = []
 
@@ -33,39 +29,3 @@ class MainApp
     break if input.to_i == 3
   end
 end
-
-#  {
-#     "countries" => {
-#         "india" => {
-#             "code" => "in",
-#             "province" => {
-#                 "Jammu and Kashmir" => {
-#                      "code" => "JK",
-#                      "cities" => {
-#                         "poonch" => {
-#                             "code" => "2"
-#                             },
-#                         "hubli" => {
-#                             "code" => "HU"
-#                         }
-#                     }
-#                 }
-#             }
-#         }
-#     }
-# }
-#     country_hash_data["countries"].merge!({
-#         row["Country Name"].to_s => {
-#             "code" => row["Country Code"].to_s,
-#             "province" => {
-#                 row["Province Name"].to_s => {
-#                     "code" => row["Province Code"],
-#                     "cities" => {
-#                         row["City Name"].to_s => {
-#                             "code" => row["City Code"].to_s
-#                         },
-#                     },
-#                 },
-#             },
-#         },
-# })

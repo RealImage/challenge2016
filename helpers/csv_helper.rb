@@ -42,6 +42,5 @@ def csv_to_hash(_csvfile)
     country_hash_data['countries'][row['Country Name'].to_s.downcase]['province'][row['Province Name'].to_s.downcase]['cities'][row['City Name'].to_s.downcase]
       .merge!('code' => row['City Code'].to_s.downcase)
   end
-  binding.pry
   country_hash_data
 end
