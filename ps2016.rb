@@ -3,34 +3,55 @@
 #  COUNTRY
     # PROVINCE
       # CITY
-## DEFINE User Format
+## PERMISSION FILE
+## USERS and inheritance hierarchy L2R
 ## USER :
+  # NAME
   # INHERIT FROM
   # INCLUDE
   # EXCLUDE
-class FindAuthorization
+# -------------------------------------------------------------------------------------------------------------
+  # SAMPLE FORMAT
 
-    User = Struct.new(:name, :inherited,:included, :excluded)
+  # Permissions: DISTRIBUTOR1
+  # INCLUDE: INDIA
+  # INCLUDE: UNITEDSTATES
+  # EXCLUDE: KARNATAKA-INDIA
+  # EXCLUDE: CHENNAI-TAMILNADU-INDIA
+
+  # Permissions: DISTRIBUTOR2 < DISTRIBUTOR1
+  # INCLUDE: INDIA
+  # EXCLUDE: TAMILNADU-INDIA
+
+# -------------------------------------------------------------------------------------------------------------
+# we need three structures for this scenario
+# @@CITY => STATE
+# @@STATES => COUNTRY
+# @@COUNTRY => STATE => CITY
+# @@WORLD
+
+  User = Struct.new(:name, :inherited,:included, :excluded)
+  class FindAuthorization
+    @@permission ={}
     def initialize(partner,permission)
       # User = Struct.new(:user, :inherit, :include, :permission)
-    @@permission =  get_csv(permission,false) if !permission.empty?
-    @@city, @@states, @@world = get_csv(partner,true) if !partner.empty?
+      # "GET ALL LOCATIONS FIRST"
+      @@city, @@states, @@world = get_csv(partner,true) if !partner.empty?
+      ## get initial Users
+      get_csv(permission,false) if !permission.empty?
     end
 
-    # @@CITY => STATE
-    # @@STATES => COUNTRY
-    # @@COUNTRY => STATE => CITY
-    # @@WORLD
-def get_state(in_location)
-  @@states.fetch(in_location)
-end
-def get_country(in_location)
-  @@world.fetch(in_location)
-end
-def get_city(in_location)
-  @@city.fetch(in_location)
-end
+    def get_state(in_location)
+      @@states.fetch(in_location)
+    end
+    def get_country(in_location)
+      @@world.fetch(in_location)
+    end
+    def get_city(in_location)
+      @@city.fetch(in_location)
+    end
 
+  ## check input is valid
   def valid_location(in_location)
     location = in_location.split("-")
     case location.size
@@ -44,7 +65,7 @@ end
     in_location
   end
 
-  # Find
+  # Find  City/Province is within Province/Country
   def find_inclusive_or_not(src,dest)
     max_size = src.size
     case max_size
@@ -82,43 +103,52 @@ end
     end
   end
 
-    def processing_logic(user, location)
-      binding.break
-       match_found = false
+   def processing_logic(validuser, location)
+
+      # binding.break
+      excluded={}
+      # "call checks and so forth
        @@excluded = 0
        @@included = 0
-        raise "Invalid User" if !@@permission.has_key?(user)
-        validuser = @@permission.fetch(user)
-       # st = @@country["INDIA"].filter{ |item| p item if !item["TAMIL NADU"].nil? }
-        to_check = valid_location(location)
-      # check authorization
+       parent={}
+       to_check = valid_location(location)
+       if @@permission.has_key?(validuser[:name])
+          validuser = @@permission.fetch(validuser[:name])
+       end
+
+      # check authorization - Only Excluded might matter!
         if validuser[:inherited] != :inherited
           validuser[:inherited].each do |inh|
             user1 =  @@permission.fetch(inh)
-            next  if user1.nil?
-            # user1[:included].each do |loc|
-            #   loc = valid_location(loc)
-            #   @@included+=1 if  check_location(to_check,loc,false)
-            # end
-            user1[:excluded].each do |loc|
-              loc = valid_location(loc)
-              @@excluded+=1 if check_location(to_check,loc,true)
-            end
+            next  if user1.nil? or user1[:excluded] == :excluded
+              user1[:excluded].each do |loc|
+                if check_location(to_check,valid_location(loc),true)
+                  @@excluded+=1
+                  excluded.store(loc, loc)
+                end
+              end
+            if user1[:included] != :included
+              user1[:included].each do |loc|
+                parent.store(loc, loc ) if check_location(to_check,valid_location(loc),true)
+              end
+          end
           end
         end
-        validuser[:included].each do |loc|
-            loc = valid_location(loc)
-            @@included+=1 if check_location(to_check,loc,false)
+        # current user authorization
+        if validuser[:included] != :included
+          validuser[:included].each do |loc|
+            @@included+=1 if check_location(to_check,valid_location(loc),false) and ( parent.has_key?(loc) or parent.empty? )
           end
+        end
+      if validuser[:excluded] != :excluded
           validuser[:excluded].each do |loc|
-            loc = valid_location(loc)
-            @@excluded+=1 if check_location(to_check,loc,true)
-          end
-
+            @@excluded+=1 if check_location(to_check,valid_location(loc),true)
+         end
+        end
         if @@excluded > 0 or @@included == 0
-          raise "No Authorization"
+          false
         else
-          raise "Authorized! Please proceed"
+          true
         end
       end
 
@@ -129,23 +159,21 @@ end
       require 'csv'
       user = User.new(:name, :inherited,:included, :excluded)
       included=[]
-            excluded=[]
-                 inherited=[]
-                 permission={}
-      provinces = {}
+      excluded=[]
+      inherited=[]
       city = {}
-       state = {}
-          country = {}
+      state = {}
       world ={}
       CSV.foreach(File.open(filename), headers: header, :converters => :numeric, :header_converters => :symbol){ |row|
         next if row.empty?
         case
-          when filename.include?('test_ps')
+          when filename.include?('PS2016.txt')
             city_name=[]
             states=[]
             row[:city_name] = row[:city_name].upcase.gsub(/[[:space:]]/, '')
             row[:province_name] = row[:province_name].upcase.gsub(/[[:space:]]/, '')
             row[:country_name] = row[:country_name].upcase.gsub(/[[:space:]]/, '')
+
             if !city.include?(row[:city_name])
               city.store(row[:city_name],row[:province_name])
             end
@@ -153,26 +181,8 @@ end
             if !state.include?(row[:province_name])
               state.store(row[:province_name], row[:country_name])
             end
-
-            if !provinces.include?(row[:province_name])
-                city_name.append(row[:city_name])
-                provinces.store(row[:province_name], city_name)
-            else
-              city_name = provinces[row[:province_name]]
-              city_name.append(row[:city_name])
-              provinces[row[:province_name]] = city_name
-            end
-
-            province = provinces.select{ |p| p == row[:province_name]}
-
-            if !country.include?(row[:country_name])
+            if !world.include?(row[:country_name])
               world.store(row[:country_name],row[:country_name])
-              states.append(province)
-              country.store(row[:country_name],states)
-            else
-              states = country[row[:country_name]]
-              states.append(province)
-              country[row[:country_name]]  = states.uniq
             end
           when filename.include?('permission')
               if  row[0].include?('Permissions')
@@ -180,7 +190,15 @@ end
                     user[:included] = included if !included.empty?
                     user[:excluded] = excluded if !excluded.empty?
                     user[:inherited] = inherited if !inherited.empty?
-                    permission.store(user[:name],user)
+                    user[:included].each do |city|
+                      if !processing_logic(user, city)
+                        puts "Parent Authorization missing#{city}"
+                        next
+                      else
+                        @@permission.store(user[:name],user)
+                      end
+                    end
+
                     user = User.new(:name, :inherited,:included, :excluded)
                     included=[]
                     excluded=[]
@@ -199,16 +217,24 @@ end
               end
         end
       }
-      if  filename.include?('test_ps')
+      if  filename.include?('PS2016.txt')
         return [ city, state, world ]
       else
           if user[:name] != :name
             user[:included] = included if !included.empty?
             user[:excluded] = excluded if !excluded.empty?
             user[:inherited] = inherited if !inherited.empty?
-              permission.store(user[:name],user)
+            # binding.break
+            user[:included].each do |city|
+              if !processing_logic(user, city)
+                puts "Parent Authorization missin for #{city}"
+                next
+              else
+                @@permission.store(user[:name],user)
+              end
+            end
+
           end
-        permission
       end
   end
 end
@@ -216,23 +242,36 @@ end
 require 'debug'
 
 # "start of processing"
-ab = FindAuthorization.new("test_ps.txt",'permission.txt')
+ab = FindAuthorization.new("PS2016.txt",'permission.txt')
 # "pS1" - minimum cost
 run = true
 puts ("--------------------------------------------------------------------------------------------------------------")
 puts ("---------------------------------------- Distributor Authorization--------------------------------------------")
-puts ("--------------------------------------------------------------------------------------------------------------")
 while run
+  puts ("--------------------------------------------------------------------------------------------------------------")
   puts ("Enter x/X to EXIT")
   puts ("Enter Distributor Id: ")
   user = gets.chomp.upcase.gsub(/[[:space:]]/, '')
-  puts ("Location in Format( Ctry or Prov-Ctry or City-Prov-Ctry) : ")
+  puts ("Location in Format( INCLUDED/EXCLUDED : Ctry or Prov-Ctry or City-Prov-Ctry) : ")
   city = gets.chomp.upcase.gsub(/[[:space:]]/, '')
-  if user == 'x' or city == 'X'
+  if user == 'X' or city == 'X'
     run = false
   else
     begin
-        ab.processing_logic(user, city)
+      obj_user = User.new(:name, :inherited, :included, :excluded)
+      inherit_from = user.split('<')
+      inherited=[]
+
+      inherit_from.each_with_index do |value, index|
+      case
+        when index == 0
+          obj_user[:name] = value
+        when  index != 0
+          inherited << value
+        end
+      end
+      obj_user[:inherited] = inherited if !inherited.nil?
+      ab.processing_logic(obj_user, city) ? 'Authorized' : 'Not Authorized'
     rescue => exception
       puts exception.message
     else
@@ -240,8 +279,3 @@ while run
     end
   end
 end
-
-
-
-
-
