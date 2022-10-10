@@ -21,9 +21,15 @@ func main() {
 	distributer.Exclude = config.Exclude
 	distributer.Check = config.Check
 
-	distributer.Sub.Name = config.SubDistributer
-	distributer.Sub.Include = config.SubInclude
-	distributer.Sub.Check = config.SubCheck
+	subDistributer := utils.NewDistributer{}
+	subDistributer.Name = config.SubDistributer1
+	subDistributer.Include = config.SubInclude1
+	subDistributer.Exclude = config.SubExclude1
+	subDistributer.Check = config.SubCheck1
+
+	subDistributerList := []utils.NewDistributer{}
+	subDistributerList = append(subDistributerList, subDistributer)
+	fmt.Println(subDistributerList)
 
 	csvFile, err := os.Open("cities.csv")
 	if err != nil {
@@ -43,16 +49,21 @@ func main() {
 	if distributer.Check != "" {
 		fmt.Println("Primary distributer allowed in this region = ", allowed)
 	}
-	for _, val := range distributer.Sub.Include {
-		subInclude = find(excluded, val, true)
+	for _, val := range subDistributerList {
+		for _, inc := range val.Include {
+			subInclude = find(excluded, inc, true)
+		}
 	}
-	for _, val := range distributer.Sub.Exclude {
-		subExclude = find(excluded, val, true)
+	for _, val := range subDistributerList {
+		for _, exc := range val.Exclude {
+			subInclude = find(excluded, exc, true)
+		}
+		allowedSub := check(excluded, val.Check)
+		if val.Check != "" {
+			fmt.Printf("Distributer = %+v; allowed in this region = %+v;", val.Name, allowedSub)
+		}
 	}
-	allowedSub := check(excluded, distributer.Sub.Check)
-	if distributer.Sub.Check != "" {
-		fmt.Println("Sub distributer allowed in this region = ", allowedSub)
-	}
+
 }
 
 func find(records [][]string, val string, task bool) [][]string {

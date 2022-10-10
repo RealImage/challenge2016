@@ -14,11 +14,5 @@ type NewDistributer struct {
 	Include []string
 	Exclude []string
 	Check   string
-	Sub     SubDistributer
-}
-type SubDistributer struct {
-	Name    string
-	Include []string
-	Exclude []string
-	Check string
+	Sub     []NewDistributer
 }
