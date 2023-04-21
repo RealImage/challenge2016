@@ -2,111 +2,110 @@ package main
 
 import (
 	"encoding/csv"
-    "qube-cinemas/utils"
 	"fmt"
 	"os"
+	"qube-cinemas/utils"
 )
 
 func main() {
-    // Load data from CSV file
-    f, err := os.Open("cities.csv")
-    if err != nil {
-        fmt.Println("Error opening file:", err)
-        return
-    }
-    defer f.Close()
+	// Load data from CSV file
+	f, err := os.Open("cities.csv")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer f.Close()
 
-    reader := csv.NewReader(f)
-    reader.TrimLeadingSpace = true
+	reader := csv.NewReader(f)
+	reader.TrimLeadingSpace = true
 
-    records, err := reader.ReadAll()
-    if err != nil {
-        fmt.Println("Error reading CSV file:", err)
-        return
-    }
+	records, err := reader.ReadAll()
+	if err != nil {
+		fmt.Println("Error reading CSV file:", err)
+		return
+	}
 
-    // Map cities to regions
-    regions := make(map[string]utils.Region)
-    for _, record := range records {
-        city := record[3]
-        region := utils.Region{record[5], record[4], city}
-        regions[city] = region
-    }
+	// Map cities to regions
+	regions := make(map[string]utils.Region)
+	for _, record := range records {
+		city := record[3]
+		region := utils.Region{Country: record[5], State: record[4], City: city}
+		regions[city] = region
+	}
 
-    // Define permissions
-    distributor1 := utils.Permission{
-        Included: []utils.Region{
-            {"INDIA", "", ""},
-            {"UNITEDSTATES", "", ""},
-        },
-        Excluded: []utils.Region{
-            {"INDIA", "KARNATAKA", ""},
-            {"INDIA", "TAMILNADU", "CHENNAI"},
-        },
-    }
+	// Define permissions
+	distributor1 := utils.Permission{
+		Included: []utils.Region{
+			{Country: "INDIA", State: "", City: ""},
+			{Country: "UNITEDSTATES", State: "", City: ""},
+		},
+		Excluded: []utils.Region{
+			{Country: "INDIA", State: "KARNATAKA", City: ""},
+			{Country: "INDIA", State: "TAMILNADU", City: "CHENNAI"},
+		},
+	}
 
-    distributor2 := utils.Permission{
-        Included: []utils.Region{
-            {"INDIA", "", ""},
-        },
-        Excluded: []utils.Region{
-            {"INDIA", "TAMILNADU", ""},
-            {"INDIA", "KARNATAKA", ""},
-        },
-    }
+	distributor2 := utils.Permission{
+		Included: []utils.Region{
+			{Country: "INDIA", State: "", City: ""},
+		},
+		Excluded: []utils.Region{
+			// {Country: "INDIA", State: "TAMILNADU", City: ""},
+			{Country: "INDIA", State: "KARNATAKA", City: ""},
+		},
+	}
 
-    distributor3 := utils.Permission{
-        Included: []utils.Region{
-            {"INDIA", "KARNATAKA", "HUBLI"},
-        },
-        Excluded: []utils.Region{},
-    }
+	distributor3 := utils.Permission{
+		Included: []utils.Region{
+			{Country: "INDIA", State: "TAMILNADU", City: "TIRUCHIRAPALLI"},
+		},
+		Excluded: []utils.Region{},
+	}
+    distributor2.Excluded = append(distributor2.Excluded, distributor1.Excluded...)
+    distributor3.Excluded = append(distributor3.Excluded, distributor2.Excluded...)
 
-    // Check permissions
-    fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor1)) // should print true
-    fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor1))      // should print false
-    fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor1))    // should print false
+	// Check permissions
+	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor1)) // should print true
+	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor1))       // should print false
+	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor1))     // should print false
 
-    fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2)) // should print false
-    fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor2))      // should print false
-    fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor2))    // should print false
+	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2)) // should print false
+	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor2))       // should print false
+	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor2))     // should print false
 
-    fmt.Println(checkPermission("HUBLI", "KARNATAKA", "INDIA", distributor3)) // should print true
-    fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor3)) // should print false
+	fmt.Println(checkPermission("MADURAI", "TAMILNADU", "INDIA", distributor3))        // should print false
+	fmt.Println(checkPermission("TIRUCHIRAPALLI", "TAMILNADU", "INDIA", distributor3)) // should print true
 }
 
 func checkPermission(city string, state string, country string, permission utils.Permission) bool {
-    region := utils.Region{country, state, city}
+	region := utils.Region{Country: country, State: state, City: city}
 
-    for _, excluded := range permission.Excluded {
-        if isSubregion(excluded, region) {
-            return false
-        }
-    }
+	for _, excluded := range permission.Excluded {
+		if isSubregion(excluded, region) {
+			return false
+		}
+	}
 
-    for _, included := range permission.Included {
-        if isSubregion(included, region) {
-            return true
-        }
+	for _, included := range permission.Included {
+		if isSubregion(included, region) {
+			return true
+		}
 	}
 	return false
 }
 
 func isSubregion(parent utils.Region, child utils.Region) bool {
-    if parent.Country != "" && parent.Country != child.Country {
-        return false
-    }
-    if parent.State != "" && parent.State != child.State {
-        return false
-    }
-    if parent.City != "" && parent.City != child.City {
-        return false
-    }
-    return true
+	if parent.Country != "" && parent.Country != child.Country {
+		return false
+	}
+	if parent.State != "" && parent.State != child.State {
+		return false
+	}
+	if parent.City != "" && parent.City != child.City {
+		return false
+	}
+	return true
 }
-
-
-   
 
 // package main
 
