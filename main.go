@@ -9,31 +9,7 @@ import (
 
 func main() {
 	// Load data from CSV file
-	f, err := os.Open("cities.csv")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer f.Close()
-
-	reader := csv.NewReader(f)
-	reader.TrimLeadingSpace = true
-
-	records, err := reader.ReadAll()
-	if err != nil {
-		fmt.Println("Error reading CSV file:", err)
-		return
-	}
-
-	// Map cities to regions
-	regions := make(map[string]utils.Region)
-	for _, record := range records {
-		city := record[3]
-		region := utils.Region{Country: record[5], State: record[4], City: city}
-		regions[city] = region
-	}
-
-	// Define permissions
+    // Define permissions
 	distributor1 := utils.Permission{
 		Included: []utils.Region{
 			{Country: "INDIA", State: "", City: ""},
@@ -61,6 +37,34 @@ func main() {
 		},
 		Excluded: []utils.Region{},
 	}
+	distributerAuthorized(distributor1, distributor2, distributor3)
+}
+
+func distributerAuthorized(distributor1 utils.Permission, distributor2 utils.Permission, distributor3 utils.Permission){
+    f, err := os.Open("cities.csv")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer f.Close()
+
+	reader := csv.NewReader(f)
+	reader.TrimLeadingSpace = true
+
+	records, err := reader.ReadAll()
+	if err != nil {
+		fmt.Println("Error reading CSV file:", err)
+		return
+	}
+
+	// Map cities to regions
+	regions := make(map[string]utils.Region)
+	for _, record := range records {
+		city := record[3]
+		region := utils.Region{Country: record[5], State: record[4], City: city}
+		regions[city] = region
+	}
+
     distributor2.Excluded = append(distributor2.Excluded, distributor1.Excluded...)
     distributor3.Excluded = append(distributor3.Excluded, distributor2.Excluded...)
 
