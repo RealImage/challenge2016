@@ -2,20 +2,10 @@ package main
 
 import (
 	"encoding/csv"
+    "qube-cinemas/utils"
 	"fmt"
 	"os"
 )
-
-type Region struct {
-    Country string
-    State   string
-    City    string
-}
-
-type Permission struct {
-    Included []Region
-    Excluded []Region
-}
 
 func main() {
     // Load data from CSV file
@@ -36,40 +26,40 @@ func main() {
     }
 
     // Map cities to regions
-    regions := make(map[string]Region)
+    regions := make(map[string]utils.Region)
     for _, record := range records {
         city := record[3]
-        region := Region{record[5], record[4], city}
+        region := utils.Region{record[5], record[4], city}
         regions[city] = region
     }
 
     // Define permissions
-    distributor1 := Permission{
-        Included: []Region{
+    distributor1 := utils.Permission{
+        Included: []utils.Region{
             {"INDIA", "", ""},
             {"UNITEDSTATES", "", ""},
         },
-        Excluded: []Region{
+        Excluded: []utils.Region{
             {"INDIA", "KARNATAKA", ""},
             {"INDIA", "TAMILNADU", "CHENNAI"},
         },
     }
 
-    distributor2 := Permission{
-        Included: []Region{
+    distributor2 := utils.Permission{
+        Included: []utils.Region{
             {"INDIA", "", ""},
         },
-        Excluded: []Region{
+        Excluded: []utils.Region{
             {"INDIA", "TAMILNADU", ""},
             {"INDIA", "KARNATAKA", ""},
         },
     }
 
-    distributor3 := Permission{
-        Included: []Region{
+    distributor3 := utils.Permission{
+        Included: []utils.Region{
             {"INDIA", "KARNATAKA", "HUBLI"},
         },
-        Excluded: []Region{},
+        Excluded: []utils.Region{},
     }
 
     // Check permissions
@@ -85,8 +75,8 @@ func main() {
     fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor3)) // should print false
 }
 
-func checkPermission(city string, state string, country string, permission Permission) bool {
-    region := Region{country, state, city}
+func checkPermission(city string, state string, country string, permission utils.Permission) bool {
+    region := utils.Region{country, state, city}
 
     for _, excluded := range permission.Excluded {
         if isSubregion(excluded, region) {
@@ -102,7 +92,7 @@ func checkPermission(city string, state string, country string, permission Permi
 	return false
 }
 
-func isSubregion(parent Region, child Region) bool {
+func isSubregion(parent utils.Region, child utils.Region) bool {
     if parent.Country != "" && parent.Country != child.Country {
         return false
     }

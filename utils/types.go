@@ -1,5 +1,16 @@
 package utils
 
+type Region struct {
+    Country string
+    State   string
+    City    string
+}
+
+type Permission struct {
+    Included []Region
+    Excluded []Region
+}
+
 type location struct {
 	cityCode     string
 	provinceCode string
