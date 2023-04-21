@@ -65,16 +65,16 @@ func main() {
     distributor3.Excluded = append(distributor3.Excluded, distributor2.Excluded...)
 
 	// Check permissions
-	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor1)) // should print true
-	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor1))       // should print false
-	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor1))     // should print false
+	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor1))
+	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor1))       
+	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor1))    
 
-	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2)) // should print false
-	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor2))       // should print false
-	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor2))     // should print false
+	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2)) 
+	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor2))   
+	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor2))   
 
-	fmt.Println(checkPermission("MADURAI", "TAMILNADU", "INDIA", distributor3))        // should print false
-	fmt.Println(checkPermission("TIRUCHIRAPALLI", "TAMILNADU", "INDIA", distributor3)) // should print true
+	fmt.Println(checkPermission("MADURAI", "TAMILNADU", "INDIA", distributor3))       
+	fmt.Println(checkPermission("TIRUCHIRAPALLI", "TAMILNADU", "INDIA", distributor3))
 }
 
 func checkPermission(city string, state string, country string, permission utils.Permission) bool {
