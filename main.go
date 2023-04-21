@@ -38,8 +38,8 @@ func main() {
     // Map cities to regions
     regions := make(map[string]Region)
     for _, record := range records {
-        city := record[2]
-        region := Region{record[0], record[1], city}
+        city := record[3]
+        region := Region{record[5], record[4], city}
         regions[city] = region
     }
 
@@ -77,7 +77,7 @@ func main() {
     fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor1))      // should print false
     fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor1))    // should print false
 
-    fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2)) // should print true
+    fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2)) // should print false
     fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor2))      // should print false
     fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor2))    // should print false
 
