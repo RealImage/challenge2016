@@ -1,15 +1,12 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
-	"os"
 	"qube-cinemas/utils"
 )
 
 func main() {
-	// Load data from CSV file
-    // Define permissions
+	// Define permissions
 	distributor1 := utils.Permission{
 		Included: []utils.Region{
 			{Country: "INDIA", State: "", City: ""},
@@ -37,48 +34,82 @@ func main() {
 		},
 		Excluded: []utils.Region{},
 	}
+
 	distributerAuthorized(distributor1, distributor2, distributor3)
 }
 
-func distributerAuthorized(distributor1 utils.Permission, distributor2 utils.Permission, distributor3 utils.Permission){
-    f, err := os.Open("cities.csv")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer f.Close()
+func distributerAuthorized(distributor1 utils.Permission, distributor2 utils.Permission, distributor3 utils.Permission) {
+	//    If data to be loaded from csv file ************
+	// f, err := os.Open("cities.csv")
+	// if err != nil {
+	// 	fmt.Println("Error opening file:", err)
+	// 	return
+	// }
+	// defer f.Close()
 
-	reader := csv.NewReader(f)
-	reader.TrimLeadingSpace = true
+	// reader := csv.NewReader(f)
+	// reader.TrimLeadingSpace = true
 
-	records, err := reader.ReadAll()
-	if err != nil {
-		fmt.Println("Error reading CSV file:", err)
-		return
-	}
+	// records, err := reader.ReadAll()
+	// if err != nil {
+	// 	fmt.Println("Error reading CSV file:", err)
+	// 	return
+	// }
 
 	// Map cities to regions
-	regions := make(map[string]utils.Region)
-	for _, record := range records {
-		city := record[3]
-		region := utils.Region{Country: record[5], State: record[4], City: city}
-		regions[city] = region
-	}
+	// regions := make(map[string]utils.Region)
+	// for _, record := range records {
+	// 	city := record[3]
+	// 	region := utils.Region{Country: record[5], State: record[4], City: city}
+	// 	regions[city] = region
+	// }
 
-    distributor2.Excluded = append(distributor2.Excluded, distributor1.Excluded...)
-    distributor3.Excluded = append(distributor3.Excluded, distributor2.Excluded...)
+	distributor2.Excluded = append(distributor2.Excluded, distributor1.Excluded...)
+	distributor3.Excluded = append(distributor3.Excluded, distributor2.Excluded...)
 
 	// Check permissions
-	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor1))
-	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor1))       
-	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor1))    
+	if checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor1) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
+	if checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor1) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
+	if checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor1) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
 
-	fmt.Println(checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2)) 
-	fmt.Println(checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor2))   
-	fmt.Println(checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor2))   
+	if checkPermission("CHICAGO", "ILLINOIS", "UNITEDSTATES", distributor2) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
+	if checkPermission("CHENNAI", "TAMILNADU", "INDIA", distributor2) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
+	if checkPermission("BANGALORE", "KARNATAKA", "INDIA", distributor2) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
 
-	fmt.Println(checkPermission("MADURAI", "TAMILNADU", "INDIA", distributor3))       
-	fmt.Println(checkPermission("TIRUCHIRAPALLI", "TAMILNADU", "INDIA", distributor3))
+	if checkPermission("MADURAI", "TAMILNADU", "INDIA", distributor3) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
+	if checkPermission("TIRUCHIRAPALLI", "TAMILNADU", "INDIA", distributor3) {
+		fmt.Println("yes")
+	} else {
+		fmt.Println("no")
+	}
 }
 
 func checkPermission(city string, state string, country string, permission utils.Permission) bool {
