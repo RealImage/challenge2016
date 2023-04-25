@@ -11,6 +11,7 @@ import (
 	"unicode"
 )
 
+// ReadCitiesCSV reads the cities.csv file and returns a list of cities
 func ReadCitiesCSV(filename string) []models.City {
 	var cities []models.City
 
@@ -41,6 +42,7 @@ func ReadCitiesCSV(filename string) []models.City {
 	return cities
 }
 
+// RemoveSpace removes the spaces from the string and returns the string in lower case
 func RemoveSpace(s string) string {
 	rr := make([]rune, 0, len(s))
 	for _, r := range s {
@@ -52,6 +54,7 @@ func RemoveSpace(s string) string {
 	return strings.ToLower(string(rr))
 }
 
+// AddDistributor adds a distributor to the distributor list
 func AddDistributor(id *int, DistributorsList *[]models.Distributor) {
 	*id++
 	var name string
@@ -95,6 +98,7 @@ func AddDistributor(id *int, DistributorsList *[]models.Distributor) {
 	}
 }
 
+// PrintDistList prints the distributor list
 func PrintDistList(DistributorsList *[]models.Distributor) {
 	fmt.Println("Distributor List: ")
 	for _, distributor := range *DistributorsList {
@@ -107,6 +111,7 @@ func PrintDistList(DistributorsList *[]models.Distributor) {
 	}
 }
 
+// CheckDistributorPermission checks if a distributor has permission to access a city
 func CheckDistributorPermission(cities *[]models.City, DistributorsList *[]models.Distributor) {
 
 	fmt.Println("Check Permission for a Distributor")
@@ -132,6 +137,7 @@ func CheckDistributorPermission(cities *[]models.City, DistributorsList *[]model
 	}
 }
 
+// CheckPermission checks if a distributor has permission to access a city
 func CheckPermission(cities []models.City, DistributorsList []models.Distributor, distName string) (bool, error) {
 	var id int
 	for i, distributor := range DistributorsList {
@@ -235,6 +241,7 @@ func CheckPermission(cities []models.City, DistributorsList []models.Distributor
 	return false, nil
 }
 
+// DistributorNetwork creates a network between distributors
 func DistributorNetwork(DistributorsList *[]models.Distributor) {
 	fmt.Println("")
 	fmt.Println("### Create a network between Distributors ###")
