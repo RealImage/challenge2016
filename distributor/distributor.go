@@ -3,16 +3,20 @@ package distributor
 import "strings"
 
 type Distributor struct {
-	included        map[string]bool
-	excluded        map[string]bool
-	subDistributors []*Distributor
+	included             map[string]bool
+	excluded             map[string]bool
+	subDistributors      []*Distributor
+	subDistributorsCount int
 }
 
 // NewDistributor Constructor for Distributor class
-func NewDistributor(included []string, excluded []string) *Distributor {
+func NewDistributor(included, excluded []string, subDistributors []*Distributor,
+	subDistributorsCount int) *Distributor {
 	distributor := &Distributor{
-		included: make(map[string]bool),
-		excluded: make(map[string]bool),
+		included:             make(map[string]bool),
+		excluded:             make(map[string]bool),
+		subDistributors:      subDistributors,
+		subDistributorsCount: subDistributorsCount,
 	}
 
 	// Add included regions
@@ -26,6 +30,14 @@ func NewDistributor(included []string, excluded []string) *Distributor {
 	}
 
 	return distributor
+}
+
+func (d *Distributor) GetIncludedRegion() map[string]bool {
+	return d.included
+}
+
+func (d *Distributor) GetExcludedRegion() map[string]bool {
+	return d.excluded
 }
 
 // AddIncludedRegion Define methods to add or remove regions from the permissions
@@ -45,10 +57,16 @@ func (d *Distributor) RemoveExcludedRegion(region string) {
 	delete(d.excluded, region)
 }
 
-func (d *Distributor) AddSubDistributor(included, excluded []string) {
-	newSubDistributor := NewDistributor(included, excluded)
+func (d *Distributor) AddSubDistributor(included, excluded []string, subDistributors []*Distributor,
+	subDistributorsCount int) *Distributor {
+
+	newSubDistributor := NewDistributor(included, excluded, subDistributors, subDistributorsCount)
 	d.subDistributors = append(d.subDistributors, newSubDistributor)
-	return
+	return newSubDistributor
+}
+
+func (d *Distributor) GetSubDistributorsCount() int {
+	return d.subDistributorsCount
 }
 
 // HasPermission Define a method to check if a given region is included or excluded
