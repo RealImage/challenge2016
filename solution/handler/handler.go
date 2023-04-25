@@ -6,7 +6,6 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"unicode"
@@ -42,15 +41,6 @@ func ReadCitiesCSV(filename string) []models.City {
 	return cities
 }
 
-func GetMainMenu() {
-	fmt.Println("1. Add Distributor with Permission")
-	fmt.Println("2. List all Distributors")
-	fmt.Println("3. Check Distributor from the distributor list")
-	fmt.Println("4. Check Permission for a Distributor")
-	fmt.Println("5. Main Menu")
-	fmt.Println("6. Exit")
-}
-
 func RemoveSpace(s string) string {
 	rr := make([]rune, 0, len(s))
 	for _, r := range s {
@@ -65,16 +55,17 @@ func RemoveSpace(s string) string {
 func AddDistributor(id *int, DistributorsList *[]models.Distributor) {
 	*id++
 	var name string
-	fmt.Println("Enter Distributor Name: ")
+	fmt.Println("")
+	fmt.Println("->Enter Distributor Name: ")
 	fmt.Scanln(&name)
 	var distributor models.Distributor
 	distributor.ID = *id
 	distributor.Name = name
 	*DistributorsList = append(*DistributorsList, distributor)
-	fmt.Println("Add Permissions for ", distributor.Name)
+	fmt.Println("->Now Add Permissions for ", distributor.Name)
 	for {
 		var permission string
-		fmt.Println("Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu")
+		fmt.Println("Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu | Ex: INCLUDE: INDIA or EXCLUDE: KARNATAKA-INDIA")
 		// Permissions for DISTRIBUTOR1
 		// INCLUDE: INDIA
 		// INCLUDE: UNITEDSTATES
@@ -99,7 +90,7 @@ func AddDistributor(id *int, DistributorsList *[]models.Distributor) {
 		case "EXCLUDE":
 			distributor.Exclude = append(distributor.Exclude, sufix)
 		default:
-			fmt.Println("Invalid Choice")
+			fmt.Println("Invalid Choice, Try Again!")
 		}
 	}
 }
@@ -107,26 +98,37 @@ func AddDistributor(id *int, DistributorsList *[]models.Distributor) {
 func PrintDistList(DistributorsList *[]models.Distributor) {
 	fmt.Println("Distributor List: ")
 	for _, distributor := range *DistributorsList {
-		fmt.Println(distributor.ID, distributor.Name)
+		fmt.Println(distributor.ID, ") "+distributor.Name+" has permission to access: ")
+		fmt.Println("INCLUDE: " + strings.Join(distributor.Include, ", "))
+		fmt.Println("EXCLUDE: " + strings.Join(distributor.Exclude, ", "))
+		fmt.Println("Distribution Parent: " + distributor.Parent)
+		fmt.Println("Distribution Children: " + distributor.Child)
+		fmt.Println("")
 	}
 }
 
 func CheckDistributorPermission(cities *[]models.City, DistributorsList *[]models.Distributor) {
 
 	fmt.Println("Check Permission for a Distributor")
-	var name string
-	fmt.Println("Enter Distributor Name: ")
-	fmt.Scanln(&name)
-	ans, err := CheckPermission(*cities, *DistributorsList, name)
-	if err != nil {
-		fmt.Println(err)
-	}
-	if ans {
-		fmt.Println("YES")
-		fmt.Println("Distributor: ", name, " has permission!")
-	} else {
-		fmt.Println("NO")
-		fmt.Println("Distributor: ", name, " doesn't has permission!")
+	for {
+		var name string
+		fmt.Println("Enter Distributor Name: or press 4 for Main menu")
+		fmt.Scanln(&name)
+
+		if name == "4" {
+			break
+		}
+		ans, err := CheckPermission(*cities, *DistributorsList, name)
+		if err != nil {
+			fmt.Println(err)
+		}
+		if ans {
+			fmt.Println("YES")
+			fmt.Println("Distributor: ", name, " has permission!")
+		} else {
+			fmt.Println("NO")
+			fmt.Println("Distributor: ", name, " doesn't has permission!")
+		}
 	}
 }
 
@@ -144,7 +146,7 @@ func CheckPermission(cities []models.City, DistributorsList []models.Distributor
 		return false, errors.New("Distributor not found")
 	}
 
-	fmt.Println("Make a entry for the city you want to check: ")
+	fmt.Println("-> Make a entry for the city you want to check: | ex: INDIA, FRANCE, KARNATKA-INDIA, etc...")
 	// City Code,Province Code,Country Code,City Name,Province Name,Country Name
 	// format -> CITY-PROVINCECODE-COUNTRYCODE-CITYNAME-PROVINCENAME-COUNTRYNAME
 	scanner := bufio.NewScanner(os.Stdin)
@@ -158,7 +160,7 @@ func CheckPermission(cities []models.City, DistributorsList []models.Distributor
 	}
 
 	if len(data) == 1 {
-		log.Println("Checking for Country")
+		fmt.Println("Checking for Country")
 		for _, city := range cities {
 			city.CountryName = RemoveSpace(city.CountryName)
 			data[0] = RemoveSpace(data[0])
@@ -180,7 +182,7 @@ func CheckPermission(cities []models.City, DistributorsList []models.Distributor
 			}
 		}
 	} else if len(data) == 2 {
-		log.Println("Checking for ProvinceName & CountryName")
+		fmt.Println("Checking for ProvinceName & CountryName")
 		for _, city := range cities {
 			city.ProvinceName = RemoveSpace(city.ProvinceName)
 			city.CountryName = RemoveSpace(city.CountryName)
@@ -204,7 +206,7 @@ func CheckPermission(cities []models.City, DistributorsList []models.Distributor
 			}
 		}
 	} else if len(data) == 3 {
-		log.Println("Checking for CityName, ProvinceName & CountryName")
+		fmt.Println("Checking for CityName, ProvinceName & CountryName")
 		for _, city := range cities {
 			city.CityName = RemoveSpace(city.CityName)
 			city.ProvinceName = RemoveSpace(city.ProvinceName)
@@ -231,4 +233,53 @@ func CheckPermission(cities []models.City, DistributorsList []models.Distributor
 		}
 	}
 	return false, nil
+}
+
+func DistributorNetwork(DistributorsList *[]models.Distributor) {
+	fmt.Println("")
+	fmt.Println("### Create a network between Distributors ###")
+	fmt.Println("-> Enter the name of the Distributors which you want to connect in this FORMAT: childDistributor<-parentDistributor | ex : Dist2<-Dist1")
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	name := scanner.Text()
+
+	// Split the input into parent and child distributors
+	var parentName, childName string
+	if strings.Contains(name, "<-") {
+		data := strings.Split(name, "<-")
+		parentName = strings.TrimSpace(data[1])
+		childName = strings.TrimSpace(data[0])
+	} else {
+		fmt.Println("Invalid Format")
+		return
+	}
+
+	// Find the parent and child distributors in the list
+	var parentDistributor, childDistributor *models.Distributor
+	for i := range *DistributorsList {
+		d := &(*DistributorsList)[i]
+		if d.Name == parentName {
+			parentDistributor = d
+		}
+		if d.Name == childName {
+			childDistributor = d
+		}
+	}
+
+	// If either the parent or child distributors couldn't be found, return an error
+	if parentDistributor == nil {
+		fmt.Println("Parent distributor not found")
+		return
+	}
+	if childDistributor == nil {
+		fmt.Println("Child distributor not found")
+		return
+	}
+
+	childDistributor.Include = append(childDistributor.Include, parentDistributor.Include...)
+	childDistributor.Exclude = append(childDistributor.Exclude, parentDistributor.Exclude...)
+	childDistributor.Parent = parentDistributor.Name
+	parentDistributor.Child = childDistributor.Name
+	fmt.Println("")
+	fmt.Printf("Added network connection between %s and %s\n", parentDistributor.Name, childDistributor.Name)
 }

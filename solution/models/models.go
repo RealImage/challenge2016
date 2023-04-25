@@ -22,4 +22,6 @@ type Distributor struct {
 	Name    string   `json:"name" avro:"name"`
 	Include []string `json:"includes" avro:"includes"`
 	Exclude []string `json:"excludes" avro:"excludes"`
+	Parent  string   `json:"parent" avro:"parent"`
+	Child   string   `json:"child" avro:"child"`
 }
