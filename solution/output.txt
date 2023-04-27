@@ -1,0 +1,186 @@
+$ go run main.go
+Loading cities from CSV file...
+#############################|Real Image Challenge CLI TOOL|#############################
+#############################|Author: Yash Chauhan|#############################
+
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+1
+
+#### ADDING A DISTRIBUTOR WITH PERMISSIONS ####
+
+->Enter Distributor Name:
+Dist1
+->Now Add Permissions for  Dist1
+Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu | Ex: INCLUDE: INDIA or EXCLUDE: KARNATAKA-INDIA
+INCLUDE: INDIA
+Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu | Ex: INCLUDE: INDIA or EXCLUDE: KARNATAKA-INDIA
+EXCLUDE: UNITEDSTATES
+Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu | Ex: INCLUDE: INDIA or EXCLUDE: KARNATAKA-INDIA
+4
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+1
+
+#### ADDING A DISTRIBUTOR WITH PERMISSIONS ####
+
+->Enter Distributor Name:
+Dist2
+->Now Add Permissions for  Dist2
+Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu | Ex: INCLUDE: INDIA or EXCLUDE: KARNATAKA-INDIA
+INCLUDE: FRANCE
+Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu | Ex: INCLUDE: INDIA or EXCLUDE: KARNATAKA-INDIA
+EXCLUDE: GERMANY
+Enter permission(INCLUDE/EXCLUDE): REGION or press 4 for Main menu | Ex: INCLUDE: INDIA or EXCLUDE: KARNATAKA-INDIA
+4
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+2
+
+#### PRINTING THE DISTRIBUTOR LIST ####
+Distributor List:
+1 ) Dist1 has permission to access:
+INCLUDE: INDIA
+EXCLUDE: UNITEDSTATES
+Distribution Parent:
+Distribution Children:
+
+2 ) Dist2 has permission to access:
+INCLUDE: FRANCE
+EXCLUDE: GERMANY
+Distribution Parent:
+Distribution Children:
+
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+3
+
+#### CHECKING THE DISTRIBUTOR PERMISSIONS ####
+Check Permission for a Distributor
+Enter Distributor Name: or press 4 for Main menu
+Dist1
+-> Make a entry for the city you want to check: | ex: INDIA, FRANCE, KARNATKA-INDIA, etc...
+FRANCE
+Checking for Country
+NO
+Distributor:  Dist1  doesn't has permission!
+Enter Distributor Name: or press 4 for Main menu
+Dist1
+-> Make a entry for the city you want to check: | ex: INDIA, FRANCE, KARNATKA-INDIA, etc...
+INDIA
+Checking for Country
+YES
+Distributor:  Dist1  has permission!
+Enter Distributor Name: or press 4 for Main menu
+4
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+4
+
+#### CREATING THE NETWORK OF DISTRIBUTORS ####
+
+### Create a network between Distributors ###
+-> Enter the name of the Distributors which you want to connect in this FORMAT: childDistributor<-parentDistributor | ex : Dist2<-Dist1
+Dist2<-Dist1
+
+Added network connection between Dist1 and Dist2
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+2
+
+#### PRINTING THE DISTRIBUTOR LIST ####
+Distributor List:
+1 ) Dist1 has permission to access:
+INCLUDE: INDIA
+EXCLUDE: UNITEDSTATES
+Distribution Parent:
+Distribution Children: Dist2
+
+2 ) Dist2 has permission to access:
+INCLUDE: FRANCE, INDIA
+EXCLUDE: GERMANY, UNITEDSTATES
+Distribution Parent: Dist1
+Distribution Children:
+
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+3
+
+#### CHECKING THE DISTRIBUTOR PERMISSIONS ####
+Check Permission for a Distributor
+Enter Distributor Name: or press 4 for Main menu
+Dist2
+-> Make a entry for the city you want to check: | ex: INDIA, FRANCE, KARNATKA-INDIA, etc...
+INDIA
+Checking for Country
+YES
+Distributor:  Dist2  has permission!
+Enter Distributor Name: or press 4 for Main menu
+Dist1
+-> Make a entry for the city you want to check: | ex: INDIA, FRANCE, KARNATKA-INDIA, etc...
+FRANCE
+Checking for Country
+NO
+Distributor:  Dist1  doesn't has permission!
+Enter Distributor Name: or press 4 for Main menu
+4
+######## MAIN MENU ########
+
+1. Add Distributor with Permission
+2. List all Distributors
+3. Check Permission for a Distributor
+4. Create a Network of Distributors
+5. Back to the Main Menu
+6. Exit
+
+6
+Exiting from the CLI Tool
