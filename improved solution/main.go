@@ -72,7 +72,7 @@ func main() {
 			fmt.Println("")
 			fmt.Println("#### CREATING THE NETWORK OF DISTRIBUTORS ####")
 			//@TODO: Working on this
-			// handler.DistributorNetwork(&DistributorsList)
+			Distributor.CreateSubDistributorNetwork()
 		case 5:
 			// Get back to the main menu
 			fmt.Println("")

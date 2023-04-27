@@ -20,6 +20,7 @@ type DistributorInterface interface {
 	SetInclude(sufix string, id int)
 	SetExclude(sufix string, id int)
 	VerifyQuery(query string) bool
+	CreateSubDistributorNetwork()
 }
 
 type DistributorsModel struct {
@@ -55,9 +56,9 @@ func (d *DistributorsModel) LoadCitiesFromCSV(filename string) (bool, error) {
 			break
 		}
 
-		country := utils.RemoveSpace(row[5])
-		province := utils.RemoveSpace(row[4])
-		city := utils.RemoveSpace(row[3])
+		country := row[5]
+		province := row[4]
+		city := row[3]
 
 		if _, ok := d.CountryStateMap[country]; !ok {
 			d.CountryStateMap[country] = make([]string, 0)
@@ -85,7 +86,6 @@ func (d *DistributorsModel) AddDistributor(id *int) {
 	fmt.Println("")
 	fmt.Println("->Enter Distributor Name: ")
 	fmt.Scanln(&name)
-	name = utils.RemoveSpace(name)
 	d.CurrentDistributor.ID = *id
 	d.CurrentDistributor.Name = name
 	d.Distributors = append(d.Distributors, d.CurrentDistributor)
@@ -120,10 +120,25 @@ func (d *DistributorsModel) AddDistributor(id *int) {
 func (d *DistributorsModel) ListDistributors() {
 	fmt.Println("->Distributor List: ")
 	for _, distributor := range d.Distributors {
-		fmt.Println(distributor.ID, ") "+distributor.Name+" has permission to access: ")
-		fmt.Println("Permitted States: " + strings.Join(distributor.PermittedPlaces, ", "))
-		fmt.Println("Distribution Parent: " + distributor.Parent)
-		fmt.Println("Distribution Children: " + distributor.Child)
+		fmt.Println("-> ", distributor.ID, ") "+distributor.Name+" has permission to access: ")
+		fmt.Println("Permitted Places: ", len(distributor.PermittedPlaces))
+		if distributor.SubDistributor {
+			fmt.Println("Sub Distributor: YES")
+		} else {
+			fmt.Println("Sub Distributor: NO")
+		}
+
+		if distributor.Parent != "" {
+			fmt.Println("Parent: " + distributor.Parent)
+		} else {
+			fmt.Println("Parent: NONE")
+		}
+
+		if len(distributor.Child) > 0 {
+			fmt.Println("Children: " + strings.Join(distributor.Child, ","))
+		} else {
+			fmt.Println("Children: NONE")
+		}
 		fmt.Println("")
 	}
 }
@@ -139,7 +154,6 @@ func (d *DistributorsModel) CheckPermission() {
 			break
 		}
 
-		name = utils.RemoveSpace(name)
 		for _, dist := range d.Distributors {
 			if dist.Name == name {
 				d.CurrentDistributor = dist
@@ -154,7 +168,6 @@ func (d *DistributorsModel) CheckPermission() {
 		fmt.Println("->Enter your query to check permission: ")
 		var query string
 		fmt.Scanln(&query)
-		query = utils.RemoveSpace(query)
 
 		ans := d.VerifyQuery(query)
 		if ans {
@@ -295,4 +308,60 @@ func (d *DistributorsModel) SetExclude(exclude string, id int) {
 	}
 
 	d.Distributors[id].PermittedPlaces = d.CurrentDistributor.PermittedPlaces
+}
+
+func (d *DistributorsModel) CreateSubDistributorNetwork() {
+
+	for {
+
+		fmt.Println("-> Your are currently in the Distributor Network Creation Mode")
+		fmt.Println("-> Create Sub Distributor")
+		fmt.Println("-> Enter Name of the Sub Distributor: or press 'q' to exit")
+
+		var name string
+		fmt.Scanln(&name)
+
+		if name == "q" {
+			break
+		}
+
+		d.CurrentDistributor = models.Distributor{
+			ID:              len(d.Distributors),
+			Name:            name,
+			SubDistributor:  true,
+			PermittedPlaces: d.Distributors[len(d.Distributors)-1].PermittedPlaces,
+		}
+
+		fmt.Println("")
+		fmt.Println("### Create a network between Distributors ###")
+		fmt.Println("-> Enter the name of the Distributors which you want to connect in this FORMAT: childDistributor<-parentDistributor | ex : Dist2<-Dist1")
+		scanner := bufio.NewScanner(os.Stdin)
+		scanner.Scan()
+		name2 := scanner.Text()
+
+		if name == "q" {
+			break
+		}
+
+		// Split the input into parent and child distributors
+		var parentName, childName string
+		if strings.Contains(name2, "<-") {
+			data := strings.Split(name2, "<-")
+			parentName = strings.TrimSpace(data[1])
+			childName = strings.TrimSpace(data[0])
+		} else {
+			fmt.Println("Invalid Format")
+			return
+		}
+
+		d.CurrentDistributor.Parent = parentName
+		d.Distributors = append(d.Distributors, d.CurrentDistributor)
+
+		// Check if the parent distributor exists
+		d.Distributors[len(d.Distributors)-1].Child = append(d.Distributors[len(d.Distributors)-1].Child, childName)
+		d.Distributors[len(d.Distributors)-1].SubDistributor = true
+
+		fmt.Println("")
+		fmt.Printf("Added network connection between parent -> %s and child->  %s\n", parentName, childName)
+	}
 }
