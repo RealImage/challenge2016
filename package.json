@@ -1,0 +1,26 @@
+{
+  "name": "distributer",
+  "version": "1.0.0",
+  "description": "In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.",
+  "main": "distributer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aagrawal7/challenge2016.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aagrawal7/challenge2016/issues"
+  },
+  "homepage": "https://github.com/aagrawal7/challenge2016#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "commander": "^10.0.1",
+    "csvtojson": "^2.0.10",
+    "express": "^4.18.2",
+    "inquirer": "^9.2.0"
+  }
+}
