@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  title: Distributor API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /status:
+    get:
+      summary: Add a new distributor
+      responses:
+        "200":
+          description: OK
+  /addDistributor:
+    post:
+      summary: Add a new distributor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DistributorDetails"
+      responses:
+        "200":
+          description: Distributor added successfully
+        "400":
+          description: Invalid input
+      operationId: AddDistributor
+
+  /permission/{distributorName}:
+    get:
+      summary: Get permissions for a distributor
+      parameters:
+        - name: distributorName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DistributorDetails"
+        "400":
+          description: Bad request
+      operationId: GetPermissionsByName
+  /check-permissions:
+    post:
+      description: "check permissions"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - location
+              properties:
+                name:
+                  type: string
+                location:
+                  $ref: "#/components/schemas/Location"
+      responses:
+        "200":
+          description: YES/NO
+        "400":
+          description: Invalid input
+      operationId: CheckPermission
+components:
+  schemas:
+    DistributorDetails:
+      type: object
+      required:
+        - name
+        - parentDistributor
+        - include
+        - exclude
+      properties:
+        name:
+          type: string
+          description: Name of the distributor
+        include:
+          type: array
+          items:
+            $ref: "#/components/schemas/Location"
+            description: List of items to include
+        exclude:
+          type: array
+          items:
+            $ref: "#/components/schemas/Location"
+          description: List of items to exclude
+        parentDistributor:
+          type: string
+          description: parent distributor
+    Location:
+      type: object
+      required:
+        - "city"
+        - "province"
+        - "country"
+      properties:
+        city:
+          type: string
+        province:
+          type: string
+        country:
+          type: string

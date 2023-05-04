@@ -1,0 +1,6 @@
+package: app
+generate:
+  chi-server: false
+  client: false
+  models: true
+  embedded-spec: false
