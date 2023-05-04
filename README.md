@@ -1,41 +1,33 @@
 # Real Image Challenge 2016
 
-In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
+This program checks if a given city is allowed to be distributed to by a distributor or not.
 
-Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
-```
-Permissions for DISTRIBUTOR1
-INCLUDE: INDIA
-INCLUDE: UNITEDSTATES
-EXCLUDE: KARNATAKA-INDIA
-EXCLUDE: CHENNAI-TAMILNADU-INDIA
-```
-This allows `DISTRIBUTOR1` to distribute in any city inside the United States and India, *except* cities in the state of Karnataka (in India) and the city of Chennai (in Tamil Nadu, India).
+To get started with this program, follow these steps:
 
-At this point, asking your program if `DISTRIBUTOR1` has permission to distribute in `CHICAGO-ILLINOIS-UNITEDSTATES` should get `YES` as the answer, and asking if distribution can happen in `CHENNAI-TAMILNADU-INDIA` should of course be `NO`. Asking if distribution is possible in `BANGALORE-KARNATAKA-INDIA` should also be `NO`, because the whole state of Karnataka has been excluded.
+# Usage
+When prompted, enter distributor permissions in the following format:
 
-Sometimes, a distributor might split the work of distribution amount smaller sub-distiributors inside their authorized geographies. For instance, `DISTRIBUTOR1` might assign the following permissions to `DISTRIBUTOR2`:
+INCLUDE: <country_code> - allows distribution in the specified country
+EXCLUDE: <state_code>-<country_code> - disallows distribution in the specified state of the specified country
 
-```
-Permissions for DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: INDIA
-EXCLUDE: TAMILNADU-INDIA
-```
-Now, `DISTRIBUTOR2` can distribute the movie anywhere in `INDIA`, except inside `TAMILNADU-INDIA` and `KARNATAKA-INDIA` - `DISTRIBUTOR2`'s permissions are always a subset of `DISTRIBUTOR1`'s permissions. It's impossible/invalid for `DISTRIBUTOR2` to have `INCLUDE: CHINA`, for example, because `DISTRIBUTOR1` isn't authorized to do that in the first place. 
+For example, you can try the following as input.
 
-If `DISTRIBUTOR2` authorizes `DISTRIBUTOR3` to handle just the city of Hubli, Karnataka, India, for example:
-```
-Permissions for DISTRIBUTOR3 < DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: HUBLI-KARNATAKA-INDIA
-```
-Again, `DISTRIBUTOR2` cannot authorize `DISTRIBUTOR3` with a region that they themselves do not have access to. 
+Enter the distributor permissions:
+INCLUDE: IN
+EXCLUDE: TN-IN
+EXCLUDE: KA-IN
 
-We've provided a CSV with the list of all countries, states and cities in the world that we know of - please use the data mentioned there for this program. *The codes you see there may be different from what you see here, so please always use the codes in the CSV*. This Readme is only an example. 
+Enter city:VISAKHAPATNAM-AP-IN
 
-Write a program in any language you want (If you're here from Gophercon, use Go :D) that does this. Feel free to make your own input and output format / command line tool / GUI / Webservice / whatever you want. Feel free to hold the dataset in whatever structure you want, but try not to use external databases - as far as possible stick to your langauage without bringing in MySQL/Postgres/MongoDB/Redis/Etc.
+When prompted, enter the city name, state code, and country code to check if it is allowed for distribution
+The program will output either "YES" or "NO" .
+This program uses data from the cities.csv file to check if a city is allowed or not.
 
-To submit a solution, fork this repo and send a Pull Request on Github. 
+This program checks distributor permissions in the following way:
 
-For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
+If the distributor has not included the country in their permissions, the city is not allowed.
+If the distributor has excluded the state in the country from their permissions, the city is not allowed.
+If the city is not in the database for the specified country and state, the city is not allowed.
+
 
 
