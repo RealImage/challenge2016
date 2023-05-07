@@ -1,6 +1,6 @@
 module distribution-mgmnt
 
-go 1.19
+go 1.18
 
 require (
 	github.com/deepmap/oapi-codegen v1.12.4

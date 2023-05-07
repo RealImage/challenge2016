@@ -9,63 +9,71 @@ import (
 var DistributorMgmntDB *DistributionMaps
 
 type DistributionMaps struct {
-	CityMap     map[string]string
-	ProvinceMap map[string]string
-	CountryMap  map[string]map[string][]string
+	CityMap     map[string]app.Location
+	ProvinceMap map[string]app.Location
+	CountryMap  map[string]map[string][]app.Location
 	Distributor map[string]app.DistributorDetails
 	mu          sync.Mutex
 }
 
 func NewDistributionMaps() *DistributionMaps {
 	return &DistributionMaps{
-		CityMap:     make(map[string]string),
-		ProvinceMap: make(map[string]string),
-		CountryMap:  make(map[string]map[string][]string),
+		CityMap:     make(map[string]app.Location),
+		ProvinceMap: make(map[string]app.Location),
+		CountryMap:  make(map[string]map[string][]app.Location),
 		Distributor: make(map[string]app.DistributorDetails),
 		mu:          sync.Mutex{},
 	}
 }
 
-func (d *DistributionMaps) SetCityMap(city, province string) {
+func (d *DistributionMaps) SetCityMap(locs []app.Location, wg *sync.WaitGroup) {
 	d.mu.Lock()
-
-	d.CityMap[strings.ToUpper(city)] = strings.ToUpper(province)
+	for _, loc := range locs {
+		d.CityMap[strings.ToUpper(loc.City)] = loc
+	}
 	d.mu.Unlock()
+	wg.Done()
 }
-func (d *DistributionMaps) GetProvinceFromCityMap(city string) (string, bool) {
+func (d *DistributionMaps) GetProvinceFromCityMap(city string) (app.Location, bool) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	res, ok := d.CityMap[strings.ToUpper(city)]
 	return res, ok
 }
-func (d *DistributionMaps) SetProvinceMap(province, country string) {
+func (d *DistributionMaps) SetProvinceMap(locs []app.Location, wg *sync.WaitGroup) {
 	d.mu.Lock()
-	d.ProvinceMap[strings.ToUpper(province)] = strings.ToUpper(country)
+	for _, loc := range locs {
+		d.ProvinceMap[strings.ToUpper(loc.Province)] = loc
+	}
 	d.mu.Unlock()
+	wg.Done()
 }
-func (d *DistributionMaps) GetCountryFromProvinceMap(province string) (string, bool) {
+func (d *DistributionMaps) GetCountryFromProvinceMap(province string) (app.Location, bool) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	res, ok := d.ProvinceMap[strings.ToUpper(province)]
 	return res, ok
 }
 
-func (d *DistributionMaps) SetCountryMap(city, province, country string) {
+func (d *DistributionMaps) SetCountryMap(locs []app.Location, wg *sync.WaitGroup) {
 	d.mu.Lock()
-	if d.CountryMap == nil {
-		d.CountryMap = make(map[string]map[string][]string)
+	for _, loc := range locs {
+		if d.CountryMap == nil {
+			d.CountryMap = make(map[string]map[string][]app.Location)
+		}
+		if d.CountryMap[strings.ToUpper(loc.Country)] == nil {
+			d.CountryMap[strings.ToUpper(loc.Country)] = make(map[string][]app.Location)
+		}
+		if d.CountryMap[strings.ToUpper(loc.Country)][strings.ToUpper(loc.Province)] == nil {
+			d.CountryMap[strings.ToUpper(loc.Country)][strings.ToUpper(loc.Province)] = make([]app.Location, 0)
+		}
+		d.CountryMap[strings.ToUpper(loc.Country)][strings.ToUpper(loc.Province)] = append(d.CountryMap[strings.ToUpper(loc.Country)][strings.ToUpper(loc.Province)], loc)
 	}
-	if d.CountryMap[strings.ToUpper(country)] == nil {
-		d.CountryMap[strings.ToUpper(country)] = make(map[string][]string)
-	}
-	if d.CountryMap[strings.ToUpper(country)][strings.ToUpper(province)] == nil {
-		d.CountryMap[strings.ToUpper(country)][strings.ToUpper(province)] = make([]string, 0)
-	}
-	d.CountryMap[strings.ToUpper(country)][strings.ToUpper(province)] = append(d.CountryMap[strings.ToUpper(country)][strings.ToUpper(province)], strings.ToUpper(city))
 	d.mu.Unlock()
+	wg.Done()
 }
 
-func (d *DistributionMaps) GetLocationFromCountryMap(country string) (map[string][]string, bool) {
+func (d *DistributionMaps) GetLocationFromCountryMap(country string) (map[string][]app.Location, bool) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	res, ok := d.CountryMap[strings.ToUpper(country)]

@@ -9,6 +9,7 @@ import (
 const (
 	NO  = "NO"
 	YES = "YES"
+	ALL = "ALL"
 )
 
 func SaveAddDistributor(md *app.DistributorDetails) bool {
@@ -53,10 +54,6 @@ func CheckPermissions(req app.CheckPermissionJSONBody) string {
 	return CheckPermission(req, loc)
 }
 func CheckPermission(req app.CheckPermissionJSONBody, loc app.DistributorDetails) string {
-	// loc, ok := cmaps.DistributorMgmntDB.GetDistributorDetails(req.Name)
-	// if !ok || strings.EqualFold(req.Location.Country, "") {
-	// 	return NO
-	// }
 	prv, isCityAvlbl := checkCity(req.Location.City)
 	_, isPrvnceAvlbl := checkProvince(req.Location.Province)
 	cntry, isCntryAvlbl := checkCntry(req.Location.Country)
@@ -73,13 +70,13 @@ func CheckPermission(req app.CheckPermissionJSONBody, loc app.DistributorDetails
 	} else if !strings.EqualFold(req.Location.City, "") && !strings.EqualFold(req.Location.Province, "") && !strings.EqualFold(req.Location.Country, "") {
 		if checkExcludeList(loc.Exclude, req.Location.Province, req.Location.City) || !isPresentInArrayStruct(loc.Include, req.Location.Country) {
 			return NO
-		} else if isPresent(cntry[req.Location.Province], req.Location.City) {
+		} else if isPresentInArrayStruct(cntry[req.Location.Province], req.Location.City) {
 			return YES
 		}
 	} else if !strings.EqualFold(req.Location.City, "") && strings.EqualFold(req.Location.Province, "") && !strings.EqualFold(req.Location.Country, "") {
 		if !isPresentInArrayStruct(loc.Include, req.Location.Country) || checkExcludeList(loc.Exclude, req.Location.Province, req.Location.City) {
 			return NO
-		} else if isPresent(cntry[prv], req.Location.City) {
+		} else if isPresentInArrayStruct(cntry[prv.Province], req.Location.City) {
 			return YES
 		}
 	} else if strings.EqualFold(req.Location.City, "") && strings.EqualFold(req.Location.Province, "") && !strings.EqualFold(req.Location.Country, "") {
@@ -142,17 +139,17 @@ func isPresentInArrayStruct(arr []app.Location, str string) bool {
 
 }
 
-func checkCity(city string) (string, bool) {
+func checkCity(city string) (app.Location, bool) {
 	res, ok := cmaps.DistributorMgmntDB.GetProvinceFromCityMap(city)
 	return res, ok
 }
 
-func checkProvince(province string) (string, bool) {
+func checkProvince(province string) (app.Location, bool) {
 	res, ok := cmaps.DistributorMgmntDB.GetCountryFromProvinceMap(province)
 	return res, ok
 }
 
-func checkCntry(cntry string) (map[string][]string, bool) {
+func checkCntry(cntry string) (map[string][]app.Location, bool) {
 	res, ok := cmaps.DistributorMgmntDB.GetLocationFromCountryMap(cntry)
 	return res, ok
 }
@@ -163,14 +160,14 @@ func compareIncludedCntryOfParent(parent, child, ex []app.Location) bool {
 		for j := 0; j < len(parent); j++ {
 			if !strings.EqualFold(child[i].City, "") {
 				prv1, _ := checkCity(child[i].City)
-				cntry1, _ := checkProvince(prv1)
+				cntry1, _ := checkProvince(prv1.Province)
 				if !strings.EqualFold(parent[i].Province, "") {
-					if strings.EqualFold(prv1, parent[i].Province) && !isPresentInArrayStruct(ex, child[i].Province) {
+					if strings.EqualFold(prv1.Province, parent[i].Province) && !isPresentInArrayStruct(ex, child[i].Province) {
 						count++
 					}
 				}
 				if !strings.EqualFold(parent[i].Country, "") {
-					if strings.EqualFold(cntry1, parent[i].Country) && !isPresentInArrayStruct(ex, child[i].City) {
+					if strings.EqualFold(cntry1.Country, parent[i].Country) && !isPresentInArrayStruct(ex, child[i].City) {
 						count++
 					}
 				}
@@ -179,7 +176,7 @@ func compareIncludedCntryOfParent(parent, child, ex []app.Location) bool {
 			if !strings.EqualFold(child[i].Province, "") {
 				cntry1, _ := checkProvince(child[i].Province)
 				if !strings.EqualFold(parent[i].Country, "") {
-					if strings.EqualFold(cntry1, parent[i].Country) && !isPresentInArrayStruct(ex, child[i].Province) {
+					if strings.EqualFold(cntry1.Country, parent[i].Country) && !isPresentInArrayStruct(ex, child[i].Province) {
 						count++
 					}
 				}
@@ -206,15 +203,15 @@ func compareExclude(prnt []app.Location, child, parentIn, childIn []app.Location
 		if !strings.EqualFold(child[i].Province, "") {
 
 			cntry, ok := checkProvince(child[i].Province)
-			if !ok || !checkExcludeList(prnt, child[i].Province, "") && (!isPresentInArrayStruct(childIn, cntry) || !isPresentInArrayStruct(parentIn, cntry)) || !strings.EqualFold(cntry, child[i].Country) {
+			if !ok || !checkExcludeList(prnt, child[i].Province, "") && (!isPresentInArrayStruct(childIn, cntry.Country) || !isPresentInArrayStruct(parentIn, cntry.Country)) || !strings.EqualFold(cntry.Country, child[i].Country) {
 				return false
 			}
 
 		}
 		if !strings.EqualFold(child[i].City, "") {
 			prv, _ := checkCity(child[i].City)
-			cntry, ok := checkProvince(prv)
-			if !ok || !checkExcludeList(prnt, "", child[i].City) && (!isPresentInArrayStruct(childIn, cntry) || !isPresentInArrayStruct(parentIn, cntry)) || !strings.EqualFold(cntry, child[i].Country) || !strings.EqualFold(cntry, child[i].Country) {
+			cntry, ok := checkProvince(prv.Province)
+			if !ok || !checkExcludeList(prnt, "", child[i].City) && (!isPresentInArrayStruct(childIn, cntry.Country) || !isPresentInArrayStruct(parentIn, cntry.Country)) || !strings.EqualFold(cntry.Country, child[i].Country) || !strings.EqualFold(cntry.Country, child[i].Country) {
 				return false
 			}
 		}
@@ -237,4 +234,29 @@ func AddAllPermissions(ParentDistributor string, isTrue bool, res app.Distributo
 	}
 	isTrue = tr
 	return AddAllPermissions(res.ParentDistributor, isTrue, res)
+}
+
+func GetaCntryDetailsBycntryName(cntryName string) (map[string]map[string][]app.Location, bool) {
+	if strings.EqualFold(cntryName, ALL) {
+		return cmaps.DistributorMgmntDB.CountryMap, true
+	}
+	cntryRes, ok := cmaps.DistributorMgmntDB.CountryMap[cntryName]
+	if !ok {
+		return nil, false
+	}
+	res := make(map[string]map[string][]app.Location)
+	res[cntryName] = cntryRes
+	return res, ok
+}
+func GetaDistributorDetailsByName(distributorName string) (map[string]app.DistributorDetails, bool) {
+	if strings.EqualFold(distributorName, ALL) {
+		return cmaps.DistributorMgmntDB.Distributor, true
+	}
+	distributorRes, ok := cmaps.DistributorMgmntDB.Distributor[distributorName]
+	if !ok {
+		return nil, false
+	}
+	res := make(map[string]app.DistributorDetails)
+	res[distributorName] = distributorRes
+	return res, ok
 }

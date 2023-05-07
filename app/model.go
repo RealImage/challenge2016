@@ -18,9 +18,12 @@ type DistributorDetails struct {
 
 // Location defines model for Location.
 type Location struct {
-	City     string `json:"city"`
-	Country  string `json:"country"`
-	Province string `json:"province"`
+	City       string `json:"city"`
+	CityCD     string `json:"cityCD"`
+	Country    string `json:"country"`
+	CountryCD  string `json:"countryCD"`
+	Province   string `json:"province"`
+	ProvinceCD string `json:"provinceCD"`
 }
 
 // CheckPermissionJSONBody defines parameters for CheckPermission.

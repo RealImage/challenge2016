@@ -28,3 +28,14 @@ func ConvertSliceOfStructToUpper(Exclude []app.Location) []app.Location {
 func RemoveSpacesAndToUpper(str string) string {
 	return strings.ReplaceAll(strings.ToUpper(strings.TrimSpace(str)), " ", "")
 }
+
+func ConvertStructToUpper(loc app.Location) app.Location {
+	return app.Location{
+		City:       RemoveSpacesAndToUpper(loc.City),
+		CityCD:     RemoveSpacesAndToUpper(loc.CityCD),
+		Country:    RemoveSpacesAndToUpper(loc.Country),
+		CountryCD:  RemoveSpacesAndToUpper(loc.CountryCD),
+		Province:   RemoveSpacesAndToUpper(loc.Province),
+		ProvinceCD: RemoveSpacesAndToUpper(loc.ProvinceCD),
+	}
+}

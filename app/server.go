@@ -19,6 +19,12 @@ type ServerInterface interface {
 
 	// (POST /check-permissions)
 	CheckPermission(c *gin.Context)
+
+	// (GET /getDistributor/{distributor-name})
+	GetDistributorDetailsByName(c *gin.Context, distributorName string)
+
+	// (GET /getall/{cntry-name})
+	GetCntryDetailsByCntryName(c *gin.Context, cntryName string)
 	// Get permissions for a distributor
 	// (GET /permission/{distributorName})
 	GetPermissionsByName(c *gin.Context, distributorName string)
@@ -54,6 +60,48 @@ func (siw *ServerInterfaceWrapper) CheckPermission(c *gin.Context) {
 	}
 
 	siw.Handler.CheckPermission(c)
+}
+
+// GetDistributorDetailsByName operation middleware
+func (siw *ServerInterfaceWrapper) GetDistributorDetailsByName(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "distributor-name" -------------
+	var distributorName string
+
+	err = runtime.BindStyledParameter("simple", false, "distributor-name", c.Param("distributor-name"), &distributorName)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter distributor-name: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+	}
+
+	siw.Handler.GetDistributorDetailsByName(c, distributorName)
+}
+
+// GetCntryDetailsByCntryName operation middleware
+func (siw *ServerInterfaceWrapper) GetCntryDetailsByCntryName(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "cntry-name" -------------
+	var cntryName string
+
+	err = runtime.BindStyledParameter("simple", false, "cntry-name", c.Param("cntry-name"), &cntryName)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter cntry-name: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+	}
+
+	siw.Handler.GetCntryDetailsByCntryName(c, cntryName)
 }
 
 // GetPermissionsByName operation middleware
@@ -119,6 +167,10 @@ func RegisterHandlersWithOptions(router *gin.Engine, si ServerInterface, options
 	router.POST(options.BaseURL+"/addDistributor", wrapper.AddDistributor)
 
 	router.POST(options.BaseURL+"/check-permissions", wrapper.CheckPermission)
+
+	router.GET(options.BaseURL+"/getDistributor/:distributor-name", wrapper.GetDistributorDetailsByName)
+
+	router.GET(options.BaseURL+"/getall/:cntry-name", wrapper.GetCntryDetailsByCntryName)
 
 	router.GET(options.BaseURL+"/permission/:distributorName", wrapper.GetPermissionsByName)
 

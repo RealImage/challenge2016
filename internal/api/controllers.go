@@ -74,3 +74,22 @@ func (dm *DistributionMgnmtServer) CheckPermission(c *gin.Context) {
 	}
 	c.AbortWithStatusJSON(http.StatusOK, svc.CheckPermissions(req))
 }
+func (dm *DistributionMgnmtServer) GetCntryDetailsByCntryName(c *gin.Context, cntryName string) {
+	log.Infoln("starting GetCntryDetailsByCntryName.. ")
+	res, ok := svc.GetaCntryDetailsBycntryName(util.RemoveSpacesAndToUpper(cntryName))
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusNotFound, cntryName+" not found")
+		return
+	}
+	c.AbortWithStatusJSON(http.StatusFound, res)
+}
+
+func (dm *DistributionMgnmtServer) GetDistributorDetailsByName(c *gin.Context, distributorName string) {
+	log.Infoln("starting GetDistributorDetailsByName.. ")
+	res, ok := svc.GetaDistributorDetailsByName(util.RemoveSpacesAndToUpper(distributorName))
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusNotFound, distributorName+" not found")
+		return
+	}
+	c.AbortWithStatusJSON(http.StatusFound, res)
+}

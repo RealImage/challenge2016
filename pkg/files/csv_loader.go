@@ -1,11 +1,13 @@
 package files
 
 import (
+	"distribution-mgmnt/app"
 	"distribution-mgmnt/pkg/cmaps"
 	"distribution-mgmnt/pkg/util"
 	"encoding/csv"
 	"io"
 	"os"
+	"sync"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -24,6 +26,7 @@ func CSVLoader(fileName string, headerNumber int) {
 	}
 	i := int32(0)
 	errRowcounter := 0
+	locs := make([]app.Location, 0)
 	for ; i < 2147483647; i++ {
 		row, err := csvReader.Read()
 		if err == io.EOF {
@@ -33,8 +36,20 @@ func CSVLoader(fileName string, headerNumber int) {
 			errRowcounter++
 			continue
 		}
-		cmaps.DistributorMgmntDB.SetCityMap(util.RemoveSpacesAndToUpper(row[3]), util.RemoveSpacesAndToUpper(row[4]))
-		cmaps.DistributorMgmntDB.SetProvinceMap(util.RemoveSpacesAndToUpper(row[4]), util.RemoveSpacesAndToUpper(row[5]))
-		cmaps.DistributorMgmntDB.SetCountryMap(util.RemoveSpacesAndToUpper(row[3]), util.RemoveSpacesAndToUpper(row[4]), util.RemoveSpacesAndToUpper(row[5]))
+		loc := util.ConvertStructToUpper(app.Location{
+			City:       row[3],
+			CityCD:     row[0],
+			Country:    row[5],
+			CountryCD:  row[2],
+			Province:   row[4],
+			ProvinceCD: row[1],
+		})
+		locs = append(locs, loc)
 	}
+	wg := sync.WaitGroup{}
+	wg.Add(3)
+	go cmaps.DistributorMgmntDB.SetCityMap(locs, &wg)
+	go cmaps.DistributorMgmntDB.SetProvinceMap(locs, &wg)
+	go cmaps.DistributorMgmntDB.SetCountryMap(locs, &wg)
+	wg.Wait()
 }
