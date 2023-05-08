@@ -38,4 +38,3 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
-

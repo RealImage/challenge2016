@@ -1,0 +1,6 @@
+package: app
+generate:
+  gin-server: true
+  client: false
+  models: false
+  embedded-spec: false

@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "8072f511-63df-40b8-ba40-c720fa2086cf",
+		"name": "distribution-Mgmnt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "d1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hcmVuZHJhLnllamFybGEuZ2l0QGdtYWlsLmNvbSIsImV4cCI6MTY3OTY3NjU2NH0.I9RHO-VyjlU8K7e_zxgc4LzCfnGWG98fx9vuCsDGdSw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\r\n//     \"name\":\"d1\",\r\n//     \"include\":[\"India\",\"United States\",\"Italy\"],\r\n//     \"exclude\":[\r\n//         {\r\n//         \"city\":\"\",\r\n//         \"province\":\"Karnataka\",\r\n//         \"country\":\"India\"   \r\n//         },{\r\n//             \"city\":\"Chennai\",\r\n//         \"province\":\"Tamil Nadu\",\r\n//         \"country\":\"India\"    \r\n//         }\r\n//     ],\r\n//     \"parentDistributor\":\"\"\r\n// }\r\n\r\n\r\n{\r\n    \"name\":\"d1\",\r\n    \"include\":[\"India\",\"United States\"],\r\n    \"exclude\":[\r\n        {\r\n        \"city\":\"\",\r\n        \"province\":\"Karnataka\",\r\n        \"country\":\"India\"   \r\n        },{\r\n            \"city\":\"Chennai\",\r\n        \"province\":\"Tamil Nadu\",\r\n        \"country\":\"India\"    \r\n        }\r\n    ],\r\n    \"parentDistributor\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/addDistributor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addDistributor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "d2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"d2\",\r\n    \"include\":[\r\n         {\r\n        \"city\":\"\",\r\n        \"province\":\"\",\r\n        \"country\":\"India\"   \r\n        } ],\r\n    \"exclude\":[\r\n       {\r\n            \"city\":\"\",\r\n        \"province\":\"Tamil Nadu\",\r\n        \"country\":\"India\"    \r\n        }\r\n    ],\r\n    \"parentDistributor\":\"d1\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/addDistributor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addDistributor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "d3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"d3\",\r\n    \"include\":[\r\n        \r\n         {\r\n        \"city\":\"HUBLI\",\r\n        \"province\":\"KARNATAKA\",\r\n        \"country\":\"India\"   \r\n        }\r\n    ],\r\n   \r\n    \"parentDistributor\":\"d2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/addDistributor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addDistributor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/status",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPermsByName",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/permission/d2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"permission",
+						"d2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkPermissions",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"d2\",\r\n    \"location\":   {\r\n            \"city\":\"\",\r\n        \"province\":\"KARNATAKA\",\r\n        \"country\":\"INDIA\"\r\n         \r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/check-permissions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"check-permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCntryByName",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "getDistributorByName",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/getDistributor/distributor1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getDistributor",
+						"distributor1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
