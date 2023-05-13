@@ -1,0 +1,18 @@
+Work flow
+---------
+
+1. Can add Disributuer.
+		->Enter name
+		-> Can also add the permissions
+2. Can add Permissions to Distributer or Sub distributer.
+		-> On adding permission can choose 1. include or 2. exclude
+		-> While adding the place it should be asked in the order of country,state city.
+		-> To skip the question just type enter or type nil
+3. Can check the permissions of Distributer or Sub distributer.
+		-> Just type the name
+		-> Then select the seach by condition. 1. city or 2. state or 3. country
+		-> Eg: if you wanna check if distributer have permission to distribute in kollam-kerala-india. you just 	enter the place, that is kollam.
+4. Can add Sub distributer(Have only done 1 level of sub distributers)
+		-> ENter parent Distributer's name
+		-> Then enter sub distributer name
+		-> can check the permmission or to add permission can choose step 2 and 3 
