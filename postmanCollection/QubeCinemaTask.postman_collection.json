@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "c6f6fcd6-83c6-4abc-8800-ea7142689ae0",
+		"name": "QubeCinemaTask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15514419"
+	},
+	"item": [
+		{
+			"name": "Add Distributor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"distributor1\",\n    \"include\": [\n        {\n            \"country\":\"India\"\n        },{\n            \"country\":\"United States\"\n        }\n    ],\n    \"exclude\": [\n        {\n            \"province\":\"KARNATAKA\",\n            \"country\":\"India\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/addDistributor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addDistributor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Sub Distributor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"distributor2\",\n   \"include\": [\n        {\n            \"country\":\"India\"\n        }\n    ],\n    \"exclude\": [\n        {\n            \"province\":\"Tamil Nadu\",\n            \"country\":\"India\"\n        }\n    ],\n    \"parentDistributor\":\"distributor1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/addDistributor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addDistributor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Distributor Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/getDistributor?distributor=distributor1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getDistributor"
+					],
+					"query": [
+						{
+							"key": "distributor",
+							"value": "distributor1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Permission",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distributorName\":\"distributor2\",\n    \"loc\":{\n        \"city\":\"Bengaluru\",\n        \"province\":\"Karnataka\",\n        \"country\":\"India\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/checkPermission",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"checkPermission"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
