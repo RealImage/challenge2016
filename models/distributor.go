@@ -16,3 +16,8 @@ type Location struct{
 	Country string `json:"country"`
 	CountryCode string `json:"countryCode"`
 }
+
+type CheckPermission struct{
+	DistributorName *string `json:"distributorName"`
+	Loc *Location           `json:"loc"`
+}

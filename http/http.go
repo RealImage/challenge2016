@@ -2,22 +2,20 @@ package http
 
 import (
 	"log"
+	httpPkg "net/http"
 
-	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/challenge2016/models"
 	"github.com/challenge2016/service"
 	"github.com/gin-gonic/gin"
-
 )
 
 type http struct{
-	dMap *models.DistributionMaps
 	svc service.Service
 }
 
-func NewHTTP(dMap *models.DistributionMaps) *http{
+func NewHTTP(svc service.Service) *http{
 	return &http{
-		dMap: dMap,
+		svc: svc,
 	}
 }
 
@@ -30,7 +28,66 @@ func (h *http) AddDistributor(ctx *gin.Context) {
 		return
 	}
 
-	log.Println(awsutil.Prettify(distributor))
+	// log.Println(awsutil.Prettify(distributor))
 
-	h.svc.AddDistributor(ctx,&distributor)
+	response,err := h.svc.AddDistributor(ctx,&distributor)
+	if err != nil{
+		ctx.JSON(httpPkg.StatusBadRequest,gin.H{
+			"error":err.Error(),
+		})
+
+		return
+	}
+
+	ctx.Status(httpPkg.StatusCreated)
+
+	ctx.JSON(httpPkg.StatusCreated,response)
+}
+
+func (h *http) GetDistributorByName(ctx *gin.Context) {
+	distributorName := ctx.Query("distributor")
+
+	distributor,err := h.svc.GetDistributorByName(ctx,&distributorName)
+	if err != nil && err.Error() == "entity not found"{
+		ctx.JSON(httpPkg.StatusNotFound,gin.H{
+			"error": "distributor not found",
+		})
+
+		return
+	}
+
+	if err != nil{
+		ctx.JSON(httpPkg.StatusNotFound,gin.H{
+			"error": err.Error(),
+		})
+
+		return
+	}
+
+	ctx.JSON(httpPkg.StatusAccepted,distributor)
+
+	return
+}
+
+func (h *http) CheckDistributorPermission(ctx *gin.Context){
+	var checkPermission models.CheckPermission
+	
+	err := ctx.ShouldBindJSON(&checkPermission)
+	if err != nil{
+		log.Println(err)
+		return
+	}
+
+	isAllowed := h.svc.CheckDistributorPermission(ctx,checkPermission)
+	if !isAllowed{
+		ctx.JSON(httpPkg.StatusBadRequest,gin.H{
+			"message": "no",
+		})
+
+		return
+	}
+
+	ctx.JSON(httpPkg.StatusAccepted,gin.H{
+		"message": "yes",
+	})	
 }
