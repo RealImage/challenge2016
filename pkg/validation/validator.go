@@ -43,7 +43,6 @@ func (v *Validation) CustomValidationError(sourceStruct interface{}, err error) 
 		for _, e := range err.(validator.ValidationErrors) {
 			errMap := make(map[string]string)
 			key := e.Field() + "." + e.Tag()
-			fmt.Println("key : ", key)
 			if v, ok := customErrors[key]; ok {
 				errMap[e.Field()] = v.Error()
 			} else {

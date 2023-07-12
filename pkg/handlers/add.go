@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"chng2016/pkg/models"
@@ -51,7 +50,6 @@ func (d *DistributorHandler) AddDistributor(c *gin.Context) {
 			Permissions: req.Permission,
 			TrieRoot:    &models.TrieNode{Children: make(map[string]*models.TrieNode)},
 		}
-		fmt.Printf(" permission - %#v\n", distributor.Permissions.Exclude)
 		d.dataStore.SetCache(req.DistributorID, distributor)
 	} else {
 		distributor.Permissions = req.Permission
@@ -76,7 +74,6 @@ func (d *DistributorHandler) validatePermissionCodes(permission *models.Distribu
 		includeRegion := ir
 		eg.Go(func() error {
 			_, err := d.util.GetRegionDetails(includeRegion)
-			fmt.Println("err inc ldue : ", err)
 			if err != nil {
 				return err
 			}
