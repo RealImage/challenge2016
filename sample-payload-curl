@@ -1,0 +1,44 @@
+Add Distributor Curl - 
+
+
+curl --location --request POST 'http://localhost:8001/add-distributor' \
+--header 'distributor-id: 123' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "distributorID": "123",
+    "permission": {
+        "include": [
+            "IN",
+            "US"
+        ],
+        "exclude": [
+            "IN,KA",
+            "IN,TN,CENAI"
+        ]
+    }
+}'
+
+
+Add Sub Distributor curl - 
+
+
+curl --location --request POST 'http://localhost:8001/123/add-distributor' \
+--header 'distributor-id: 124' \
+--header 'admin-id: 123' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "subDistributorID": "124",
+    "permission": {
+        "include": [
+            "IN,TN"
+        ],
+        "exclude": []
+    }
+}'
+
+
+Check Permission Curl - 
+
+
+curl --location --request GET 'http://localhost:8001/123/checkPermission?countryCode=IN&cityCode=CENAI&stateCode=TN' \
+--header 'distributor-id: 123'
