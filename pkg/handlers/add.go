@@ -130,6 +130,7 @@ func (d *DistributorHandler) AddSubDistributor(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	adminDistributor := d.dataStore.GetCache(req.DistributorID)
