@@ -35,12 +35,10 @@ Follow these steps to run the program and start using it:
     Ensure you have Go installed on your system.
 
     Clone the repository:
-
     bash
+    git clone https://github.com/RohithER12/challenge_Qube_cinimas.gi
 
-git clone https://github.com/RohithER12/challenge_Qube_cinimas.git
-cd distributor-permission-system
-
+    
 Compile and run the program:
 
 bash
