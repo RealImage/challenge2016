@@ -1,0 +1,19 @@
+{
+  "distributors": {
+    "default": {
+      "include": [
+        "*"
+      ],
+      "exclude": null,
+      "children": null
+    },
+    "dis1": {
+      "include": [
+        "TN",
+        "IN"
+      ],
+      "exclude": null,
+      "children": null
+    }
+  }
+}
