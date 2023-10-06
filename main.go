@@ -2,37 +2,31 @@ package main
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
-	"strings"
+	"sort"
 
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
-type LocationData struct {
+type Permission struct {
 	Country string
 	State   string
 	City    string
 }
 
-type Permissions struct {
-	Include []string
-	Exclude []string
-}
-
 type Distributor struct {
-	Name        string
-	Permissions Permissions
-	Parent      *Distributor
+	Name    string
+	Include Permission
+	Exclude Permission
+	Parent  *Distributor
 }
 
-var (
-	distributors []*Distributor
-	countries    []string
-)
+var distributors = make(map[string]*Distributor)
 
-func LoadCSVData(filename string) ([]LocationData, error) {
+func LoadCSVData(filename string) (map[string]map[string]map[string]bool, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -45,334 +39,299 @@ func LoadCSVData(filename string) ([]LocationData, error) {
 		return nil, err
 	}
 
-	var data []LocationData
+	data := make(map[string]map[string]map[string]bool)
 	for _, record := range records[1:] {
-		data = append(data, LocationData{
-			City:    record[3],
-			State:   record[4],
-			Country: record[5],
-		})
+		country := record[5]
+		state := record[4]
+		city := record[3]
+
+		if _, exists := data[country]; !exists {
+			data[country] = make(map[string]map[string]bool)
+		}
+		if _, exists := data[country][state]; !exists {
+			data[country][state] = make(map[string]bool)
+		}
+
+		data[country][state][city] = true
 	}
 	return data, nil
 }
 
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
+func filterPermissionsBasedOnParent(parentDistributorSelect *widget.Select, locationData map[string]map[string]map[string]bool, includeCountrySelect *widget.Select, includeStateSelect *widget.Select, includeCitySelect *widget.Select, countries []string) {
+	parentDistributor := distributors[parentDistributorSelect.Selected]
+	if parentDistributor == nil {
+		return
 	}
-	return false
-}
 
-func unique(strings []string) []string {
-	keys := make(map[string]bool)
-	list := []string{}
-	for _, entry := range strings {
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-			list = append(list, entry)
-		}
+	// For Country
+	if parentDistributor.Include.Country != "" {
+		includeCountrySelect.Options = []string{parentDistributor.Include.Country}
+	} else {
+		includeCountrySelect.Options = countries
 	}
-	return list
-}
-
-func resetFields(
-	distributorNameEntry *widget.Entry,
-	includeCountrySelect, includeStateSelect, includeCitySelect,
-	excludeCountrySelect, excludeStateSelect, excludeCitySelect,
-	editDistributorSelect, parentDistributorSelect *widget.Select) {
-
-	distributorNameEntry.SetText("")
-
-	includeCountrySelect.Options = append([]string{"(Select one)"}, unique(countries)...)
-	includeCountrySelect.SetSelected("(Select one)")
-	includeStateSelect.Options = []string{"(Select one)"}
-	includeStateSelect.SetSelected("(Select one)")
-	includeCitySelect.Options = []string{"(Select one)"}
-	includeCitySelect.SetSelected("(Select one)")
-
-	excludeCountrySelect.Options = append([]string{"(Select one)"}, unique(countries)...)
-	excludeCountrySelect.SetSelected("(Select one)")
-	excludeStateSelect.Options = []string{"(Select one)"}
-	excludeStateSelect.SetSelected("(Select one)")
-	excludeCitySelect.Options = []string{"(Select one)"}
-	excludeCitySelect.SetSelected("(Select one)")
-
-	editDistributorSelect.Options = append([]string{"Select Distributor to Edit"}, getDistributorNames()...)
-	editDistributorSelect.SetSelected("Select Distributor to Edit")
-
-	parentDistributorSelect.Options = append([]string{"(Select one)"}, getDistributorNames()...)
-	parentDistributorSelect.SetSelected("(Select one)")
-
 	includeCountrySelect.Refresh()
+
+	// For State
+	if parentDistributor.Include.State != "" {
+		includeStateSelect.Options = []string{parentDistributor.Include.State}
+	} else if parentDistributor.Include.Country != "" {
+		states := []string{"Select State"}
+		for state := range locationData[parentDistributor.Include.Country] {
+			states = append(states, state)
+		}
+		sort.Strings(states)
+		includeStateSelect.Options = states
+	} else {
+		includeStateSelect.Options = []string{"Select State"}
+	}
 	includeStateSelect.Refresh()
+
+	// For City
+	if parentDistributor.Include.City != "" {
+		includeCitySelect.Options = []string{parentDistributor.Include.City}
+	} else if parentDistributor.Include.State != "" {
+		cities := []string{"Select City"}
+		for city := range locationData[parentDistributor.Include.Country][parentDistributor.Include.State] {
+			cities = append(cities, city)
+		}
+		sort.Strings(cities)
+		includeCitySelect.Options = cities
+	} else {
+		includeCitySelect.Options = []string{"Select City"}
+	}
 	includeCitySelect.Refresh()
-
-	excludeCountrySelect.Refresh()
-	excludeStateSelect.Refresh()
-	excludeCitySelect.Refresh()
-
-	editDistributorSelect.Refresh()
-	parentDistributorSelect.Refresh()
-}
-
-func getDistributorNames() []string {
-	distributorNames := []string{}
-	for _, dist := range distributors {
-		distributorNames = append(distributorNames, dist.Name)
-	}
-	return distributorNames
-}
-
-func getDistributorByName(name string) *Distributor {
-	for _, dist := range distributors {
-		if dist.Name == name {
-			return dist
-		}
-	}
-	return nil
-}
-
-func hasPermission(dist *Distributor, location string) bool {
-	parts := strings.Split(location, "-")
-
-	// Constructing the location hierarchy for checking
-	var locationsToCheck []string
-	for i := 1; i <= len(parts); i++ {
-		locationsToCheck = append(locationsToCheck, strings.Join(parts[:i], "-"))
-	}
-
-	for _, loc := range locationsToCheck {
-		// Checking if the location exists in the distributor's permissions
-		if contains(dist.Permissions.Include, loc) {
-			return true
-		}
-
-		if contains(dist.Permissions.Exclude, loc) {
-			return false
-		}
-	}
-
-	// If permission is not determined and distributor has a parent, check parent's permissions
-	if dist.Parent != nil {
-		return hasPermission(dist.Parent, location)
-	}
-
-	return false
 }
 
 func main() {
-	data, err := LoadCSVData("cities.csv")
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Distributor Manager")
+
+	locationData, err := LoadCSVData("cities.csv")
 	if err != nil {
 		panic(err)
 	}
 
-	countries = []string{}
-	stateByCountry := make(map[string][]string)
-	cityByStateCountry := make(map[string][]string)
-	for _, location := range data {
-		if !contains(countries, location.Country) {
-			countries = append(countries, location.Country)
-		}
-		stateKey := location.Country
-		cityKey := location.State + "-" + location.Country
-
-		stateByCountry[stateKey] = append(stateByCountry[stateKey], location.State)
-		cityByStateCountry[cityKey] = append(cityByStateCountry[cityKey], location.City)
-	}
-
-	myApp := app.New()
-	myWindow := myApp.NewWindow("Distributor Manager")
-
 	distributorNameEntry := widget.NewEntry()
-	distributorNameEntry.SetPlaceHolder("Distributor Name")
+	distributorNameEntry.SetPlaceHolder("Enter the name of the distributor")
 
-	includeCountrySelect := widget.NewSelect(unique(countries), nil)
+	includeCountrySelect := widget.NewSelect(nil, nil)
 	includeStateSelect := widget.NewSelect(nil, nil)
 	includeCitySelect := widget.NewSelect(nil, nil)
-	excludeCountrySelect := widget.NewSelect(unique(countries), nil)
+	excludeCountrySelect := widget.NewSelect(nil, nil)
 	excludeStateSelect := widget.NewSelect(nil, nil)
 	excludeCitySelect := widget.NewSelect(nil, nil)
 
-	includeCountrySelect.OnChanged = func(country string) {
-		includeStateSelect.Options = unique(stateByCountry[country])
-		includeStateSelect.Refresh()
-		includeCitySelect.Options = nil
-		includeCitySelect.Refresh()
+	countries := []string{"Select Country"}
+	for country := range locationData {
+		countries = append(countries, country)
+	}
+	sort.Strings(countries)
+
+	updateDropdowns := func(countrySelect, stateSelect, citySelect *widget.Select) {
+		if country := countrySelect.Selected; country != "Select Country" {
+			states := []string{"Select State"}
+			for state := range locationData[country] {
+				states = append(states, state)
+			}
+			sort.Strings(states)
+			stateSelect.Options = states
+			stateSelect.Refresh()
+		}
+
+		if state := stateSelect.Selected; state != "Select State" && countrySelect.Selected != "Select Country" {
+			cities := []string{"Select City"}
+			for city := range locationData[countrySelect.Selected][state] {
+				cities = append(cities, city)
+			}
+			sort.Strings(cities)
+			citySelect.Options = cities
+			citySelect.Refresh()
+		}
 	}
 
-	includeStateSelect.OnChanged = func(state string) {
-		key := state + "-" + includeCountrySelect.Selected
-		includeCitySelect.Options = unique(cityByStateCountry[key])
-		includeCitySelect.Refresh()
-	}
+	includeCountrySelect.OnChanged = func(string) { updateDropdowns(includeCountrySelect, includeStateSelect, includeCitySelect) }
+	includeStateSelect.OnChanged = func(string) { updateDropdowns(includeCountrySelect, includeStateSelect, includeCitySelect) }
+	excludeCountrySelect.OnChanged = func(string) { updateDropdowns(excludeCountrySelect, excludeStateSelect, excludeCitySelect) }
+	excludeStateSelect.OnChanged = func(string) { updateDropdowns(excludeCountrySelect, excludeStateSelect, excludeCitySelect) }
 
-	excludeCountrySelect.OnChanged = func(country string) {
-		excludeStateSelect.Options = unique(stateByCountry[country])
-		excludeStateSelect.Refresh()
-		excludeCitySelect.Options = nil
-		excludeCitySelect.Refresh()
-	}
-
-	excludeStateSelect.OnChanged = func(state string) {
-		key := state + "-" + excludeCountrySelect.Selected
-		excludeCitySelect.Options = unique(cityByStateCountry[key])
-		excludeCitySelect.Refresh()
-	}
+	includeCountrySelect.Options = countries
+	excludeCountrySelect.Options = countries
 
 	parentDistributorSelect := widget.NewSelect(nil, nil)
 
-	editMode := false
-	var currentDistributor *Distributor
-
-	editDistributorSelect := widget.NewSelect(nil, func(selected string) {
-		for _, dist := range distributors {
-			if dist.Name == selected {
-				currentDistributor = dist
-				distributorNameEntry.SetText(dist.Name)
-				includeParts := strings.Split(dist.Permissions.Include[0], "-")
-				includeCountrySelect.SetSelected(includeParts[2])
-				includeStateSelect.Options = unique(stateByCountry[includeParts[2]])
-				includeStateSelect.Refresh()
-				includeStateSelect.SetSelected(includeParts[1])
-				includeCitySelect.Options = unique(cityByStateCountry[includeParts[1]+"-"+includeParts[2]])
-				includeCitySelect.Refresh()
-				includeCitySelect.SetSelected(includeParts[0])
-
-				excludeParts := strings.Split(dist.Permissions.Exclude[0], "-")
-				excludeCountrySelect.SetSelected(excludeParts[2])
-				excludeStateSelect.Options = unique(stateByCountry[excludeParts[2]])
-				excludeStateSelect.Refresh()
-				excludeStateSelect.SetSelected(excludeParts[1])
-				excludeCitySelect.Options = unique(cityByStateCountry[excludeParts[1]+"-"+excludeParts[2]])
-				excludeCitySelect.Refresh()
-				excludeCitySelect.SetSelected(excludeParts[0])
-
-				editMode = true
-				break
-			}
+	updateDistributorList := func() {
+		distributorNames := []string{"Select Parent"}
+		for name := range distributors {
+			distributorNames = append(distributorNames, name)
 		}
-	})
-	editDistributorSelect.PlaceHolder = "Select Distributor to Edit"
-
-	logDisplay := widget.NewLabel("")
-
-	checkDistributorSelect := widget.NewSelect(nil, nil)
-	checkCountrySelect := widget.NewSelect(unique(countries), nil)
-	checkStateSelect := widget.NewSelect(nil, nil)
-	checkCitySelect := widget.NewSelect(nil, nil)
-	resultLabel := widget.NewLabel("")
-
-	checkCountrySelect.OnChanged = func(country string) {
-		checkStateSelect.Options = unique(stateByCountry[country])
-		checkStateSelect.Refresh()
-		checkCitySelect.Options = nil
-		checkCitySelect.Refresh()
+		sort.Strings(distributorNames)
+		parentDistributorSelect.Options = distributorNames
+		parentDistributorSelect.Refresh()
 	}
 
-	checkStateSelect.OnChanged = func(state string) {
-		key := state + "-" + checkCountrySelect.Selected
-		checkCitySelect.Options = unique(cityByStateCountry[key])
-		checkCitySelect.Refresh()
+	checkDistributorSelect := widget.NewSelect([]string{"Select Distributor"}, nil)
+
+	parentDistributorSelect.OnChanged = func(string) {
+		includeCountrySelect.Selected = "Select Country"
+		includeStateSelect.Selected = "Select State"
+		includeCitySelect.Selected = "Select City"
+
+		includeCountrySelect.Refresh()
+		includeStateSelect.Refresh()
+		includeCitySelect.Refresh()
+
+		filterPermissionsBasedOnParent(parentDistributorSelect, locationData, includeCountrySelect, includeStateSelect, includeCitySelect, countries)
+
+	}
+
+	updateCheckDistributorList := func() {
+		distributorNames := []string{"Select Distributor"}
+		for name := range distributors {
+			distributorNames = append(distributorNames, name)
+		}
+		sort.Strings(distributorNames)
+		checkDistributorSelect.Options = distributorNames
+		checkDistributorSelect.Refresh()
 	}
 
 	saveButton := widget.NewButton("Save Distributor", func() {
-		if editMode && currentDistributor != nil {
-			currentDistributor.Name = distributorNameEntry.Text
-			currentDistributor.Permissions.Include = []string{includeCitySelect.Selected + "-" + includeStateSelect.Selected + "-" + includeCountrySelect.Selected}
-			currentDistributor.Permissions.Exclude = []string{excludeCitySelect.Selected + "-" + excludeStateSelect.Selected + "-" + excludeCountrySelect.Selected}
-		} else {
-			newDistributor := &Distributor{
-				Name: distributorNameEntry.Text,
-				Permissions: Permissions{
-					Include: []string{includeCitySelect.Selected + "-" + includeStateSelect.Selected + "-" + includeCountrySelect.Selected},
-					Exclude: []string{excludeCitySelect.Selected + "-" + excludeStateSelect.Selected + "-" + excludeCountrySelect.Selected},
-				},
-			}
-			if parentDistributorSelect.Selected != "" {
-				for _, dist := range distributors {
-					if dist.Name == parentDistributorSelect.Selected {
-						newDistributor.Parent = dist
-						break
-					}
-				}
-			}
-			distributors = append(distributors, newDistributor)
-			currentDistributor = newDistributor
+		distributor := &Distributor{
+			Name: distributorNameEntry.Text,
+			Include: Permission{
+				Country: "",
+				State:   "",
+				City:    "",
+			},
+			Exclude: Permission{
+				Country: "",
+				State:   "",
+				City:    "",
+			},
 		}
 
-		editDistributorSelect.Options = getDistributorNames()
-		editDistributorSelect.Refresh()
+		if includeCountrySelect.Selected != "Select Country" {
+			distributor.Include.Country = includeCountrySelect.Selected
+		}
+		if includeStateSelect.Selected != "Select State" {
+			distributor.Include.State = includeStateSelect.Selected
+		}
+		if includeCitySelect.Selected != "Select City" {
+			distributor.Include.City = includeCitySelect.Selected
+		}
 
-		parentDistributorSelect.Options = getDistributorNames()
+		if excludeCountrySelect.Selected != "Select Country" {
+			distributor.Exclude.Country = excludeCountrySelect.Selected
+		}
+		if excludeStateSelect.Selected != "Select State" {
+			distributor.Exclude.State = excludeStateSelect.Selected
+		}
+		if excludeCitySelect.Selected != "Select City" {
+			distributor.Exclude.City = excludeCitySelect.Selected
+		}
+
+		if parent := parentDistributorSelect.Selected; parent != "Select Parent" && distributors[parent] != nil {
+			distributor.Parent = distributors[parent]
+		}
+
+		distributors[distributor.Name] = distributor
+		updateDistributorList()
+		fmt.Println("Saved Distributor:", distributor)
+
+		distributorNameEntry.SetText("")
+		includeCountrySelect.Selected = "Select Country"
+		includeStateSelect.Selected = "Select State"
+		includeCitySelect.Selected = "Select City"
+		excludeCountrySelect.Selected = "Select Country"
+		excludeStateSelect.Selected = "Select State"
+		excludeCitySelect.Selected = "Select City"
+		parentDistributorSelect.Selected = "Select Parent"
+
+		includeCountrySelect.Refresh()
+		includeStateSelect.Refresh()
+		includeCitySelect.Refresh()
+		excludeCountrySelect.Refresh()
+		excludeStateSelect.Refresh()
+		excludeCitySelect.Refresh()
 		parentDistributorSelect.Refresh()
 
-		checkDistributorSelect.Options = getDistributorNames()
-		checkDistributorSelect.Refresh()
-
-		// Prepareinf the log message
-		distributorChain := currentDistributor.Name
-		parentDistributor := currentDistributor.Parent
-		for parentDistributor != nil {
-			distributorChain = parentDistributor.Name + " -> " + distributorChain
-			parentDistributor = parentDistributor.Parent
-		}
-
-		includeInfo := "Include of " + currentDistributor.Name + ": " + strings.Join(currentDistributor.Permissions.Include, ", ")
-		excludeInfo := "Exclude of " + currentDistributor.Name + ": " + strings.Join(currentDistributor.Permissions.Exclude, ", ")
-
-		// Appending the log message to the label
-		currentLog := logDisplay.Text
-		newLog := distributorChain + "\n" + includeInfo + "\n" + excludeInfo
-		if currentLog != "" {
-			newLog = currentLog + "\n\n" + newLog
-		}
-		logDisplay.SetText(newLog)
-
-		// Reseting fields after saving
-		resetFields(distributorNameEntry, includeCountrySelect, includeStateSelect, includeCitySelect, excludeCountrySelect, excludeStateSelect, excludeCitySelect, editDistributorSelect, parentDistributorSelect)
-
-		editMode = false
-		currentDistributor = nil
-
-		// Clearing selections for parent and edit dropdowns
-		parentDistributorSelect.SetSelected("")
-		editDistributorSelect.SetSelected("")
+		updateDistributorList()
+		updateCheckDistributorList()
 	})
 
-	checkButton := widget.NewButton("Check Permissions", func() {
-		selectedDistributor := getDistributorByName(checkDistributorSelect.Selected)
-		location := checkCitySelect.Selected + "-" + checkStateSelect.Selected + "-" + checkCountrySelect.Selected
-		if selectedDistributor != nil {
-			if hasPermission(selectedDistributor, location) {
-				resultLabel.SetText("YES")
-			} else {
-				resultLabel.SetText("NO")
-			}
-		} else {
-			resultLabel.SetText("Invalid Distributor")
+	checkPermissionLabel := widget.NewLabel("Check Distributor Permission")
+	checkCountrySelect := widget.NewSelect(countries, nil)
+	checkStateSelect := widget.NewSelect([]string{"Select State"}, nil)
+	checkCitySelect := widget.NewSelect([]string{"Select City"}, nil)
+	permissionResultLabel := widget.NewLabel("")
+
+	checkCountrySelect.OnChanged = func(string) { updateDropdowns(checkCountrySelect, checkStateSelect, checkCitySelect) }
+	checkStateSelect.OnChanged = func(string) { updateDropdowns(checkCountrySelect, checkStateSelect, checkCitySelect) }
+
+	checkPermissionButton := widget.NewButton("Check Permission", func() {
+		selectedDistributor := distributors[checkDistributorSelect.Selected]
+		if selectedDistributor == nil {
+			permissionResultLabel.SetText("Invalid Distributor")
+			return
 		}
+
+		selectedCountry := checkCountrySelect.Selected
+		selectedState := checkStateSelect.Selected
+		selectedCity := checkCitySelect.Selected
+
+		hasIncludePermission := false
+		hasExcludePermission := false
+
+		if selectedDistributor.Include.Country == selectedCountry || selectedDistributor.Include.Country == "" {
+			if selectedDistributor.Include.State == selectedState || selectedDistributor.Include.State == "" {
+				if selectedDistributor.Include.City == selectedCity || selectedDistributor.Include.City == "" {
+					hasIncludePermission = true
+				}
+			}
+		}
+
+		if selectedDistributor.Exclude.Country == selectedCountry {
+			if selectedDistributor.Exclude.State == "" || selectedDistributor.Exclude.State == selectedState {
+				if selectedDistributor.Exclude.City == "" || selectedDistributor.Exclude.City == selectedCity {
+					hasExcludePermission = true
+				}
+			}
+		} else if selectedDistributor.Exclude.Country == "" && selectedDistributor.Exclude.State == selectedState {
+			if selectedDistributor.Exclude.City == "" || selectedDistributor.Exclude.City == selectedCity {
+				hasExcludePermission = true
+			}
+		}
+
+		if hasIncludePermission && !hasExcludePermission {
+			permissionResultLabel.SetText("Has Access")
+		} else {
+			permissionResultLabel.SetText("Does Not Have Access")
+		}
+
+		checkCountrySelect.Selected = "Select Country"
+		checkStateSelect.Selected = "Select State"
+		checkCitySelect.Selected = "Select City"
+
+		checkCountrySelect.Refresh()
+		checkStateSelect.Refresh()
+		checkCitySelect.Refresh()
 	})
 
 	content := container.NewVBox(
-		editDistributorSelect,
+		widget.NewLabel("Parent Distributor:"),
+		parentDistributorSelect,
 		distributorNameEntry,
-		container.NewHBox(widget.NewLabel("Include: "), includeCountrySelect, includeStateSelect, includeCitySelect),
-		container.NewHBox(widget.NewLabel("Exclude: "), excludeCountrySelect, excludeStateSelect, excludeCitySelect),
-		widget.NewLabel("Parent Distributor:"), parentDistributorSelect,
+		widget.NewLabel("Include:"),
+		container.NewHBox(includeCountrySelect, includeStateSelect, includeCitySelect),
+		widget.NewLabel("Exclude:"),
+		container.NewHBox(excludeCountrySelect, excludeStateSelect, excludeCitySelect),
 		saveButton,
-		logDisplay,
-		widget.NewLabel("Check permissions for Distributor:"),
+		checkPermissionLabel,
 		checkDistributorSelect,
-		container.NewHBox(widget.NewLabel("Location: "), checkCountrySelect, checkStateSelect, checkCitySelect),
-		checkButton,
-		resultLabel,
+		container.NewHBox(checkCountrySelect, checkStateSelect, checkCitySelect),
+		checkPermissionButton,
+		permissionResultLabel,
 	)
+
 	myWindow.SetContent(content)
 	myWindow.ShowAndRun()
-}
-
-func splitLocation(location string) []string {
-	return strings.Split(location, "-")
 }
