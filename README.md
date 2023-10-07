@@ -2,6 +2,7 @@
 
 
 Creating a distributor1:
+
 ![ezgif com-optimize (1)](https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/418c1248-0148-4cb9-936b-aee5b8c6f96d)
 
 checking distribution permission for the distributor1:
