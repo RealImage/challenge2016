@@ -2,14 +2,13 @@
 
 
 Creating a distributor1:
-https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/2b068ae5-6bc6-42f7-a836-0595c6e1ffa2
-
+![ezgif com-optimize (1)](https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/418c1248-0148-4cb9-936b-aee5b8c6f96d)
 
 checking distribution permission for the distributor1:
-https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/fcfdfd0e-d4d4-47f8-8728-3fe65f5e8c3c
+![ezgif com-optimize (2)](https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/fb622b5c-d0fa-4c63-9247-00b3a9e2e982)
 
 Creating a sub-distributor with parent as distributor1:
-https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/feaf610b-4e62-4ed5-9aeb-a69c3625ee8d
+![ezgif com-optimize (3)](https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/99cfaad4-ca36-4331-8933-3d39dbb88aa4)
 
 Checking distributor2 permission:
-https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/f9308d34-7de6-4967-8ecb-9682f2900094
+![ezgif com-optimize (4)](https://github.com/Yash-NN/challenge2016-GUI/assets/47495435/36907145-dfa1-49c3-b99c-0e1381ba6153)
