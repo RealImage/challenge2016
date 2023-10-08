@@ -10,7 +10,7 @@ For reference purpose, an example postman collection is given in the repo, pleas
 
 1. Must have go installed on the system
 
-2. Run the below command in this directory before running the program
+2. Run the below command in this directory before running the program to download the required libraries
 ```
 go mod download
 ```
@@ -22,7 +22,7 @@ $ go run .
 ```
 This will start the API service and can be accesible through 8000 port (You can change the port in main.go if you have conlfict running in port 8000)
 
-## ENDPOINTS FOR REFRENCE
+## ENDPOINTS FOR REFERENCE
 
 ### GET : /list-cities
 
