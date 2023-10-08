@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "d552e5c3-917c-49b7-bef8-a9ab0e8f403e",
+		"name": "DISTRIBUTORS API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE DISTRIBUTOR",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "52b1959f1aca390b84260c85cf2abf74fd884792",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distributor\": \"distributor1\",\n    \"include\": [\n        \"IN\",\n        \"FL-US\"\n    ],\n    \"exclude\": [\n        \"TN-IN\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/create-distributor",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"create-distributor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LIST DISTRIBIUTORS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "52b1959f1aca390b84260c85cf2abf74fd884792",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distributor\": \"distributor1\",\n    \"include\": [\n        \"IN\",\n        \"FL-US\"\n    ],\n    \"exclude\": [\n        \"TN-IN\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/distributors",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"distributors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CHECK DISTRIBUTOR PERMISSION",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "52b1959f1aca390b84260c85cf2abf74fd884792",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distributor\": \"distributor1\",\n    \"include\": [\n        \"IN\",\n        \"FL-US\"\n    ],\n    \"exclude\": [\n        \"TN-IN\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/permission-check/distributor1/CENAI-TN-IN",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"permission-check",
+						"distributor1",
+						"CENAI-TN-IN"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
