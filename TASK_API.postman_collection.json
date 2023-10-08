@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "4cb4e4ed-1475-4d7e-b95c-d7e128defb6e",
+		"name": "TASK API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5456621"
+	},
+	"item": [
+		{
+			"name": "ADD DISTRIBUTOR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\" : \"distributor1\",\n    \"included\" : [\"IN\"],\n    \"excluded\" : [\"KA-IN\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/add-distributors",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"add-distributors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LIST DISTRIBUTOR",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/list-distributors",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"list-distributors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CHECK DISTRIBUTOR REGION",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/check-distributor-region/distributor1/KL-IN",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"check-distributor-region",
+						"distributor1",
+						"KL-IN"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LIST CITIES",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/list-cities",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"list-cities"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

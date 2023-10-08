@@ -1,41 +1,67 @@
-# Real Image Challenge 2016
+# DESCRIPTION
 
-In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
+This is a solution for the challenge provided in https://github.com/RealImage/challenge2016 (Refere QUESTION_README.md for question)
 
-Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
+Developed a simple API interface using golang to interact with the inner system. The api is based on the "github.com/gin-gonic/gin" (gin in short) api framework.
+
+For reference purpose, an example postman collection is given in the repo, please check it in the postman (make changes if required)
+
+## PREREQUISITE
+
+1. Must have go installed on the system
+
+2. Run the below command in this directory before running the program to download the required libraries
 ```
-Permissions for DISTRIBUTOR1
-INCLUDE: INDIA
-INCLUDE: UNITEDSTATES
-EXCLUDE: KARNATAKA-INDIA
-EXCLUDE: CHENNAI-TAMILNADU-INDIA
+go mod download
 ```
-This allows `DISTRIBUTOR1` to distribute in any city inside the United States and India, *except* cities in the state of Karnataka (in India) and the city of Chennai (in Tamil Nadu, India).
 
-At this point, asking your program if `DISTRIBUTOR1` has permission to distribute in `CHICAGO-ILLINOIS-UNITEDSTATES` should get `YES` as the answer, and asking if distribution can happen in `CHENNAI-TAMILNADU-INDIA` should of course be `NO`. Asking if distribution is possible in `BANGALORE-KARNATAKA-INDIA` should also be `NO`, because the whole state of Karnataka has been excluded.
-
-Sometimes, a distributor might split the work of distribution amount smaller sub-distiributors inside their authorized geographies. For instance, `DISTRIBUTOR1` might assign the following permissions to `DISTRIBUTOR2`:
+## HOW TO RUN THE PROGRAM
 
 ```
-Permissions for DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: INDIA
-EXCLUDE: TAMILNADU-INDIA
+$ go run . 
 ```
-Now, `DISTRIBUTOR2` can distribute the movie anywhere in `INDIA`, except inside `TAMILNADU-INDIA` and `KARNATAKA-INDIA` - `DISTRIBUTOR2`'s permissions are always a subset of `DISTRIBUTOR1`'s permissions. It's impossible/invalid for `DISTRIBUTOR2` to have `INCLUDE: CHINA`, for example, because `DISTRIBUTOR1` isn't authorized to do that in the first place. 
+This will start the API service and can be accesible through 8000 port (You can change the port in main.go if you have conlfict running in port 8000)
 
-If `DISTRIBUTOR2` authorizes `DISTRIBUTOR3` to handle just the city of Hubli, Karnataka, India, for example:
+## ENDPOINTS FOR REFERENCE
+
+### GET : /list-cities
+
+Endpoint to list the available cities, province and country data loaded from the given csv file
+
+### POST : /add-distributors
+
+Endpoint to add a distributor to the system. Example json body format,
+
+##### Note: You can omit the `parent` key if the distributor don't have a parent
+
 ```
-Permissions for DISTRIBUTOR3 < DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: HUBLI-KARNATAKA-INDIA
+{
+	"id" : "distributor2",
+	"parent" : "distributor1",
+	"included" : ["IN"],
+	"excluded" : ["TN-IN"]
+}
 ```
-Again, `DISTRIBUTOR2` cannot authorize `DISTRIBUTOR3` with a region that they themselves do not have access to. 
+id - Ditributor unqiue id/username (mandatory)
 
-We've provided a CSV with the list of all countries, states and cities in the world that we know of - please use the data mentioned there for this program. *The codes you see there may be different from what you see here, so please always use the codes in the CSV*. This Readme is only an example. 
+parent - Id of the parent distributor (optional)
 
-Write a program in any language you want (If you're here from Gophercon, use Go :D) that does this. Feel free to make your own input and output format / command line tool / GUI / Webservice / whatever you want. Feel free to hold the dataset in whatever structure you want, but try not to use external databases - as far as possible stick to your langauage without bringing in MySQL/Postgres/MongoDB/Redis/Etc.
+included - List of regions included (optional)
 
-To submit a solution, fork this repo and send a Pull Request on Github. 
+excluded - List of inner regions which need to be excluded (optional)
 
-For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
+### GET : /list-distributors
+
+Endpoint to list the available distributors in the system
+
+### GET : /check-distributor-region/`<distributor>`/`<region>`
+
+Endpoint to check the permission of a distributor in a corresponding region
+
+Example: If distributor1 included in India(IN), but excluded in Tamilnadu in India(TN-IN)
+
+GET : /check-region/distributor1/KA-IN will return 200 as response code and `{"data": "YES"}` as response
+
+GET : /check-region/distributor1/CENAI-TN-IN will return 403 as response code and `{"data": "NO"}` as response
 
