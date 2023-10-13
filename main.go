@@ -53,37 +53,19 @@ Distributor:
 	// Iterate through the "INCLUDE" section of distributor information.
 	for _, data := range distributorName["INCLUDE"] {
 		// Check if the input distributor's country matches the data's country.
-		IsMatched = distributorInput.country == data.country
-		if IsMatched {
+		includeMatch := findMatch(data, distributorInput)
+		if includeMatch {
+			IsMatched = true
 			break
 		}
 	}
 
-	// Initialize a variable to determine which fields to consider for matching.
-	var LenghtToConsider int
-
 	// Iterate through the "EXCLUDE" section of distributor information.
 	for _, data := range distributorName["EXCLUDE"] {
-		// Determine the length to consider based on available data (country, state, city).
-		if data.city != "" && data.state != "" {
-			LenghtToConsider = 3
-		} else if data.state != "" {
-			LenghtToConsider = 2
-		} else {
-			LenghtToConsider = 1
-		}
-
-		// Check for exclusions based on the length to consider.
-		if LenghtToConsider == 3 { //country state city
-			IsMatched = !(distributorInput.city == data.city && distributorInput.state == data.state && distributorInput.country == data.country)
-		} else if LenghtToConsider == 2 { //state city
-			IsMatched = !(distributorInput.state == data.state && distributorInput.country == data.country)
-		} else { //city
-			IsMatched = distributorInput.country != data.country
-		}
-
+		excludeMatch := findMatch(data, distributorInput)
 		// If any one of them is excluded then exit the loop
-		if !IsMatched {
+		if excludeMatch {
+			IsMatched = false
 			break
 		}
 	}
@@ -103,6 +85,30 @@ Distributor:
 	} else {
 		fmt.Println("Permission: NO")
 	}
+}
+
+func findMatch(data, distributorInput DistributorInformation) bool {
+
+	var isMatched bool
+	// Initialize a variable to determine which fields to consider for matching.
+	var LenghtToConsider int
+	// Determine the length to consider based on available data (country, state, city).
+	if data.city != "" && data.state != "" {
+		LenghtToConsider = 3
+	} else if data.state != "" {
+		LenghtToConsider = 2
+	} else {
+		LenghtToConsider = 1
+	}
+	// Check for exclusions based on the length to consider.
+	if LenghtToConsider == 3 { //country state city
+		isMatched = (distributorInput.city == data.city && distributorInput.state == data.state && distributorInput.country == data.country)
+	} else if LenghtToConsider == 2 { //state city
+		isMatched = (distributorInput.state == data.state && distributorInput.country == data.country)
+	} else { //city
+		isMatched = distributorInput.country == data.country
+	}
+	return isMatched
 }
 
 // splitLocation takes a string representing a location in the format "city-state-country"
