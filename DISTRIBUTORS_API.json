@@ -1,0 +1,68 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "DISTRIBUTORS API",
+    "dateExported": "2023-10-22T15:20:05.267Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "7883b8a0-0fa5-4803-acf8-9c689b8ba38d",
+            "colId": "1419c37a-d8b8-484c-bb57-da2e1de3215a",
+            "containerId": "",
+            "name": "CREATE DISTRIBUTOR",
+            "url": "http://localhost:8080/distributor",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-10-16T10:01:06.803Z",
+            "modified": "2023-10-22T14:15:01.300Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"Name\" : \"distributor2\",\n  \"Parent\" : \"\",\n  \"Permissions\": {\n     \"Include\" : [\"CHE\", \"IN\"],\n      \"Exclude\" : [\"US\"]\n  }\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "52b1959f1aca390b84260c85cf2abf74fd884792"
+            },
+            "tests": []
+        },
+        {
+            "_id": "465a3bf9-b16d-485f-965b-9578957e774a",
+            "colId": "1419c37a-d8b8-484c-bb57-da2e1de3215a",
+            "containerId": "",
+            "name": "LIST DISTRIBIUTORS",
+            "url": "http://localhost:8080/distributors",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-10-16T10:01:06.804Z",
+            "modified": "2023-10-22T12:58:55.492Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "52b1959f1aca390b84260c85cf2abf74fd884792"
+            },
+            "tests": []
+        },
+        {
+            "_id": "f82e37e2-f0df-4135-92ea-f53f86a9d0c4",
+            "colId": "1419c37a-d8b8-484c-bb57-da2e1de3215a",
+            "containerId": "",
+            "name": "CHECK DISTRIBUTOR PERMISSION",
+            "url": "http://localhost:8080/distributor/distributor1/region/IN",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-10-16T10:01:06.805Z",
+            "modified": "2023-10-22T13:23:43.567Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "52b1959f1aca390b84260c85cf2abf74fd884792"
+            },
+            "tests": []
+        }
+    ]
+}
