@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: distributor-app
+spec:
+  selector:
+    matchLabels:
+      app: distributor-app
+  template:
+    metadata:
+      labels:
+        app: distributor-app
+    spec:
+      containers:
+      - name: distributor-app
+        image: veerasolaiyappan/distributor-app:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
