@@ -1,0 +1,49 @@
+// Api for authorizing distributor
+curl --location --request POST 'http: //localhost:8080/authdistributor' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "distributor-1",
+    "includedregions": [
+        {
+            "country": "india",
+            "state": "andhrapradesh",
+            "city": "eluru"
+        },
+        {
+            "country": "india",
+            "state": "tamilnadu"
+        },
+        {
+            "country": "unitedstates"
+        }
+    ],
+    "excludedregions": [
+        {
+            "country": "india",
+            "state": "karnataka"
+        },
+        {
+            "country": "india",
+            "state": "tamilnadu",
+            "city": "chennai"
+        }
+    ]
+}'
+
+// Api for authorizing sub-distributor
+curl --location --request POST 'http: //localhost:8080/authchilddistributor' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "distributor-2",
+    "parentname": "distributor-2",
+    "includedregions": [
+        {
+            "country": "India",
+            "state": "Tamil Nadu",
+            "city": "Keelakarai"
+        }
+    ]
+}'
+
+// Api for checking distributor access to given region
+curl --location --request GET 'http: //localhost:8080/distributors/distributor-2/access?country=India&state=Tamil Nadu&city=Chennai'
