@@ -35,7 +35,7 @@ curl --location --request POST 'http: //localhost:8080/authdistributor' \
 curl --location --request GET 'http: //localhost:8080/distributors/distributor-2/access?country=India&state=Tamil Nadu&city=Chennai'
 
 // Api for authorizing sub-distributor
-curl --location --request POST 'http: //localhost:8080/authchilddistributor' \
+curl --location --request POST 'http: //localhost:8080/authsubdistributor' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "distributor-2",
