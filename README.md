@@ -38,4 +38,19 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
+### Installation
 
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/mahigadamsetty/challenge2016.git
+   cd challenge2016
+   ```
+
+2. Build and run the application:
+
+   ```bash
+   go run main.go
+   ```
+
+The application should be running at `http://localhost:8080`.

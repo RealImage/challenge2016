@@ -30,6 +30,10 @@ curl --location --request POST 'http: //localhost:8080/authdistributor' \
     ]
 }'
 
+
+// Api for checking distributor access to given region
+curl --location --request GET 'http: //localhost:8080/distributors/distributor-2/access?country=India&state=Tamil Nadu&city=Chennai'
+
 // Api for authorizing sub-distributor
 curl --location --request POST 'http: //localhost:8080/authchilddistributor' \
 --header 'Content-Type: application/json' \
@@ -42,8 +46,11 @@ curl --location --request POST 'http: //localhost:8080/authchilddistributor' \
             "state": "Tamil Nadu",
             "city": "Keelakarai"
         }
+    ],
+    "excludedregions" : [
+        {
+          "country" : "united states",
+          "state" : "Arkansas"
+        }
     ]
 }'
-
-// Api for checking distributor access to given region
-curl --location --request GET 'http: //localhost:8080/distributors/distributor-2/access?country=India&state=Tamil Nadu&city=Chennai'

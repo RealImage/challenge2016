@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"challenge2016/model"
 	service "challenge2016/service"
 	"net/http"
 
@@ -8,10 +9,10 @@ import (
 )
 
 type authorizeDistributor struct {
-	Name            string           `json:"name"`
-	IncludedRegions []service.Region `json:"includedregions"`
-	ExcludedRegions []service.Region `json:"excludedregions"`
-	ParentName      string           `json:"parentname,omitempty"`
+	Name            string         `json:"name"`
+	IncludedRegions []model.Region `json:"includedregions"`
+	ExcludedRegions []model.Region `json:"excludedregions"`
+	ParentName      string         `json:"parentname,omitempty"`
 }
 type Handler struct {
 	Distributor service.DistributorService
@@ -41,7 +42,7 @@ func (h *Handler) CheckDistributorAccess(c *gin.Context) {
 
 	name := c.Param("distributor")
 
-	regionToMatch := service.Region{
+	regionToMatch := model.Region{
 		Country: country,
 		State:   state,
 		City:    city,
@@ -72,7 +73,7 @@ func (h *Handler) AuthorizeSubDistributor(c *gin.Context) {
 		return
 	}
 
-	if err := h.Distributor.AuthorizeSubDistributor(authDistributor.ParentName, authDistributor.Name, authDistributor.IncludedRegions); err != nil {
+	if err := h.Distributor.AuthorizeSubDistributor(authDistributor.ParentName, authDistributor.Name, authDistributor.IncludedRegions, authDistributor.ExcludedRegions); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
