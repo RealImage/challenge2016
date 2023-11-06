@@ -25,42 +25,13 @@ type DistributorInput struct {
 	ExCities   []string `json:"exCities"`
 	ExStates   []string `json:"exStates"`
 	ExCountries []string `json:"exCountries"`
-	Addedby		string 	`json:"addedby"`
-
-	
+	Addedby		string 	`json:"addedby"`	
+}
+type DistributorResponse struct {
+	Distributors []Distributor `json:"distributors"`
 }
 
-
-var DistributerList = []Distributor{
-	{
-		Name:      "Aman001",
-		Cities:    []string{"PUNCH-JK-IN", "KLRAI-TN-IN" , "PLMYR-NY-US"},
-		States:    []string{"TN-IN","AZ-US"},
-		Countries: []string{"IN","US"},
-		ExCities: []string{},
-		ExStates: []string{},
-		ExCountries: []string{},
-		Addedby: "Admin",
-	},
-	{
-		Name:      "JohnDoe",
-		Cities:    []string{"WLAMS-AZ-US","ADUCE-CA-US"},
-		States:    []string{"RP-GE","UP-IN"},
-		Countries: []string{"US"},
-		Addedby: "Admin",
-
-	},
-	{
-		Name:      "Kamlesh001",
-		Cities:    []string{"PLMYR-NY-US"},
-		States:    []string{},
-		Countries: []string{"IN","US"},
-		ExCities: []string{},
-		ExStates: []string{},
-		ExCountries: []string{"TN-IN"},
-		Addedby: "Admin",
-	},
-}
+var DistributerList = []Distributor{}
 func Getdistributer(name string) Distributor{
 	var s Distributor
 	for _,v := range DistributerList{
@@ -72,10 +43,7 @@ func Getdistributer(name string) Distributor{
 }
 
 func CountWords(location string) int {
-	// Split the location string by commas.
 	words := strings.Split(location, "-")
-
-	// Return the number of words in the location.
 	return len(words)
 }
 
@@ -89,9 +57,10 @@ func containsString(slice []string, str string) bool {
 }
 
 func IsPermitted(d Distributor,location string) bool{
-	status:=false
+	var status bool
 	n:=CountWords(location)
 	if Excluded(d,n,location){
+		log.Println("check in country")
 		return false
 	}
 	if n==1{
@@ -109,7 +78,6 @@ func IsPermitted(d Distributor,location string) bool{
 					return true
 				}
 			}	
-		
 	}else if n==3{
 		//check in city
 		if containsString(d.Cities, location) {
@@ -126,7 +94,7 @@ func IsPermitted(d Distributor,location string) bool{
 			}
 		}	
 	}else {
-		log.Panicln("Not a valid location")
+		log.Println("Not a valid location")
 	}
 	return status
 }
@@ -188,10 +156,15 @@ func CreateDistributor(d Distributor) bool{
 		for _,v:= range alllocation{
 			if IsPermitted(addDist,v){
 		}else{
-			flag=false
-			break
+			return false
 		}
-	  }
-	   }
+	  	}
+
+		DistributerList = append(DistributerList, d)
+		return true
+	}else{
+		DistributerList = append(DistributerList, d)
+		flag=true
+	}
 	   return flag
 }
