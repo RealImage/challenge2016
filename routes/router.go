@@ -5,15 +5,11 @@ import ("github.com/gin-gonic/gin"
 	)
 
 func InitialiseRoutes(router *gin.Engine){
-	router.GET("/alldistributer", controllers.AllDistrubter)
-
-
-
-	router.Use(func(c *gin.Context){
+	router.GET("/", controllers.Home)
+	router.GET("/check-permissions", controllers.CheckPermissions)
+	router.POST("/add-distributor", controllers.AddDistributor)
+	router.NoRoute(func(c *gin.Context){
 		c.JSON(404, gin.H{"error":"Not Found"})
 	})
-
-	router.NoRoute(func(c *gin.Context){
-		c.JSON(404, gin.H{"error":"not found"})
-	})
 }
+
