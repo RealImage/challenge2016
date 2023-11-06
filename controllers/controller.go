@@ -6,9 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Home(c *gin.Context) {
-    c.JSON(http.StatusNotFound, gin.H{"error": "Hello Up"})
+
+
+ 
+func GetAll(c *gin.Context) {
+        response := models.DistributorResponse{
+            Distributors: models.DistributerList,
+        }
+    
+        c.JSON(http.StatusOK, response)
 }
+        
+   
 
 func CheckPermissions(c *gin.Context) {
     distributorName := c.Query("distributor_name")
