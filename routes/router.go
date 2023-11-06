@@ -5,7 +5,7 @@ import ("github.com/gin-gonic/gin"
 	)
 
 func InitialiseRoutes(router *gin.Engine){
-	router.GET("/", controllers.Home)
+	router.GET("/get-all-distributors", controllers.GetAll)
 	router.GET("/check-permissions", controllers.CheckPermissions)
 	router.POST("/add-distributor", controllers.AddDistributor)
 	router.NoRoute(func(c *gin.Context){
