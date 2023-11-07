@@ -26,20 +26,30 @@ cd challenge2016
    
 Build and run the application:
 
+```
 go run main.go
+
+```
 The API should be running on http://localhost:8080.
 
-API Endpoints
+# API Endpoints
+
 Get All Distributors: Retrieve a JSON list of all distributors.
+
 URL: GET /get-all-distributors
 
 Check Permissions: Check if a distributor has permission in a given area.
+
 URL: GET /check-permissions
 
 Query Parameters:
+
 distributor_name: The name of the distributor.
+
 location: The geographic location to check permissions for.
+
 Example:
+
 ```
 GET /check-permissions?distributor_name=Aman001&location=IN
 
@@ -48,7 +58,6 @@ GET /check-permissions?distributor_name=Aman001&location=IN
 
 Add Distributor: Add a new distributor to the system.
 ```
-
 URL: POST /add-distributor
 
 ```
