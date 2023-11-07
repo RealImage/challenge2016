@@ -5,9 +5,6 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 )
-
-
-
  
 func GetAll(c *gin.Context) {
         response := models.DistributorResponse{
@@ -22,6 +19,9 @@ func GetAll(c *gin.Context) {
 func CheckPermissions(c *gin.Context) {
     distributorName := c.Query("distributor_name")
     location := c.Query("location")
+    //check if asked location is a valid location
+    valid:=models.CheckCode(location)
+    if valid{
 	var distributer_detail models.Distributor 
 	for _,d:=range models.DistributerList{
 		if d.Name==distributorName{
@@ -30,12 +30,15 @@ func CheckPermissions(c *gin.Context) {
 		}
 }
     status := models.IsPermitted(distributer_detail, location)
-
     if status {
         c.JSON(http.StatusOK, gin.H{"message": "YES"})
     } else {
         c.JSON(http.StatusOK, gin.H{"message": "NO"})
     }
+    }else{
+    c.JSON(http.StatusOK, gin.H{"error": "Not a valid location"})
+    }
+   
 }
 
 func AddDistributor(c *gin.Context) {
