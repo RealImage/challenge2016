@@ -57,6 +57,16 @@ GET /check-permissions?distributor_name=Aman001&location=IN
 
 
 Add Distributor: Add a new distributor to the system.
+
+# Note : 
+```
+Only `Admin` can give a distribution permission of any valid location to a new distributer.
+A dritubter can only give permission of those locations to a new distributer which comes under his/her include list.
+
+Added is the paramter which take the name of the user adding a new distributer.
+
+```
+
 ```
 URL: POST /add-distributor
 
