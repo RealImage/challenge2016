@@ -12,6 +12,9 @@ func CheckCode(code string) bool{
 
 
 	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error getting directory :", err)
+	}	
 	
 	fmt.Println(dir)
 	filePath := filepath.Join(dir, "cities.csv")
