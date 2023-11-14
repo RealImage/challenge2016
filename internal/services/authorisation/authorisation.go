@@ -80,7 +80,7 @@ func (a *Authorize) GiveAuthorisation(ctx context.Context, req *dtos.Authorisati
 		}
 		if req.ParentName != "" {
 			// this function validate the request such that the region/location data in it is subset of the parent
-			_, err := validateChildWithParentRegion(ctx, inc, req.ParentName, globals.TypeInclude, ind)
+			_, err := validateChildWithParentRegion(ctx, inc, req.ParentName)
 			if err != nil {
 				log.Println("error: ", err)
 				return err
@@ -185,48 +185,32 @@ func addAuthorisationData(ctx context.Context, data *dtos.Location, res map[stri
 	}
 }
 
-func validateChildWithParentRegion(ctx context.Context, region *dtos.Location, parentName string, reqFrom string, ind int) (bool, error) {
+func validateChildWithParentRegion(ctx context.Context, region *dtos.Location, parentName string) (bool, error) {
 
 	if _, exists := globals.DistributorData[parentName]; !exists {
 		return false, errors.New("parent doesn't exists")
 	}
 	data, dataBool := globals.DistributorData[parentName].Included[region.Country]
-	if reqFrom == globals.TypeExclude {
-		data, dataBool = globals.DistributorData[parentName].Excluded[region.Country]
-	}
-	if exists := dataBool; !exists && region.Country != "" {
+
+	if !dataBool {
 		return false, errors.New("country is not subset of parent")
 	}
 
 	if region.State != "" {
-		//case of first time
-		var newState bool
 		if len(data.States) == 0 {
-			err := validateRegion(ctx, region, reqFrom, ind)
-			if err != nil {
-				log.Println("error: ", err)
-				return false, err
-			}
-			newState = true
+			return true, nil
 		}
-		if _, exists := data.States[region.State]; !newState && !exists {
-			return false, errors.New("country is not subset of parent")
+		if _, exists := data.States[region.State]; !exists {
+			return false, errors.New("state is not subset of parent")
 		}
 	}
 
 	if region.City != "" {
-		//case of first time
-		var newCity bool
 		if len(data.States[region.State].Cities) == 0 {
-			err := validateRegion(ctx, region, reqFrom, ind)
-			if err != nil {
-				log.Println("error: ", err)
-				return false, err
-			}
-			newCity = true
+			return true, nil
 		}
-		if _, exists := data.States[region.State].Cities[region.City]; !newCity && !exists {
-			return false, errors.New("country is not subset of parent")
+		if _, exists := data.States[region.State].Cities[region.City]; !exists {
+			return false, errors.New("city is not same as of parent")
 		}
 	}
 
@@ -236,15 +220,15 @@ func validateChildWithParentRegion(ctx context.Context, region *dtos.Location, p
 func validateRegion(ctx context.Context, region *dtos.Location, reqFrom string, ind int) error {
 	if region.Country != "" {
 		if _, exists := globals.MasterData[region.Country]; !exists {
-			return errors.New("region's country in " + reqFrom + " at position " + fmt.Sprint(ind+1) + " doesn't exist in master data")
+			return errors.New("region's country in " + reqFrom + " at object " + fmt.Sprint(ind+1) + " doesn't exist in master data")
 		}
 	} else {
-		return errors.New("region's country is empty in " + reqFrom + " at position " + fmt.Sprint(ind+1))
+		return errors.New("region's country is empty in " + reqFrom + " at object " + fmt.Sprint(ind+1))
 	}
 
 	if region.State != "" {
 		if _, exists := globals.MasterData[region.Country].States[region.State]; !exists {
-			return errors.New("region's state in " + reqFrom + " at position " + fmt.Sprint(ind+1) + " doesn't exist in master data")
+			return errors.New("region's state in " + reqFrom + " at object " + fmt.Sprint(ind+1) + " doesn't exist in master data")
 		}
 	}
 
