@@ -2,7 +2,7 @@ package controller
 
 import (
 	"net/http"
-	datacsv "qube-cinemas-challenge/data-csv"
+	datacsv "qube-cinemas-challenge/data-csv" //all the data from the csv file is imported
 	"qube-cinemas-challenge/models"
 	"strconv"
 
@@ -24,12 +24,16 @@ func AddDistributor(c *gin.Context){
 	type DistributorData struct{
 		Parent string `json:"parent"`
 	}
+
+	//parsing json data
 	var newData DistributorData
 	if err := c.ShouldBind(&newData);err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status":false,"error":err.Error()})
 		return
 	}
-	var exist bool
+
+	//Distributor creating logic if the distributor is a sub distributor
+	var exist bool //for checking the user entered parent id is correct or not
 	if newData.Parent != ""{
 		for _, distributor:= range datacsv.Distributor{
 			exist = distributor.ID==newData.Parent
@@ -43,6 +47,8 @@ func AddDistributor(c *gin.Context){
 			return
 		}
 	}
+
+	//Distributor creating logic if the distributor is not a sub distributor
 	newDistributor.ID = strconv.Itoa(len(datacsv.Distributor)+1)
 	datacsv.Distributor = append(datacsv.Distributor, newDistributor)
 
@@ -58,6 +64,8 @@ func GetParentDetails(c *gin.Context){
 		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error":err.Error()})
 		return
 	}
+
+	//searching from the array for the user entered distributor
 	for _,distributor := range datacsv.Distributor{
 		if distributor.ID == dist.Id {
 			c.JSON(http.StatusAccepted, gin.H{"status":true, "Parent":distributor.Parent})
@@ -119,21 +127,21 @@ func AddIncludedCountry(c *gin.Context){
 		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error":err.Error()})
 		return
 	}
-	var dist_rule *models.Rule
-	var exist bool
-	for _,rule:= range datacsv.Rules{
-		if rule.Dist_Id == dist.Id{
+	var dist_rule *models.Rule //creating a rule for the distributor
+	var exist bool //for checking the rule already exists or not
+	for _,rule:= range datacsv.Rules{ 
+		if rule.Dist_Id == dist.Id{ // checking the rule already exists or not
 			exist = true
-			dist_rule = rule
+			dist_rule = rule // assiging the already existing rule to the created rule
 		}
 	}
 	for _,distributor:= range datacsv.Distributor{
-		if distributor.ID ==dist.Id{
+		if distributor.ID ==dist.Id{ //getting the details from user input 
 			for _, city := range datacsv.Cities{
 				if city.Province.Country.Code == dist.CountryCode{
-					includeNode := make(map[*models.City]bool)
-					includeNode[city] = true
-					if !exist{
+					includeNode := make(map[*models.City]bool) 
+					includeNode[city] = true //setting the city permission
+					if !exist{ // if the rule doesnt exist creating a new rule for the distributor
 						dist_rule = &models.Rule{Dist_Id: dist.Id, Included: includeNode}
 						datacsv.Rules = append(datacsv.Rules, dist_rule)
 					} else {
@@ -342,12 +350,12 @@ func CityLevelPermission(c *gin.Context){
 		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error":err.Error()})
 		return
 	}
-	var city *models.City
-	var exist bool
+	var city *models.City //creating city instance
+	var exist bool //for checking the user entered city available or not
 	for _,getCity := range datacsv.Cities{
-		if getCity.Code == dist.CityCode{
+		if getCity.Code == dist.CityCode{ //fetching the city data
 			exist = true
-			city = getCity
+			city = getCity //assigning the city data to city instance
 		}
 	}
 	if !exist{

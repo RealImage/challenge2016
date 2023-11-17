@@ -18,3 +18,6 @@ func main(){
 
 	r.Run()
 }
+
+//run the command "go run main.go" to run the project
+//all the routes are registered in the file routes.go inside the routes directory
