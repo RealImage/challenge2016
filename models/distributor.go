@@ -1,9 +1,13 @@
 package models
 
 type Distributor struct{
-	Included map[City]bool
-	Excluded map[City]bool
+	ID string
 
 	Parent *Distributor
-	Sub []*Distributor
+}
+
+type Rule struct{
+	Dist_Id string
+	Included map[City]bool
+	Excluded map[City]bool
 }
