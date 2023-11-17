@@ -8,5 +8,5 @@ import (
 
 
 func Routes(c *gin.Engine){
-	c.GET("", controller.GetLocations)
+	c.GET("/locations", controller.GetLocations)
 }
