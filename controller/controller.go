@@ -330,3 +330,130 @@ func RemoveIncludedCity(c *gin.Context){
 		}
 	}
 }
+
+//Checking Permission
+func CityLevelPermission(c *gin.Context){
+	type Dist_Id struct{
+		Id string `json:"dist_id"`
+		CityCode string `json:"city-code"`
+	}
+	var dist Dist_Id
+	if err := c.ShouldBindJSON(&dist);err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error":err.Error()})
+		return
+	}
+	var city *models.City
+	var exist bool
+	for _,getCity := range datacsv.Cities{
+		if getCity.Code == dist.CityCode{
+			exist = true
+			city = getCity
+		}
+	}
+	if !exist{
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"status":false, "message":"The city code doesn't exist"})
+		return
+	}
+	for _,rule:= range datacsv.Rules{
+		if rule.Dist_Id == dist.Id{
+			if rule.Included[city]{
+				c.JSON(http.StatusAccepted, gin.H{"status":true, "message":city.Name+" is permitted for Distributor "+dist.Id})
+				return
+			} else {
+				c.JSON(http.StatusAccepted, gin.H{"status":true, "message":city.Name+" is not permitted for Distributor "+dist.Id})
+				return
+			}
+		}
+	}
+	c.JSON(http.StatusUnprocessableEntity, gin.H{"status":false, "message":"Distributor Id doesn't exist"})
+}
+
+func ProvinceLevelPermission(c *gin.Context){
+	type Dist_Id struct{
+		Id string `json:"dist_id"`
+		ProvinceCode string `json:"province-code"`
+	}
+	var dist Dist_Id
+	if err := c.ShouldBindJSON(&dist);err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error":err.Error()})
+		return
+	}
+	var province *models.Province
+	var exist bool
+	var included, excluded int
+	for _,getCity := range datacsv.Cities{
+		if getCity.Province.Code == dist.ProvinceCode{
+			province = getCity.Province
+			exist = true
+			for _,rule:= range datacsv.Rules{
+				if rule.Dist_Id == dist.Id{
+					if rule.Included[getCity]{
+						included++
+					} else {
+						excluded++
+					}
+				}
+			}
+		}
+	}
+	if !exist{
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"status":false, "message":"The province code doesn't exist"})
+		return
+	}
+
+	if excluded == 0 {
+		c.JSON(http.StatusAccepted, gin.H{"status":true, "message":province.Name+" is permitted for Distributor "+dist.Id})
+		return
+	} else if included !=0 {
+		c.JSON(http.StatusAccepted, gin.H{"status":true, "message":province.Name+" is permitted for Distributor "+dist.Id+" but there are "+strconv.Itoa(excluded)+" cities excluded for this distributor"})
+		return
+	} else {
+		c.JSON(http.StatusAccepted, gin.H{"status":true, "message":province.Name+" is not permitted for Distributor "+dist.Id})
+		return
+	}
+}
+
+func CountryLevelPermission(c *gin.Context){
+	type Dist_Id struct{
+		Id string `json:"dist_id"`
+		CountryCode string `json:"city-code"`
+	}
+	var dist Dist_Id
+	if err := c.ShouldBindJSON(&dist);err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status":false, "error":err.Error()})
+		return
+	}
+	var country *models.Country
+	var exist bool
+	var included, excluded int
+	for _,getCity := range datacsv.Cities{
+		if getCity.Province.Country.Code == dist.CountryCode{
+			country = getCity.Province.Country
+			exist = true
+			for _,rule:= range datacsv.Rules{
+				if rule.Dist_Id == dist.Id{
+					if rule.Included[getCity]{
+						included++
+					} else {
+						excluded++
+					}
+				}
+			}
+		}
+	}
+	if !exist{
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"status":false, "message":"The country code doesn't exist"})
+		return
+	}
+
+	if excluded == 0 {
+		c.JSON(http.StatusAccepted, gin.H{"status":true, "message":country.Name+" is permitted for Distributor "+dist.Id})
+		return
+	} else if included !=0 {
+		c.JSON(http.StatusAccepted, gin.H{"status":true, "message":country.Name+" is permitted for Distributor "+dist.Id+" but there are "+strconv.Itoa(excluded)+" cities excluded for this distributor"})
+		return
+	} else {
+		c.JSON(http.StatusAccepted, gin.H{"status":true, "message":country.Name+" is not permitted for Distributor "+dist.Id})
+		return
+	}
+}
