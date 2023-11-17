@@ -13,4 +13,7 @@ func Routes(c *gin.Engine){
 	c.POST("/Add-Distributor", controller.AddDistributor)
 	c.GET("/get-parent", controller.GetParentDetails)
 	c.GET("/get-subDistributors", controller.GetSubDistributors)
+
+	c.GET("/get-included-region", controller.GetIncludedRegion)
+	c.POST("/add-included-country", controller.AddIncludedCountry)
 }

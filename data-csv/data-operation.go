@@ -11,8 +11,12 @@ type Locations []*models.City
 
 //Distributor
 var Distributor []*models.Distributor
+
 //Locations
 var Cities []*models.City
+
+//Rules
+var Rules []*models.Rule
 
 type CSV struct{
 	FileName string `json:"csv"`

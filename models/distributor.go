@@ -8,6 +8,5 @@ type Distributor struct{
 
 type Rule struct{
 	Dist_Id string
-	Included map[City]bool
-	Excluded map[City]bool
+	Included map[*City]bool
 }
