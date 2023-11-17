@@ -2,11 +2,17 @@ package datacsv
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
 	"qube-cinemas-challenge/models"
 )
 
 type Locations []*models.City
+
+//Distributor
+var Distributor []*models.Distributor
+//Locations
+var Cities []*models.City
 
 type CSV struct{
 	FileName string `json:"csv"`
@@ -42,4 +48,15 @@ func(c *CSV) Read() ([]*models.City, error){
 		locations = append(locations, location)
 	}
 	return locations, nil
+}
+
+func DataFetch() {
+	//File name asking from the user
+	var file CSV
+	file.FileName = "cities.csv"
+	var err error
+	Cities, err = file.Read()
+	if err != nil {
+		fmt.Println("Error: "+err.Error())
+	}
 }
