@@ -1,0 +1,4 @@
+{"id":"4635b0dd-d695-494a-ab4d-e833ff10eb57","name":"Distributor01","permissions":{"include":["India","United States"],"exclude":["Karnataka-India","Chennai-Tamil Nadu-India"]}}
+{"id":"61a43143-1bcb-47f2-9afb-41b00e28003f","name":"Distributor02","permissions":{"include":["India"],"exclude":["Tamil Nadu-India","Karnataka-India","Chennai-Tamil Nadu-India"]},"parent":"4635b0dd-d695-494a-ab4d-e833ff10eb57"}
+{"id":"d54c8207-e19b-48a1-9bc7-b691ad54d59f","name":"Distributor03","permissions":{"include":["Madhyamgram-West Bengal-India"],"exclude":["Tamil Nadu-India","Karnataka-India","Chennai-Tamil Nadu-India"]},"parent":"61a43143-1bcb-47f2-9afb-41b00e28003f"}
+{"id":"5473f75f-1889-4c2a-b1b6-8e54a115db1e","name":"Distributor04","permissions":{"include":["United States"],"exclude":["Karnataka-India","Chennai-Tamil Nadu-India"]}}
