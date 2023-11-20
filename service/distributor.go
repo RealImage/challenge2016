@@ -12,7 +12,14 @@ import (
 	"strings"
 )
 
-const DISTRIBUTOR_DB = "distributor.txt"
+const (
+	DistributorDb             = "distributor.txt"
+	InvalidRegionError        = "regions mentioned are not valid"
+	InvalidParamError         = "invalid param value"
+	DistributorPermissionFail = "NO: DISTRIBUTOR does not have mentioned permission to distribute"
+	DistributorPermissionPass = "YES: DISTRIBUTOR have mentioned permission to distribute"
+	DistributorNotFound       = "DISTRIBUTOR: id does not match with any distributor"
+)
 
 type Distributor struct {
 	Id          string      `json:"id"`
@@ -31,7 +38,7 @@ func CreateDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	if name == "" {
 		log.Println("invalid param value")
-		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "invalid param value")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, InvalidParamError)
 		return
 	}
 
@@ -41,6 +48,11 @@ func CreateDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		utils.WriteResponseJson(w, http.StatusBadRequest, nil, err.Error())
+		return
+	}
+
+	if !ValidateRegion(distributor.Permissions.Exclude) || !ValidateRegion(distributor.Permissions.Include) {
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, InvalidRegionError)
 		return
 	}
 
@@ -67,7 +79,7 @@ func CreateSubDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	if name == "" || parentId == "" {
 		log.Println("invalid param value")
-		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "invalid param value")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, InvalidParamError)
 		return
 	}
 
@@ -80,6 +92,11 @@ func CreateSubDistributorHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !ValidateRegion(subDistributor.Permissions.Exclude) || !ValidateRegion(subDistributor.Permissions.Include) {
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, InvalidRegionError)
+		return
+	}
+
 	distributor, err := FetchDistributorByUid(parentId)
 	if err != nil {
 		log.Println(err)
@@ -87,7 +104,7 @@ func CreateSubDistributorHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !CheckPermissions(subDistributor.Permissions, distributor.Permissions) {
-		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, DistributorPermissionFail)
 		return
 	}
 
@@ -115,12 +132,17 @@ func CheckDistributorPermissionHandler(w http.ResponseWriter, r *http.Request) {
 	permission := chi.URLParam(r, "permission")
 	if uid == "" || permission == "" {
 		log.Println("invalid param value")
-		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "invalid param value")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, InvalidParamError)
 		return
 	}
 
 	permissions := Permissions{
 		Include: []string{permission},
+	}
+
+	if !ValidateRegion(permissions.Include) {
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, InvalidRegionError)
+		return
 	}
 
 	distributor, err := FetchDistributorByUid(uid)
@@ -131,22 +153,22 @@ func CheckDistributorPermissionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if distributor.Id == "" {
-		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "DISTRIBUTOR: id does not match with any distributor")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, DistributorNotFound)
 		return
 	}
 
 	if distributor.Parent != "" {
 		if !CheckParentDistributorPermissions(permissions, distributor.Parent) {
-			utils.WriteResponseJson(w, http.StatusBadRequest, nil, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
+			utils.WriteResponseJson(w, http.StatusBadRequest, nil, DistributorPermissionFail)
 			return
 		}
 	}
 
 	if CheckPermissions(permissions, distributor.Permissions) {
-		utils.WriteResponseJson(w, http.StatusOK, nil, "YES: DISTRIBUTOR have mentioned permission to distribute")
+		utils.WriteResponseJson(w, http.StatusOK, DistributorPermissionPass, "")
 		return
 	} else {
-		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, DistributorPermissionFail)
 		return
 	}
 }
@@ -188,7 +210,7 @@ func IsSubset(subset, superset []string) bool {
 
 // FetchDistributorByUid - to fetch the distributor by uid
 func FetchDistributorByUid(uid string) (distributor Distributor, err error) {
-	file, err := os.Open(DISTRIBUTOR_DB)
+	file, err := os.Open(DistributorDb)
 	if err != nil {
 		log.Println(err)
 		return distributor, err
@@ -213,7 +235,7 @@ func FetchDistributorByUid(uid string) (distributor Distributor, err error) {
 
 // saveDistributorData - save the distributor data to file for further access
 func saveDistributorData(distributor Distributor) (err error) {
-	file, err := os.OpenFile(DISTRIBUTOR_DB, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	file, err := os.OpenFile(DistributorDb, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Println("Error opening file:", err)
 		return err

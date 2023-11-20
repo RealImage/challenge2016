@@ -38,4 +38,75 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
+# Solution
+
+Run the following command to start the server up:
+```
+make start
+```
+NOTE: If you do not have make system install on your system use the below command to start the server up:
+```
+go build -o ./bin/distributionApp ./cmd/api && ./bin/distributionApp 
+```
+
+Wait for the server instance to start, once you receive the following message that means server has started successfully
+```
+Building front end binary...
+env CGO_ENABLED=0 go build -o ./bin/distributionApp ./cmd/api
+Done!
+Starting front end
+go build -o ./bin/distributionApp ./cmd/api
+./bin/distributionApp
+2023/11/20 23:02:05 started server on port: 8080
+```
+
+NOTE: You can copy paste this curl commands to postman or run it in terminal
+Once the server is up we have following 3 APIs for following operations:
+
+1. Creating New Distributor
+```
+curl --location 'localhost:8080/v1/distribute/Distributor01' \
+--header 'Content-Type: application/json' \
+--data '{
+    "permissions": {
+        "include": [
+            "India",
+            "United States"
+        ],
+        "exclude": [
+            "Karnataka-India",
+            "Chennai-Tamil Nadu-India"
+        ]
+    }
+}'
+```
+
+2. Distributing regions to Sub-Distributor through a Distributor
+```
+curl --location 'localhost:8080/v1/sub-distribute/4635b0dd-d695-494a-ab4d-e833ff10eb57/Distributor02' \
+--header 'Content-Type: application/json' \
+--data '{
+    "permissions": {
+        "include": [
+            "India"
+        ],
+        "exclude": [
+            "Tamil Nadu-India"
+        ]
+    }
+}'
+```
+
+3. Checking permission for Distributor or Sub-Distributor
+```
+curl --location 'localhost:8080/v1/check-permissions/4635b0dd-d695-494a-ab4d-e833ff10eb57/India'
+```
+
+NOTE: Below are following points to keep in mind
+1. Distributor and Sub-Distributor data is created in distributor.txt file.
+2. If you want to test several scenarios then you will have to create Distributor or Sub-Distributor and then fetch the uuids from distributor.txt file.
+3. Then replace this uuids in curl command to test out the scenarios.
+
+NOTE: I have created some Distributors and Sub-Distributors in distributor.txt file for reference. You can refer the data and test curl commands accordingly.
+
 

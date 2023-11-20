@@ -10,7 +10,7 @@ import (
 type ResponseJson struct {
 	Status      string      `json:"status"`
 	Result      interface{} `json:"result,omitempty"`
-	ErrorString string      `json:"error"`
+	ErrorString string      `json:"error,omitempty"`
 }
 
 // WriteResponseJson - a utility function for writing response json
