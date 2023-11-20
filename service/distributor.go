@@ -3,10 +3,10 @@ package service
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"github.com/RealImage/challenge2016/utils"
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -26,11 +26,12 @@ type Permissions struct {
 	Exclude []string `json:"exclude,omitempty"`
 }
 
+// CreateDistributorHandler - handler for creating new distributor
 func CreateDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	if name == "" {
-		fmt.Println("invalid param value")
-		utils.WriteResponseJson(w, http.StatusBadRequest, "invalid param value")
+		log.Println("invalid param value")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "invalid param value")
 		return
 	}
 
@@ -38,8 +39,8 @@ func CreateDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	var distributor Distributor
 	err := json.NewDecoder(r.Body).Decode(&distributor)
 	if err != nil {
-		fmt.Println(err)
-		utils.WriteResponseJson(w, http.StatusBadRequest, err)
+		log.Println(err)
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, err.Error())
 		return
 	}
 
@@ -49,21 +50,24 @@ func CreateDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	// saving the data to text file as we do not have to use DB
 	err = saveDistributorData(distributor)
 	if err != nil {
-		fmt.Println(err)
-		utils.WriteResponseJson(w, http.StatusBadRequest, err)
+		log.Println(err)
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, err.Error())
 		return
 	}
 
-	utils.WriteResponseJson(w, http.StatusOK, distributor)
+	utils.WriteResponseJson(w, http.StatusOK, distributor, "")
 	return
 }
 
+// CreateSubDistributorHandler - handler for creating new sub distributor
+// we check here if the permissions for new sub distributor matches the distributor
+// only then the sub distributor will be permitted to distribute
 func CreateSubDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	parentId := chi.URLParam(r, "parent_id")
 	name := chi.URLParam(r, "name")
 	if name == "" || parentId == "" {
-		fmt.Println("invalid param value")
-		utils.WriteResponseJson(w, http.StatusBadRequest, "invalid param value")
+		log.Println("invalid param value")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "invalid param value")
 		return
 	}
 
@@ -71,19 +75,19 @@ func CreateSubDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	var subDistributor Distributor
 	err := json.NewDecoder(r.Body).Decode(&subDistributor)
 	if err != nil {
-		fmt.Println(err)
-		utils.WriteResponseJson(w, http.StatusBadRequest, err)
+		log.Println(err)
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, err.Error())
 		return
 	}
 
 	distributor, err := FetchDistributorByUid(parentId)
 	if err != nil {
-		fmt.Println(err)
-		utils.WriteResponseJson(w, http.StatusBadRequest, err)
+		log.Println(err)
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, err.Error())
 		return
 	}
 	if !CheckPermissions(subDistributor.Permissions, distributor.Permissions) {
-		utils.WriteResponseJson(w, http.StatusBadRequest, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
 		return
 	}
 
@@ -95,75 +99,82 @@ func CreateSubDistributorHandler(w http.ResponseWriter, r *http.Request) {
 	// saving the data to text file as we do not have to use DB
 	err = saveDistributorData(subDistributor)
 	if err != nil {
-		fmt.Println(err)
-		utils.WriteResponseJson(w, http.StatusBadRequest, err)
+		log.Println(err)
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, err.Error())
 		return
 	}
 
-	utils.WriteResponseJson(w, http.StatusOK, subDistributor)
+	utils.WriteResponseJson(w, http.StatusOK, subDistributor, "")
 	return
 }
 
+// CheckDistributorPermissionHandler - handler for checking the distributor has given permission to distribute
+// if the distributor is sub distributor then also check the permission with parent distributor
 func CheckDistributorPermissionHandler(w http.ResponseWriter, r *http.Request) {
 	uid := chi.URLParam(r, "id")
-	if uid == "" {
-		fmt.Println("invalid param value")
-		utils.WriteResponseJson(w, http.StatusBadRequest, "invalid param value")
+	permission := chi.URLParam(r, "permission")
+	if uid == "" || permission == "" {
+		log.Println("invalid param value")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "invalid param value")
 		return
 	}
 
-	var permissions Permissions
-	err := json.NewDecoder(r.Body).Decode(&permissions)
-	if err != nil {
-		fmt.Println(err)
-		utils.WriteResponseJson(w, http.StatusBadRequest, err)
-		return
+	permissions := Permissions{
+		Include: []string{permission},
 	}
 
 	distributor, err := FetchDistributorByUid(uid)
 	if err != nil {
-		fmt.Println(err)
-		utils.WriteResponseJson(w, http.StatusBadRequest, err)
+		log.Println(err)
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, err.Error())
+		return
+	}
+
+	if distributor.Id == "" {
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "DISTRIBUTOR: id does not match with any distributor")
 		return
 	}
 
 	if distributor.Parent != "" {
 		if !CheckParentDistributorPermissions(permissions, distributor.Parent) {
-			utils.WriteResponseJson(w, http.StatusBadRequest, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
+			utils.WriteResponseJson(w, http.StatusBadRequest, nil, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
 			return
 		}
 	}
 
 	if CheckPermissions(permissions, distributor.Permissions) {
-		utils.WriteResponseJson(w, http.StatusOK, "YES: DISTRIBUTOR have mentioned permission to distribute")
+		utils.WriteResponseJson(w, http.StatusOK, nil, "YES: DISTRIBUTOR have mentioned permission to distribute")
 		return
 	} else {
-		utils.WriteResponseJson(w, http.StatusBadRequest, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
+		utils.WriteResponseJson(w, http.StatusBadRequest, nil, "NO: DISTRIBUTOR does not have mentioned permission to distribute")
 		return
 	}
 }
 
+// CheckParentDistributorPermissions - fetching the distributor by uid and checking permission to distribute
 func CheckParentDistributorPermissions(permissions Permissions, parentId string) bool {
 	distributor, err := FetchDistributorByUid(parentId)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return false
 	}
 
 	return CheckPermissions(permissions, distributor.Permissions)
 }
 
+// CheckPermissions - check if the permissions are correct and distributor is eligible to distribute
 func CheckPermissions(subSet Permissions, superSet Permissions) bool {
-	if isSubset(subSet.Include, superSet.Exclude) {
+	if IsSubset(subSet.Include, superSet.Exclude) {
 		return false
 	}
-	if isSubset(subSet.Include, superSet.Include) {
+	if IsSubset(subSet.Include, superSet.Include) {
 		return true
 	}
 	return false
 }
 
-func isSubset(subset, superset []string) bool {
+// IsSubset - func to check for subset permission with superset permission for distributor and sub-distributor
+func IsSubset(subset, superset []string) bool {
 	i, j := 0, 0
 	for i < len(subset) && j < len(superset) {
 		if subset[i] == superset[j] || strings.HasSuffix(subset[i], superset[j]) {
@@ -175,10 +186,11 @@ func isSubset(subset, superset []string) bool {
 	return i == len(subset)
 }
 
+// FetchDistributorByUid - to fetch the distributor by uid
 func FetchDistributorByUid(uid string) (distributor Distributor, err error) {
 	file, err := os.Open(DISTRIBUTOR_DB)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return distributor, err
 	}
 	defer file.Close()
@@ -199,10 +211,11 @@ func FetchDistributorByUid(uid string) (distributor Distributor, err error) {
 	return distributor, err
 }
 
+// saveDistributorData - save the distributor data to file for further access
 func saveDistributorData(distributor Distributor) (err error) {
 	file, err := os.OpenFile(DISTRIBUTOR_DB, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
-		fmt.Println("Error opening file:", err)
+		log.Println("Error opening file:", err)
 		return err
 	}
 	defer file.Close()
@@ -210,7 +223,7 @@ func saveDistributorData(distributor Distributor) (err error) {
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(distributor)
 	if err != nil {
-		fmt.Println("Error writing file:", err)
+		log.Println("Error writing file:", err)
 		return err
 	}
 

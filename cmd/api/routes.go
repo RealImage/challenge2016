@@ -11,6 +11,7 @@ import (
 func routes() http.Handler {
 	mux := chi.NewRouter()
 
+	//adding cors options for api security
 	mux.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -24,10 +25,9 @@ func routes() http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(middleware.Heartbeat("/v1/ping"))
 
-	//mux.Get("/v1/dataset", service.LoadDatasetHandler)
 	mux.Post("/v1/distribute/{name}", service.CreateDistributorHandler)
 	mux.Post("/v1/sub-distribute/{parent_id}/{name}", service.CreateSubDistributorHandler)
-	mux.Post("/v1/check-permissions/{id}", service.CheckDistributorPermissionHandler)
+	mux.Get("/v1/check-permissions/{id}/{permission}", service.CheckDistributorPermissionHandler)
 
 	return mux
 }

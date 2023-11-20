@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/csv"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -10,12 +9,13 @@ import (
 
 const CITIES_DB = "cities.csv"
 
+// App - app struct for initialisation
 type App struct {
 	Config  *Config
-	Logger  *log.Logger
 	Dataset map[string][]string
 }
 
+// Config - config struct for several configuration for app
 type Config struct {
 	Port string
 }
@@ -23,12 +23,12 @@ type Config struct {
 func NewApp() *App {
 	app := &App{
 		Config: NewConfig(),
-		Logger: log.New(os.Stdout, "challenge2016 - ", log.Ldate|log.Ltime),
 	}
 
+	//load the dataset into memory
 	dataSet, err := LoadDataset()
 	if err != nil {
-		app.Logger.Println("error starting server")
+		log.Println("error starting server")
 	}
 	app.Dataset = dataSet
 
@@ -41,12 +41,13 @@ func NewConfig() *Config {
 	}
 }
 
+// LoadDataset - loading the dataset into memory
 func LoadDataset() (dataSet map[string][]string, err error) {
 	dataSet = make(map[string][]string)
 
 	file, err := os.Open(CITIES_DB)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return dataSet, err
 	}
 	defer file.Close()
@@ -55,7 +56,7 @@ func LoadDataset() (dataSet map[string][]string, err error) {
 
 	records, err := reader.ReadAll()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return dataSet, err
 	}
 

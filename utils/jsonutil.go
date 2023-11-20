@@ -2,25 +2,28 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 )
 
 type ResponseJson struct {
-	Status string      `json:"status"`
-	Result interface{} `json:"result"`
+	Status      string      `json:"status"`
+	Result      interface{} `json:"result,omitempty"`
+	ErrorString string      `json:"error"`
 }
 
-func WriteResponseJson(w http.ResponseWriter, status int, data any) {
+// WriteResponseJson - a utility function for writing response json
+func WriteResponseJson(w http.ResponseWriter, status int, data any, errorString string) {
 	response := ResponseJson{
-		Status: strconv.Itoa(status),
-		Result: data,
+		Status:      strconv.Itoa(status),
+		Result:      data,
+		ErrorString: errorString,
 	}
 
 	js, err := json.Marshal(response)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		response.Result = err
 	}
 

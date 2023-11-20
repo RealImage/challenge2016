@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/RealImage/challenge2016/service"
+	"log"
 	"net/http"
 	"time"
 )
 
 func InitServer() {
+	//initialise the app, config and load the dataset into memory
 	app := service.NewApp()
 
 	server := &http.Server{
@@ -18,8 +20,8 @@ func InitServer() {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	app.Logger.Println("started server on port : ", app.Config.Port)
+	log.Println("started server on port:", app.Config.Port)
 
 	err := server.ListenAndServe()
-	app.Logger.Fatal(err)
+	log.Fatalln(err)
 }
