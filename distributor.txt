@@ -1,0 +1,2 @@
+{"id":"c4cbba50-ca01-462e-a5c4-dd00645f7ff7","name":"Distributor01","permissions":{"include":["INDIA","UNITEDSTATES"],"exclude":["KARNATAKA-INDIA","CHENNAI-TAMILNADU-INDIA"]}}
+{"id":"c71e9cd2-9cdc-4591-8434-c6f3920bf50a","name":"Distributor02","permissions":{"include":["INDIA"],"exclude":["TAMILNADU-INDIA","KARNATAKA-INDIA","CHENNAI-TAMILNADU-INDIA"]},"parent":"c4cbba50-ca01-462e-a5c4-dd00645f7ff7"}
