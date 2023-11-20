@@ -27,6 +27,7 @@ _testmain.go
 *.iml
 
 # Directory-based project format:
+/bin
 .vscode/
 .idea/
 .idea/workspace.xml
