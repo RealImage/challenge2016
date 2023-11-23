@@ -43,6 +43,10 @@ type distributor struct {
 	exclSet        map[string]*triplet
 }
 
+const (
+	csvFilePath = "cities.csv"
+)
+
 var (
 	cityMap        map[string]*city
 	stateMap       map[string]*state
@@ -51,15 +55,28 @@ var (
 )
 
 func main() {
-	records := readCsvFile()
+	records, err := readCsvFile()
+	if err != nil {
+		log.Fatalf("Error reading CSV file: %v", err)
+	}
 	initMaps()
 	createRecordsMap(records)
-	start()
-
+	showMainMenu()
 }
 
-func start() {
-	showMainMenu()
+func readCsvFile() ([][]string, error) {
+	file, err := os.Open(csvFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("error opening file: %v", err)
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf("error reading CSV: %v", err)
+	}
+	return records, nil
 }
 
 func showMainMenu() {
@@ -68,13 +85,18 @@ func showMainMenu() {
 			input    int
 			distName string
 		)
-		fmt.Println("\nMain Menu -> 1.Add Distributor  2.Show All Entities  3.Check Authorization  4.End")
+		fmt.Println("\nMain Menu -> 1.Add Distributor  2.Show All Entities  3.Check Distributor Authorization  4.End")
 		fmt.Scanf("%d %s", &input, &distName)
+		if distName == "" && (input == 1 || input == 3) {
+			fmt.Println("\nPlease Enter Distributor Name with option 1 and 3")
+			fmt.Println("Eg : 1 <Distributor Name> / 2 / 3 <Distributor Name> / 4")
+			continue
+		}
 		switch input {
 		case 1:
-			addDist(distName, nil)
+			addDistributor(distName, nil)
 		case 2:
-			showAll()
+			showAllMenu()
 		case 3:
 			checkAuthorization(distName)
 		default:
@@ -83,16 +105,72 @@ func showMainMenu() {
 	}
 }
 
-func showAll() {
+func addDistributor(distName string, master *distributor) {
+	dist := getDistributor(distName, master)
+	showPermissionMenu(dist)
+}
+
+func getDistributor(distName string, master *distributor) *distributor {
+	dist, ok := distributorMap[distName]
+	if !ok {
+		dist = &distributor{
+			name:           distName,
+			master:         master,
+			subDistributor: make(map[string]*distributor),
+			inclSet:        make(map[string]*triplet),
+			exclSet:        make(map[string]*triplet),
+		}
+		if master != nil {
+			master.subDistributor[distName] = dist
+		}
+		distributorMap[distName] = dist
+	}
+	return dist
+}
+
+func showPermissionMenu(dist *distributor) {
+	for {
+		var (
+			input   int
+			perName string
+		)
+		fmt.Printf("\n%s Distributor Menu -> 1.Include Place  2.Exclude Place  3.Add Sub-Distributor  4.Show Info  5.Back\n", dist.name)
+		fmt.Scanf("%d %s", &input, &perName)
+		if input > 4 {
+			return
+		}
+		if input == 4 {
+			showDistributor(dist)
+		} else {
+			if perName == "" {
+				fmt.Println("\nPlease enter Place Code or Distributor Name with 1, 2, 3 option")
+				fmt.Println("Eg : 1 <Place Code> / 2 <Place Code> / 3 <Distributor Name> / 4 / 5 ")
+				continue
+			}
+			switch input {
+			case 1:
+				permissionAction(dist, input, perName)
+			case 2:
+				permissionAction(dist, input, perName)
+			case 3:
+				addDistributor(perName, dist)
+			default:
+				fmt.Println("Wrong option selected")
+			}
+		}
+	}
+}
+
+func showAllMenu() {
 	for {
 		var (
 			input int
 		)
-		fmt.Println("\nShow Entity Menu -> 1.Show All Distributor  2.Show All Countries  3.Show All Provinces  4.Show All Cities  5.Back")
+		fmt.Println("\nEntity Menu -> 1.Show All Distributor  2.Show All Countries  3.Show All Provinces  4.Show All Cities  5.Back")
 		fmt.Scanf("%d", &input)
 		switch input {
 		case 1:
-			showAllDist()
+			showAllDistributors()
 		case 2:
 			showAllCountry()
 		case 3:
@@ -103,6 +181,97 @@ func showAll() {
 			return
 		}
 	}
+}
+
+func checkAuthorization(distName string) {
+	if distName == "" {
+		fmt.Println("Distributor Name is empty")
+		return
+	}
+	dist, ok := distributorMap[distName]
+	if !ok {
+		fmt.Println("Distributor not present. Try using add Distributor option")
+		return
+	}
+	showAuthorizationMenu(dist)
+}
+
+func showAuthorizationMenu(dist *distributor) {
+	for {
+		var (
+			input   int
+			perName string
+		)
+		fmt.Printf("Disributor %s Authorization Menu -> 1. Is Place Authorized  2.Back\n", dist.name)
+		fmt.Scanf("%d %s", &input, &perName)
+		switch input {
+		case 1:
+			if perName == "" {
+				fmt.Println("\nPlease Enter Place Code with option 1")
+				fmt.Println("Eg : 1 <Place Code> / 2 ")
+				continue
+			}
+			if !isPlaceCodeValid(perName) {
+				fmt.Printf("Place Code %s is not valid\n", perName)
+				fmt.Printf("Please Enter Place Code in format <Country Code-Province Code-City Code> \n")
+				fmt.Printf("Eg : For CHENNAI Enter this Code -> IN-TN-CENAI\n")
+				continue
+			}
+			auth := checkAuthorized(dist, perName)
+			fmt.Printf("%s Authorization : %v ", perName, auth)
+		default:
+			return
+		}
+	}
+}
+
+func showCountryMenu() {
+	for {
+		var (
+			input       int
+			countryName string
+		)
+		fmt.Println("Country Menu -> 1.Show All Province In Country  2.Show All City In Country  3.Back")
+		fmt.Scanf("%d %s", &input, &countryName)
+		if countryName == "" && (input == 1 || input == 2) {
+			fmt.Println("\nPlease Enter Country Code with option 1 and 2")
+			fmt.Println("Eg : 1 <Country Code> / 2 <Country Code> / 3")
+			continue
+		}
+		countryName = strings.ToUpper(countryName)
+		switch input {
+		case 1:
+			printAllStateInCountry(countryName)
+		case 2:
+			printAllCityInCountry(countryName)
+		default:
+			return
+		}
+	}
+
+}
+
+func showStateMenu() {
+	for {
+		var (
+			input     int
+			stateName string
+		)
+		fmt.Println("Province Menu -> 1.Show All City In Province  2.Back")
+		fmt.Scanf("%d %s", &input, &stateName)
+		if stateName == "" && input == 1 {
+			fmt.Println("\nEnter Province Code with option 1")
+			fmt.Println("Eg : 1 <Province Code> / 2 ")
+		}
+		stateName = strings.ToUpper(stateName)
+		switch input {
+		case 1:
+			printAllCityInState(stateName)
+		default:
+			return
+		}
+	}
+
 }
 
 func showAllCity() {
@@ -119,152 +288,87 @@ func showAllCountry() {
 	showCountryMenu()
 }
 
-func showStateMenu() {
-	for {
-		var (
-			input     int
-			stateName string
-		)
-		fmt.Println("\nState Menu -> 1.Show All City In State  2.Back")
-		fmt.Scanf("%d %s", &input, &stateName)
-		stateName = strings.ToUpper(stateName)
-		switch input {
-		case 1:
-			printAllCityInState(stateName)
-		default:
-			return
-		}
-	}
-
-}
-
-func showCountryMenu() {
-	for {
-		var (
-			input       int
-			countryName string
-		)
-		fmt.Println("\nCountry Menu -> 1.Show All Province In Country  2.Show All City In Country  3.Back")
-		fmt.Scanf("%d %s", &input, &countryName)
-		countryName = strings.ToUpper(countryName)
-		switch input {
-		case 1:
-			printAllStateInCountry(countryName)
-		case 2:
-			printAllCityInCountry(countryName)
-		default:
-			return
-		}
-	}
-
-}
-
 func showAllCityInMap() {
 	fmt.Println()
-	fmt.Printf("\nAll Cities : %d\n", len(cityMap))
+	fmt.Printf("All Cities : %d\n", len(cityMap))
 	for _, city := range cityMap {
 		fmt.Printf("%s -> %s\n", city.name, city.code)
 	}
-	fmt.Printf("\nAll Cities : %d\n", len(cityMap))
+	fmt.Printf("All Cities : %d\n", len(cityMap))
 	fmt.Println()
 }
 
 func showAllStateInMap() {
 	fmt.Println()
-	fmt.Printf("\nAll Provinces : %d\n", len(stateMap))
+	fmt.Printf("All Provinces : %d\n", len(stateMap))
 	for _, state := range stateMap {
 		fmt.Printf("%s -> %s\n", state.name, state.code)
 	}
-	fmt.Printf("\nAll Provinces : %d\n", len(stateMap))
+	fmt.Printf("All Provinces : %d\n", len(stateMap))
 	fmt.Println()
 }
 
 func showAllCountryInMap() {
 	fmt.Println()
-	fmt.Printf("\nAll Countries : %d\n", len(countryMap))
+	fmt.Printf("All Countries : %d\n", len(countryMap))
 	for _, country := range countryMap {
 		fmt.Printf("%s -> %s\n", country.name, country.code)
 	}
-	fmt.Printf("\nAll Countries : %d\n", len(countryMap))
+	fmt.Printf("All Countries : %d\n", len(countryMap))
 	fmt.Println()
 }
 
 func printAllStateInCountry(countryName string) {
 	if countryName == "" {
-		fmt.Println("Country Name is empty")
+		fmt.Println("Country Code is empty")
 		return
 	}
 	if country, ok := countryMap[countryName]; ok {
-		fmt.Printf("\n%s States : %d\n", country.name, len(country.stateSet))
+		fmt.Printf("%s Provinces : %d\n", country.name, len(country.stateSet))
 		for _, state := range country.stateSet {
 			fmt.Printf("%s -> %s\n", state.name, state.code)
 		}
-		fmt.Printf("\n%s States : %d\n", country.name, len(country.stateSet))
+		fmt.Printf("%s Provinces : %d\n", country.name, len(country.stateSet))
 		fmt.Println()
 		showStateMenu()
 	} else {
-		fmt.Printf("Country %s not present\n", countryName)
+		fmt.Printf("Country Code %s is invalid\n", countryName)
 	}
 }
 
 func printAllCityInState(stateName string) {
 	if stateName == "" {
-		fmt.Println("Province Name is empty")
+		fmt.Println("Province Code is empty")
 		return
 	}
 	if state, ok := stateMap[stateName]; ok {
-		fmt.Printf("\n%s Cities : %d\n", state.name, len(state.citySet))
+		fmt.Printf("%s Cities : %d\n", state.name, len(state.citySet))
 		for _, city := range state.citySet {
 			fmt.Printf("%s -> %s\n", city.name, city.code)
 		}
-		fmt.Printf("\n%s Cities : %d\n", state.name, len(state.citySet))
+		fmt.Printf("%s Cities : %d\n", state.name, len(state.citySet))
 		fmt.Println()
 	} else {
-		fmt.Printf("State %s not present\n", stateName)
+		fmt.Printf("Province Code %s is not Valid\n", stateName)
+		fmt.Printf("Please Enter Province Code in format <Country Code-Province Code> \n")
+		fmt.Printf("Eg : For Tamil Nadu Enter this Code -> IN-TN\n")
 	}
 }
 
 func printAllCityInCountry(countryName string) {
 	if countryName == "" {
-		fmt.Println("Country Name is empty")
+		fmt.Println("Country Code is empty")
 		return
 	}
 	if country, ok := countryMap[countryName]; ok {
-		fmt.Printf("\n%s Cities : %d\n", country.name, len(country.citySet))
+		fmt.Printf("%s Cities : %d\n", country.name, len(country.citySet))
 		for _, city := range country.citySet {
 			fmt.Printf("%s -> %s\n", city.name, city.code)
 		}
-		fmt.Printf("\n%s Cities : %d\n", country.name, len(country.citySet))
+		fmt.Printf("%s Cities : %d\n", country.name, len(country.citySet))
 		fmt.Println()
 	} else {
-		fmt.Printf("Country %s not present\n", countryName)
-	}
-}
-
-func checkAuthorization(distName string) {
-	if distName == "" {
-		fmt.Println("Distributor Name is empty")
-		return
-	}
-	dist, ok := distributorMap[distName]
-	if !ok {
-		fmt.Println("Distributor not present. Try using add Distributor option")
-		return
-	}
-	for {
-		var (
-			input   int
-			perName string
-		)
-		fmt.Printf("Disributor %s Authorization Menu -> 1.Permission Name  2.Back\n", dist.name)
-		fmt.Scanf("%d %s", &input, &perName)
-		switch input {
-		case 1:
-			auth := checkAuthorized(dist, perName)
-			fmt.Println(auth)
-		default:
-			return
-		}
+		fmt.Printf("Country Code %s is not Valid\n", countryName)
 	}
 }
 
@@ -347,83 +451,35 @@ func printMasterDist(dist *distributor) {
 	printMasterDist(dist.master)
 }
 
-func showAllDist() {
-	fmt.Printf("\nDistributor : %d", len(distributorMap))
-	for distName, dist := range distributorMap {
-		fmt.Printf("\nName : %s ", distName)
-		printMasterDist(dist.master)
-		fmt.Printf("\nIncluded : ")
-		for name := range dist.inclSet {
-			fmt.Printf("%s, ", name)
-		}
-		fmt.Printf("\nExcluded : ")
-		for name := range dist.exclSet {
-			fmt.Printf("%s, ", name)
-		}
-		fmt.Println()
+func showAllDistributors() {
+	fmt.Printf("\nDistributors : %d\n", len(distributorMap))
+	for _, dist := range distributorMap {
+		showDistributor(dist)
+	}
+	fmt.Printf("\nDistributors : %d\n", len(distributorMap))
+	fmt.Println()
+}
+
+func showDistributor(dist *distributor) {
+	fmt.Printf("\nName : %s ", dist.name)
+	printMasterDist(dist.master)
+	fmt.Printf("\nIncluded : ")
+	for name := range dist.inclSet {
+		fmt.Printf("%s, ", name)
+	}
+	fmt.Printf("\nExcluded : ")
+	for name := range dist.exclSet {
+		fmt.Printf("%s, ", name)
 	}
 	fmt.Println()
 }
 
-func addDist(distName string, master *distributor) {
-	if distName == "" {
-		fmt.Println("Distributor Name is empty")
-		return
-	}
-	if dist, ok := distributorMap[distName]; ok {
-		showPermissionMenu(dist)
-
-	} else {
-		dist := createDistributor(distName, master)
-		if master != nil {
-			master.subDistributor[distName] = dist
-		}
-		distributorMap[distName] = dist
-		showPermissionMenu(dist)
-
-	}
-}
-
-func createDistributor(distName string, master *distributor) *distributor {
-	dist := &distributor{
-		name:           distName,
-		master:         master,
-		subDistributor: make(map[string]*distributor),
-		inclSet:        make(map[string]*triplet),
-		exclSet:        make(map[string]*triplet),
-	}
-	return dist
-}
-
-func showPermissionMenu(dist *distributor) {
-	for {
-		var (
-			input   int
-			perName string
-		)
-		fmt.Printf("\n%s Menu -> 1.Add Include  2.Add Exclude  3.Add Sub-Distributor  4.Show  5.Back\n", dist.name)
-		fmt.Scanf("%d %s", &input, &perName)
-		if input > 4 {
-			return
-		}
-		if input == 4 {
-			showAll()
-		} else if input == 3 {
-			addDist(perName, dist)
-		} else {
-			if perName == "" {
-				fmt.Println("Name is empty")
-				return
-			}
-			perName = strings.ToUpper(perName)
-			permissionAction(dist, input, perName)
-		}
-	}
-}
-
 func permissionAction(dist *distributor, action int, perName string) {
-	if !isNameValid(perName) {
-		fmt.Printf("Name %s is not valid\n", perName)
+	perName = strings.ToUpper(perName)
+	if !isPlaceCodeValid(perName) {
+		fmt.Printf("Place Code %s is not valid\n", perName)
+		fmt.Printf("Please Enter Place Code in format <Country Code-Province Code-City Code> \n")
+		fmt.Printf("Eg : For CHENNAI Enter this Code -> IN-TN-CENAI\n")
 		return
 	}
 	switch action {
@@ -437,12 +493,43 @@ func permissionAction(dist *distributor, action int, perName string) {
 }
 
 func addPerInDistIncl(dist *distributor, perName string) {
+	if _, ok := dist.inclSet[perName]; ok {
+		fmt.Printf("Distributor %s already included %s\n", dist.name, perName)
+		return
+	}
 	trip := createTriplet(perName)
 	if len(dist.subDistributor) == 0 && isDistributorAuthorisedToInclu(dist, trip) {
 		dist.inclSet[perName] = &trip
 		addExclusionFromMaster(dist, trip)
 	} else {
-		fmt.Printf("Distributor %s is not authorized to add %s in inclusion\n", dist.name, perName)
+		fmt.Printf("Distributor %s is not authorized to include %s\n", dist.name, perName)
+	}
+}
+
+func isDistributorAuthorisedToInclu(dist *distributor, trip triplet) bool {
+	if dist.master != nil {
+		if !isMasterAuthorisedToInclu(dist.master, trip) {
+			fmt.Printf("Master %s is not authorized to include\n", dist.master.name)
+			return false
+		} else {
+			return true
+		}
+	}
+	switch trip.typ {
+	case 1:
+		if !checkCityExcl(dist, trip) && !checkStateExcl(dist, trip) {
+			return true
+		} else {
+			return false
+		}
+	case 2:
+		if !checkStateExcl(dist, trip) {
+			return true
+		} else {
+			return false
+		}
+	default:
+		return true
 	}
 }
 
@@ -493,46 +580,24 @@ func isMasterAuthorisedToInclu(dist *distributor, trip triplet) bool {
 			return false
 		}
 	default:
-		return true
-	}
-}
-
-func isDistributorAuthorisedToInclu(dist *distributor, trip triplet) bool {
-	if dist.master != nil {
-		if !isMasterAuthorisedToInclu(dist.master, trip) {
-			fmt.Printf("Master %s is not authorized to add\n", dist.master.name)
-			return false
-		} else {
-			fmt.Printf("Master %s is authorized to add\n", dist.master.name)
-			return true
-		}
-	}
-	switch trip.typ {
-	case 1:
-		if !checkCityExcl(dist, trip) && !checkStateExcl(dist, trip) {
-			//&& (checkStateIncl(dist, trip) || checkCountryIncl(dist, trip)) {
+		if checkCountryIncl(dist, trip) {
 			return true
 		} else {
 			return false
 		}
-	case 2:
-		if !checkStateExcl(dist, trip) {
-			//&& checkCountryIncl(dist, trip) {
-			return true
-		} else {
-			return false
-		}
-	default:
-		return true
 	}
 }
 
 func addPerInDistExcl(dist *distributor, perName string) {
+	if _, ok := dist.exclSet[perName]; ok {
+		fmt.Printf("Distributor %s already excluded %s\n", dist.name, perName)
+		return
+	}
 	trip := createTriplet(perName)
 	if len(dist.subDistributor) == 0 && isDistributorAuthorisedToExclu(dist, trip) {
 		dist.exclSet[perName] = &trip
 	} else {
-		fmt.Printf("Distributor %s is not authorized to add %s in exclusion", dist.name, perName)
+		fmt.Printf("Distributor %s is not authorized to exclude %s\n", dist.name, perName)
 	}
 }
 
@@ -555,7 +620,7 @@ func isDistributorAuthorisedToExclu(dist *distributor, trip triplet) bool {
 	}
 }
 
-func isNameValid(perName string) bool {
+func isPlaceCodeValid(perName string) bool {
 	return checkCity(perName) || checkState(perName) || checkCountry(perName)
 }
 
@@ -575,7 +640,6 @@ func checkCountry(perName string) bool {
 }
 
 func initMaps() {
-
 	cityMap = make(map[string]*city)
 	stateMap = make(map[string]*state)
 	countryMap = make(map[string]*country)
@@ -583,7 +647,7 @@ func initMaps() {
 }
 
 func createRecordsMap(records [][]string) {
-	fmt.Printf("\nLines : %d\n", len(records))
+	fmt.Printf("Total Records : %d\n", len(records))
 	for i, record := range records {
 		if i == 0 {
 			continue
@@ -618,11 +682,11 @@ func createRecordsMap(records [][]string) {
 			}
 		}
 
-		cty.code = ctyCode + "-" + staCode + "-" + conCode
-		sta.code = staCode + "-" + conCode
+		cty.code = conCode + "-" + staCode + "-" + ctyCode
+		sta.code = conCode + "-" + staCode
 		con.code = conCode
-		cty.name = ctyName + "-" + staName + "-" + conName
-		sta.name = staName + "-" + conName
+		cty.name = conName + "-" + staName + "-" + ctyName
+		sta.name = conName + "-" + staName
 		con.name = conName
 
 		_, isCon := countryMap[con.code]
@@ -659,21 +723,4 @@ func createRecordsMap(records [][]string) {
 		}
 		stat.citySet[cty.code] = cety
 	}
-}
-
-func readCsvFile() [][]string {
-	file, err := os.Open("cities.csv")
-
-	if err != nil {
-		log.Fatal("Error file reading file")
-	}
-
-	defer file.Close()
-
-	reader := csv.NewReader(file)
-	records, err := reader.ReadAll()
-	if err != nil {
-		log.Fatal("Error reading csv")
-	}
-	return records
 }
