@@ -1,0 +1,11 @@
+{
+    "DistributorName":"Distributor1",
+    "Location":{
+        "CityCode":     "PJGOT",
+		"ProvinceCode": "SD",
+		"CountryCode":  "PK",
+		"CityName":     "Pir jo Goth",
+		"ProvinceName": "Sindh",
+		"CountryName":  "Pakistan"
+    }
+}

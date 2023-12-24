@@ -1,0 +1,46 @@
+[
+    { 
+    "Name": "Distributor1",
+    "Permission": {    
+    "Include": [
+    {
+        "CountryCode":  "IN",
+		"CountryName":  "India"
+    },
+    {
+        "CountryCode":  "PK",
+		"CountryName":  "Pakistan"
+    }
+    ],
+    "Exclude": [
+        {   
+            "ProvinceCode": "JK",
+            "CountryCode":  "IN",
+            "ProvinceName": "Jammu and Kashmir",
+            "CountryName":  "India"
+        }
+    ]   
+    }
+    },
+    
+    {
+    "Name": "Distributor2",
+    "Permission": {
+    "Include": [
+    {
+        "CountryCode":  "IN",
+		"CountryName":  "India"
+    }
+    ],
+    "Exclude": [
+        {   
+            "ProvinceCode": "SD",
+            "CountryCode":  "PK",
+            "ProvinceName": "Sindh",
+            "CountryName":  "Pakistan"
+        }
+    ]
+    },
+    "ParentName": "Distributor1"
+    }
+    ]
