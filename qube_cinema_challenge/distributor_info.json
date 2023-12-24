@@ -1,0 +1,38 @@
+[
+    { 
+    "Name": "Distributor1",
+    "Permission": {    
+    "Include": [
+    {
+        "CountryCode":  "IN",
+		"CountryName":  "India"
+    },
+    {
+        "CountryCode":  "US",
+		"CountryName":  "United States"
+    }
+    ],
+    "Exclude": [
+        {   
+            "ProvinceCode": "JK",
+            "CountryCode":  "IN",
+            "ProvinceName": "Jammu and Kashmir",
+            "CountryName":  "India"
+        }
+    ]   
+    }
+    },
+    
+    {
+    "Name": "Distributor2",
+    "Permission": {
+    "Include": [
+    {
+        "CountryCode":  "IN",
+		"CountryName":  "India"
+    }
+    ]
+    },
+    "ParentName": "Distributor1"
+    }
+    ]
