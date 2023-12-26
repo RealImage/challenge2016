@@ -34,8 +34,63 @@ We've provided a CSV with the list of all countries, states and cities in the wo
 
 Write a program in any language you want (If you're here from Gophercon, use Go :D) that does this. Feel free to make your own input and output format / command line tool / GUI / Webservice / whatever you want. Feel free to hold the dataset in whatever structure you want, but try not to use external databases - as far as possible stick to your langauage without bringing in MySQL/Postgres/MongoDB/Redis/Etc.
 
-To submit a solution, fork this repo and send a Pull Request on Github. 
+## Run Locally
 
-For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
+Go to the project directory
+
+```bash
+  cd challenge2016
+```
+
+Run the code
+
+```bash
+  go run main.go
+```
+
+
+## Running Tests
+
+To run tests in distributor package, run the following command
+
+Go to the distributor directory
+
+```bash
+  cd distributor
+```
+
+Run test command
+
+```bash
+  go test
+```
+
+To run tests in parsing package, run the following command
+
+Go to the parsing directory
+
+```bash
+  cd parsing
+```
+
+Run test command
+
+```bash
+  go test
+```
+
+To run tests in validate package, run the following command
+
+Go to the validate directory
+
+```bash
+  cd validate
+```
+
+Run test command
+
+```bash
+  go test
+```
 
 
