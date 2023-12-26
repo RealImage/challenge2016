@@ -39,7 +39,7 @@ Write a program in any language you want (If you're here from Gophercon, use Go 
 Go to the project directory
 
 ```bash
-  cd Realimage_challenge_2016_prabhu
+  cd challenge2016
 ```
 
 Run the code
