@@ -1,0 +1,29 @@
+{
+    "distributor1": {
+        "include": [
+            "INDIA",
+            "UNITEDSTATES"
+        ],
+        "exclude": [
+            "CHENNAI-INDIA"
+        ],
+        "childPermissions": {
+            "distributor1a": {
+                "include": ["HYD-INDIA"],
+                "exclude": [
+                    "KBHP-HYD-INDIA"
+                ]
+            }
+        }
+    },
+    "distributor2": {
+        "include": [
+            "INDIA",
+            "UNITEDSTATES",
+            "CHINA"
+        ],
+        "exclude": [
+            "CHENNAI-INDIA"
+        ]
+    }
+}

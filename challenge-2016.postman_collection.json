@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "92499578-a1aa-48fe-8691-9ff495e20a09",
+		"name": "challenge-2016",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create distribution",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distributor\": \"distributor1\",\n    \"permissions\": {\n        \"include\": [\n            \"INDIA\",\n            \"UNITEDSTATES\"\n        ],\n        \"exclude\": [\n            \"CHENNAI-INDIA\"\n        ],\n        \"childPermissions\":{\n            \"distributor1a\":{\n                \"exclude\":[\"ECR-CHENNAI-INDIA\"]\n            }\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/distribution",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"distribution"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check distributor permissions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distributor\": \"distributor1\",\n    \"permissions\": {\n        \"include\": [\n            \"INDIA\",\n            \"UNITEDSTATES\"\n        ],\n        \"exclude\": [\n            \"CHENNAI-INDIA\"\n        ],\n        \"childPermissions\":{\n            \"distributor1a\":{\n                \"exclude\":[\"ECR-CHENNAI-INDIA\"]\n            }\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/check/:distributor/:region",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"check",
+						":distributor",
+						":region"
+					],
+					"variable": [
+						{
+							"key": "distributor",
+							"value": "distributor1"
+						},
+						{
+							"key": "region",
+							"value": "HYD-INDIA"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
