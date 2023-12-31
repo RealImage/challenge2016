@@ -1,0 +1,16 @@
+[
+    {
+      "id": 1,
+      "queries": [
+        "ALTON-IL-US",
+        "YELUR-KA-IN"
+      ]
+    },
+    {
+      "id": 2,
+      "queries": [
+        "MUBAI-MH-IN",
+        "ETVAL-CA-US"
+      ]
+    }
+  ]
