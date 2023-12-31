@@ -13,8 +13,6 @@ type Distributor struct {
 
 // NewDistributor creates a new Distributor object based on the provided inputs.
 func NewDistributor(regionMap map[string]map[string]map[string]bool, includes, excludes []string,id int) (*Distributor, error) {
-	// Make a copy of the original region map
-	
 	newRegionMap := make(map[string]map[string]map[string]bool)
 	for _, include := range includes {
 		parts := strings.Split(include, "-")

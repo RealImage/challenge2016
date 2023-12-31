@@ -1,0 +1,14 @@
+[
+    {
+      "id": 1,
+      "includes": ["IN", "US"],
+      "excludes": ["KL-IN", "CHENAI-TN-IN"],
+      "children": [
+        {
+          "id": 2,
+          "includes": ["KA-IN"],
+          "excludes": ["YELUR-KA-IN"]
+        }
+      ]
+    }
+]

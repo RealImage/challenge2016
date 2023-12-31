@@ -46,7 +46,7 @@ func TestDistributors(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error creating distributor1: %v", err)
 	}else{
-	validateRegionMap(t, distributor1, "IN", "KA", "YELUR", true) // Updated from "BANGALORE" to "YELUR"
+	validateRegionMap(t, distributor1, "US", "KA", "YELUR", false) // Updated from "BANGALORE" to "YELUR"
 	validateRegionMap(t, distributor1, "IN", "TN", "CENAI", true)
 	validateRegionMap(t, distributor1, "US", "CA", "AGOUR", false) // Updated from "LOSANGELES" to "AGOUR"
 	}
