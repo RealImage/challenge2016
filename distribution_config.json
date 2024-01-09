@@ -1,0 +1,30 @@
+[
+{
+    "id": 1,
+    "includes": ["JP", "US"],
+    "excludes": ["NEIAK-13-JP", "CITSP-FL-US"],
+    "children": [
+      {
+        "id": 2,
+        "includes": ["11-JP", "AL-US"],
+        "excludes": ["TX-US"],
+        "children" : [
+            {
+                "id": 3,
+                "includes": ["11-JP", "BSEMR-AL-US"],
+                "excludes": ["BIRMG-AL-US"],
+                "children": [
+                    {
+                      "id": 4,
+                      "includes": ["11-JP"],
+                      "excludes": ["KODMA-11-JP"]
+                    }
+                  ]
+
+              }
+        ]
+      }
+      
+    ]
+  }
+]

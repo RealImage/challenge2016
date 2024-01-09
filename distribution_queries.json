@@ -1,0 +1,18 @@
+[
+    {
+      "id": 4,
+      "queries": [
+        "ALTON-IL-US",
+        "KODMA-11-JP",
+        "URAWA-11-JP"
+        
+      ]
+    },
+    {
+      "id": 2,
+      "queries": [
+        "MUBAI-MH-IN",
+        "BSEMR-AL-US"
+      ]
+    }
+  ] 
