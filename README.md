@@ -1,41 +1,119 @@
 # Real Image Challenge 2016
 
-In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
+This project is a Distributor Management System that allows users to create distributors, sub-distributors, check permissions, and view distributor’s information.
 
-Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
+## Getting Started 
+### Prerequisites 
+- Node.js 
+- npm (Node Package Manager) 
+- CSV file with geo data (cities.csv) 
+
+### Installation
+
+1. Clone the repository: 
+```bash 
+git clone https://github.com/Deva45anbu/challenge2016.git 
 ```
-Permissions for DISTRIBUTOR1
-INCLUDE: INDIA
-INCLUDE: UNITEDSTATES
-EXCLUDE: KARNATAKA-INDIA
-EXCLUDE: CHENNAI-TAMILNADU-INDIA
+2.	Install dependencies:
+```bash
+npm install
+``` 
+3.	Run the application:
 ```
-This allows `DISTRIBUTOR1` to distribute in any city inside the United States and India, *except* cities in the state of Karnataka (in India) and the city of Chennai (in Tamil Nadu, India).
+npm start
+```
 
-At this point, asking your program if `DISTRIBUTOR1` has permission to distribute in `CHICAGO-ILLINOIS-UNITEDSTATES` should get `YES` as the answer, and asking if distribution can happen in `CHENNAI-TAMILNADU-INDIA` should of course be `NO`. Asking if distribution is possible in `BANGALORE-KARNATAKA-INDIA` should also be `NO`, because the whole state of Karnataka has been excluded.
+### Usage
+1.	Launch the application by running npm start.
+2.	Follow the prompts to
+     - Create a new distributor
+     - Create a sub-distributor
+     - Check permissions of a distributor
+     - View distributor information
+     - Exit the program.
+3.	Enter the required information when prompted.
 
-Sometimes, a distributor might split the work of distribution amount smaller sub-distiributors inside their authorized geographies. For instance, `DISTRIBUTOR1` might assign the following permissions to `DISTRIBUTOR2`:
+### File Structure
+1. index.js: Main application file.
+2. cities.csv: CSV file containing geographical data.
+3. README.md: Project documentation. 
+
+
+### Sample Inputs/Outputs:
+> **_NOTE:_**  List of choices is prompted to perform actions based on user input and continues to prompt the user until the program is exited.
+
+- List of choices
+```
+? Select one of the below choices :
+ (Use arrow keys)
+> Create a new distributor
+  Create a sub distributor
+  Check permission for a distributor
+  View Distributors information
+  Exit the program
+
 
 ```
-Permissions for DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: INDIA
-EXCLUDE: TAMILNADU-INDIA
+- Choosing "Create a new distributor"
 ```
-Now, `DISTRIBUTOR2` can distribute the movie anywhere in `INDIA`, except inside `TAMILNADU-INDIA` and `KARNATAKA-INDIA` - `DISTRIBUTOR2`'s permissions are always a subset of `DISTRIBUTOR1`'s permissions. It's impossible/invalid for `DISTRIBUTOR2` to have `INCLUDE: CHINA`, for example, because `DISTRIBUTOR1` isn't authorized to do that in the first place. 
+? Enter distributor name: 
+ Distributor1
+? Enter the regions you want to include for this distributor :
+ India,Japan,China
+? Enter the regions you want to exclude for this distributor :
+ Tamil nadu-india,Maharashtra-India
 
-If `DISTRIBUTOR2` authorizes `DISTRIBUTOR3` to handle just the city of Hubli, Karnataka, India, for example:
 ```
-Permissions for DISTRIBUTOR3 < DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: HUBLI-KARNATAKA-INDIA
+
+- Choosing "Check permission for a distributor"
 ```
-Again, `DISTRIBUTOR2` cannot authorize `DISTRIBUTOR3` with a region that they themselves do not have access to. 
+? Select one of the below choices :
+ Check permission for a distributor
+? Enter distributor name that need to checked:
+ Distributor1
+? Enter regions that need to checked:
+ India,gujarat-india,chennai-tamil nadu-india,shingu-wakayama-japan
+Check Permssion Result : [
+  'DISTRIBUTOR1 have access to INDIA',
+  'DISTRIBUTOR1 have access to GUJARAT-INDIA',
+  'DISTRIBUTOR1 do not have access to CHENNAI-TAMIL NADU-INDIA',
+  'DISTRIBUTOR1 have access to SHINGU-WAKAYAMA-JAPAN'
+]
+```
+- Choosing "Create a sub distributor"
+```
+? Select one of the below choices :
+ Create a sub distributor
+? Enter distributor name: 
+ Distributor2
+? Enter the regions you want to include for this distributor :
+ india
+? Enter the regions you want to exclude for this distributor :
+ gujarat-india
+? Enter the name of the parent distributor :
+ Distributor1
+```
+- Choosing "Check permission for a distributor"
+```
+? Select one of the below choices :
+ Check permission for a distributor
+? Enter distributor name that need to checked:
+ Distributor2
+? Enter regions that need to checked:
+ chennai-tamil nadu-india,gujarat-india,uttar pradesh-india,bihar-india,new zealand
+Check Permssion Result : [
+  'DISTRIBUTOR2 do not have access to CHENNAI-TAMIL NADU-INDIA',
+  'DISTRIBUTOR2 do not have access to GUJARAT-INDIA',
+  'DISTRIBUTOR2 have access to UTTAR PRADESH-INDIA',
+  'DISTRIBUTOR2 have access to BIHAR-INDIA',
+  'DISTRIBUTOR2 do not have access to NEW ZEALAND'
+]
+```
+## Contributing 
 
-We've provided a CSV with the list of all countries, states and cities in the world that we know of - please use the data mentioned there for this program. *The codes you see there may be different from what you see here, so please always use the codes in the CSV*. This Readme is only an example. 
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
 
-Write a program in any language you want (If you're here from Gophercon, use Go :D) that does this. Feel free to make your own input and output format / command line tool / GUI / Webservice / whatever you want. Feel free to hold the dataset in whatever structure you want, but try not to use external databases - as far as possible stick to your langauage without bringing in MySQL/Postgres/MongoDB/Redis/Etc.
+### Author
 
-To submit a solution, fork this repo and send a Pull Request on Github. 
-
-For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
-
-
+[Deva Anbu](https://github.com/Deva45anbu).
