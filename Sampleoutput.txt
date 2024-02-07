@@ -1,0 +1,309 @@
+Creating Distributor 
+
+user@dev-server:~/distribution/challenge2016/src$ go run main.go
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+1
+enter name for distributor
+balaji
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+1
+enter include permissions for distributor
+tamil nadu-india
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+2
+enter exclude permissions for distributor
+uttar pradesh-india
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+3
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+3
+Give the distributor name
+balaji
+Name:  balaji
+Include permissions:  [tamil nadu-india]
+Exclude Permissions:  [uttar pradesh-india]
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+5
+Give the distributor name
+balaji
+Give area of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+Enter Area:
+haryana-india
+Area is not permitted for distributor  balaji
+Included areas--- [tamil nadu-india]
+Excluded areas--- [uttar pradesh-india]
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+5
+Give the distributor name
+balaji
+Give area of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+Enter Area:
+Maholi-uttar pradesh-india
+Area is not permitted for distributor  balaji
+Included areas--- [tamil nadu-india]
+Excluded areas--- [uttar pradesh-india]
+
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+5
+Give the distributor name
+balaji
+Give area of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+Enter Area:
+chennai-Tamil Nadu-India
+Area is permitted for distributor  balaji
+Included areas--- [tamil nadu-india]
+Excluded areas--- [uttar pradesh-india]
+
+
+
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+2
+enter name for sub distributor
+sanjay
+enter name for Parent distributor
+balaji
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+1
+enter include permissions for distributor
+tamil nadu-india
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+3
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+3
+Give the distributor name
+sanjay
+Name:  sanjay
+Include permissions:  [tamil nadu-india]
+Exclude Permissions:  []
+Parent Distributor Name:  balaji
+Parent Include permissions:  [tamil nadu-india]
+Parent Exclude Permissions:  [uttar pradesh-india]
+
+
+
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+2
+enter name for sub distributor
+sanjay
+enter name for Parent distributor
+balaji
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+1
+enter include permissions for distributor
+chennai-Tamil Nadu-India
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+3
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+3
+Give the distributor name
+sanjay
+Name:  sanjay
+Include permissions:  [chennai-tamil nadu-india]
+Exclude Permissions:  []
+Parent Distributor Name:  balaji
+Parent Include permissions:  [tamil nadu-india]
+Parent Exclude Permissions:  [uttar pradesh-india]
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+2
+enter name for sub distributor
+siba
+enter name for Parent distributor
+sanjay
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+1
+enter include permissions for distributor
+TN-IN-Chennai-Tamil Nadu-India
+Permissions should be of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+The choices are :
+1.enter include permissions for distributor
+2.enter exclude permissions for distributor
+3.exit permissions choice
+enter permission choice for distributor
+3
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+3
+Give the distributor name
+siba
+Name:  siba
+Include permissions:  [tn-in-chennai-tamil nadu-india]
+Exclude Permissions:  []
+Parent Distributor Name:  sanjay
+Parent Include permissions:  [chennai-tamil nadu-india]
+Parent Exclude Permissions:  []
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
+5
+Give the distributor name
+siba
+Give area of format 'CHENNAI-TAMIL NADU-INDIA'  - is mandatory
+Enter Area:
+chennai-Tamil Nadu-India
+Area is not permitted for distributor  siba
+Included areas--- [tn-in-chennai-tamil nadu-india]
+
+
+The options are :
+1.Create distributor and assign permissions
+2.Create Subdistributor and assign permissions
+3.Display Distributor details
+4.Delete Distributor
+5.Check Distributor Permissions
+6.Exit
