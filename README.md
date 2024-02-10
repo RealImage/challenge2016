@@ -38,4 +38,42 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
+---------------------------- Arvinder Pal -----------------------
+=> distributor struct represents a distributor with a name, inclusion, exclusion lists, and an array of sub-distributors.
+
+=> Location struct holds information about a geographical location (city, state, country).
+Global Variables:
+
+=> LocationMap: A map that stores location information based on city, state, and country.
+
+=> Distributors: A map that stores distributor information, where each distributor has a name and associated details.
+
+=> The main function provides a menu-driven interface for the user to interact with the program.
+
+=> Options include 
+1. adding a distributor
+2. adding permissions
+3. searching permissions by location
+4. adding a sub-distributor
+5. exiting the program
+
+=> AddPermission Function:
+=> Allows the user to add permissions (inclusion or exclusion) to a distributor or sub-distributor based on geographical locations (city, state, country)
+=> Checks if the parent distributor authorizes the permissions for a sub-distributor.
+=> SearchByLocation Function:
+
+=> Allows the user to search for permissions of a distributor or sub-distributor based on a specified location (city, state, country).
+
+=> IsAuthorized Method:
+=> Part of the distributor struct. Checks if a distributor or sub-distributor is authorized for a specific region (city, state, country) based on inclusion and exclusion lists.
+
+=> FindParentDistributor Function:
+Finds and returns the parent distributor of a given distributor name.
+CheckDistributor Function:
+
+=> Checks if a distributor or sub-distributor exists, and returns the distributor along with the relationship type (parent or child).
+
+=>AddSubDistributor Function:
+Allows the user to add a sub-distributor to an existing parent distributor.
+
 
