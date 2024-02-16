@@ -6,33 +6,31 @@ This project is a distributor management system designed to handle the creation 
 
 The project directory structure is organized as follows:
 
-challenge2016/
-│
-├── dto/
-│ ├── dto.go
-│ ├── city.go
-│ ├── state.go
-│ └── country.go
-│
-├── input/
-│ ├── inputHandlers.go
-│ └── ...
-│
-├── parser/
-│ ├── parser.go
-│ └── ...
-│
-├── permission/
-│ ├── permissionChecker.go
-│ └── ...
-│
-├── validator/
-│ ├── validator.go
-│ └── ...
-│
-├── cities.csv
-├── go.mod
-└── main.go
+- **dto/**
+  - dto.go
+  - city.go
+  - state.go
+  - country.go
+
+- **input/**
+  - inputHandlers.go
+  - ...
+
+- **parser/**
+  - parser.go
+  - ...
+
+- **permission/**
+  - permissionChecker.go
+  - ...
+
+- **validator/**
+  - validator.go
+  - ...
+
+- cities.csv
+- go.mod
+- main.go
 
 css
 Copy code
@@ -120,4 +118,4 @@ to discuss what you would like to change.
 
 ### Author
 
-[kumaran](https://github.com/kumaranElavazhagn).
+[kumaran](https://github.com/kumaranElavazhagn)
