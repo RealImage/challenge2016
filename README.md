@@ -8,9 +8,8 @@ The project directory structure is organized as follows:
 
 - **dto/**
   - dto.go
-  - city.go
-  - state.go
-  - country.go
+  - permission.go
+  - location.go
 
 - **input/**
   - inputHandlers.go
@@ -32,8 +31,6 @@ The project directory structure is organized as follows:
 - go.mod
 - main.go
 
-css
-Copy code
 
 - **dto/**: Contains the data transfer object (DTO) files representing the structure of the data used in the project.
 - **input/**: Contains functions to handle user input and interactions.
@@ -118,4 +115,4 @@ to discuss what you would like to change.
 
 ### Author
 
-[kumaran](https://github.com/kumaranElavazhagn)
+[Kumaran](https://github.com/kumaranElavazhagn)
