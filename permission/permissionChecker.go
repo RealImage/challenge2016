@@ -3,27 +3,29 @@ package permission
 import (
 	"challenge2016/dto" // Importing DTO package for data transfer objects
 	"strings"
+
+	"golang.org/x/exp/slices"
 )
 
 // The CheckPermission function checks if a distributor has access to certain test data based on their
 // inclusion and exclusion lists.
-func CheckPermission(distributorName string, testData []string, origin string, distributorInformation []dto.Distributor) []string {
+func CheckPermission(distributorName string, InputData []string, origin string, distributorInformation []dto.Distributor) []string {
 	var validationResult []string
 	var errorMsg []string
 
 	// Get distributor data by name
 	var distributorData dto.Distributor
 	for _, distributor := range distributorInformation {
-		if distributor.Name == strings.ToUpper(distributorName) {
+		if strings.EqualFold(distributor.Name, distributorName) {
 			distributorData = distributor
 			break
 		}
 	}
 
-	for _, data := range testData {
+	for _, data := range InputData {
 		switch len(strings.Split(data, "-")) {
 		case 1:
-			if contains(distributorData.Include, data) {
+			if slices.Contains(distributorData.Include, data) {
 				validationResult = append(validationResult, distributorData.Name+" has access to "+data)
 			} else {
 				validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
@@ -31,14 +33,14 @@ func CheckPermission(distributorName string, testData []string, origin string, d
 			}
 		case 2:
 			newTestData := strings.Split(data, "-")
-			if contains(distributorData.Include, newTestData[1]) {
-				if contains(distributorData.Exclude, data) {
+			if slices.Contains(distributorData.Include, newTestData[1]) {
+				if slices.Contains(distributorData.Exclude, data) {
 					validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
 					errorMsg = append(errorMsg, distributorData.Name+" does not have access to "+data)
 				} else {
 					validationResult = append(validationResult, distributorData.Name+" has access to "+data)
 				}
-			} else if contains(distributorData.Include, data) {
+			} else if slices.Contains(distributorData.Include, data) {
 				validationResult = append(validationResult, distributorData.Name+" has access to "+data)
 			} else {
 				validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
@@ -46,12 +48,12 @@ func CheckPermission(distributorName string, testData []string, origin string, d
 			}
 		case 3:
 			newTestData := strings.Split(data, "-")
-			if contains(distributorData.Include, newTestData[2]) {
-				if contains(distributorData.Include, newTestData[1]+"-"+newTestData[2]) {
-					if contains(distributorData.Include, data) {
+			if slices.Contains(distributorData.Include, newTestData[2]) {
+				if slices.Contains(distributorData.Include, newTestData[1]+"-"+newTestData[2]) {
+					if slices.Contains(distributorData.Include, data) {
 						validationResult = append(validationResult, distributorData.Name+" has access to "+data)
 					} else {
-						if contains(distributorData.Exclude, data) {
+						if slices.Contains(distributorData.Exclude, data) {
 							validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
 							errorMsg = append(errorMsg, distributorData.Name+" does not have access to "+data)
 						} else {
@@ -59,11 +61,11 @@ func CheckPermission(distributorName string, testData []string, origin string, d
 						}
 					}
 				} else {
-					if contains(distributorData.Exclude, newTestData[1]+"-"+newTestData[2]) {
+					if slices.Contains(distributorData.Exclude, newTestData[1]+"-"+newTestData[2]) {
 						validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
 						errorMsg = append(errorMsg, distributorData.Name+" does not have access to "+data)
 					} else {
-						if contains(distributorData.Exclude, data) {
+						if slices.Contains(distributorData.Exclude, data) {
 							validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
 							errorMsg = append(errorMsg, distributorData.Name+" does not have access to "+data)
 						} else {
@@ -72,14 +74,14 @@ func CheckPermission(distributorName string, testData []string, origin string, d
 					}
 				}
 			} else {
-				if contains(distributorData.Include, newTestData[1]+"-"+newTestData[2]) {
-					if contains(distributorData.Exclude, data) {
+				if slices.Contains(distributorData.Include, newTestData[1]+"-"+newTestData[2]) {
+					if slices.Contains(distributorData.Exclude, data) {
 						validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
 						errorMsg = append(errorMsg, distributorData.Name+" does not have access to "+data)
 					} else {
 						validationResult = append(validationResult, distributorData.Name+" has access to "+data)
 					}
-				} else if contains(distributorData.Include, data) {
+				} else if slices.Contains(distributorData.Include, data) {
 					validationResult = append(validationResult, distributorData.Name+" has access to "+data)
 				} else {
 					validationResult = append(validationResult, distributorData.Name+" does not have access to "+data)
@@ -93,14 +95,4 @@ func CheckPermission(distributorName string, testData []string, origin string, d
 		return errorMsg
 	}
 	return validationResult
-}
-
-// contains checks if a string is present in a slice of strings
-func contains(slice []string, str string) bool {
-	for _, s := range slice {
-		if s == str {
-			return true
-		}
-	}
-	return false
 }

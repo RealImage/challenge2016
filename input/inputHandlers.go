@@ -91,21 +91,3 @@ func GetCheckPermissionData() dto.CheckPermissionData {
 	data.Regions = GetInputRegions()
 	return data
 }
-
-// CreateNewDistributor creates a new distributor object
-func CreateNewDistributor(data dto.Distributor) dto.Distributor {
-	return dto.Distributor{
-		Name:    strings.ToUpper(data.Name),
-		Include: data.Include,
-		Exclude: data.Exclude,
-		Parent:  strings.ToUpper(data.Parent),
-	}
-}
-
-// DisplayDistributorInformation displays information about distributors
-func DisplayDistributorInformation(distributorInformation []dto.Distributor) {
-	fmt.Println("Distributor Information:")
-	for _, distributor := range distributorInformation {
-		fmt.Printf("Name: %s, Include: %v, Exclude: %v, Parent: %s\n", distributor.Name, distributor.Include, distributor.Exclude, distributor.Parent)
-	}
-}

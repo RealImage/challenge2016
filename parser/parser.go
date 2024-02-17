@@ -2,33 +2,31 @@ package parser
 
 import (
 	"challenge2016/dto" // Importing DTO package for data transfer objects
-	"encoding/csv"
 	"os"
 	"strings"
+
+	"github.com/gocarina/gocsv"
 )
 
-// The function `ParseCSVFile` takes a CSV file path as input, reads the file, and parses the data into
-// a structured format representing countries, states, and cities.
 func ParseCSVFile(csvFilePath string) ([]dto.Country, error) {
-	file, err := os.Open(csvFilePath)
+	locationsFile, err := os.OpenFile(csvFilePath, os.O_RDWR, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+	defer locationsFile.Close()
 
-	reader := csv.NewReader(file)
-	reader.FieldsPerRecord = -1
-	records, err := reader.ReadAll()
-	if err != nil {
+	locations := []*dto.Location{}
+
+	if err := gocsv.UnmarshalFile(locationsFile, &locations); err != nil { // Load clients from file
 		return nil, err
 	}
 
 	groupedData := make([]dto.Country, 0)
 
-	for _, row := range records {
-		countryName := strings.ToUpper(row[5])
-		stateName := strings.ToUpper(row[4])
-		cityName := strings.ToUpper(row[3])
+	for _, location := range locations {
+		countryName := strings.ToUpper(location.CountryName)
+		stateName := strings.ToUpper(location.ProvinceName)
+		cityName := strings.ToUpper(location.CityName)
 
 		var countryIndex int
 		countryExists := false
@@ -73,6 +71,5 @@ func ParseCSVFile(csvFilePath string) ([]dto.Country, error) {
 			}
 		}
 	}
-
 	return groupedData, nil
 }

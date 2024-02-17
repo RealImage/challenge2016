@@ -106,9 +106,6 @@ Name: POORNA, Include: [INDIA], Exclude: [SALEM-TAMIL NADU-INDIA], Parent: KUMAR
 
 - Choosing "View Distributors information" by press 5 and enter then it will exit the program.
 
-### Dependencies
-This project does not depend on any external libraries or packages beyond the standard Go libraries.
-
 ### Contributors
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.

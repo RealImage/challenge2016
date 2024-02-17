@@ -21,7 +21,7 @@ func ValidateDistributorData(data dto.Distributor, groupedData []dto.Country, di
 		errorMsg = append(errorMsg, "Include Regions must not be empty, please enter valid regions")
 	} else {
 		for _, region := range data.Include {
-			if !ValidateRegion(region, groupedData) {
+			if ValidateRegion(region, groupedData) {
 				errorMsg = append(errorMsg, "Include Region '"+region+"' is not present in csv, please enter a valid region")
 			}
 		}
@@ -29,7 +29,7 @@ func ValidateDistributorData(data dto.Distributor, groupedData []dto.Country, di
 
 	if len(data.Exclude) > 0 {
 		for _, region := range data.Exclude {
-			if !ValidateRegion(region, groupedData) {
+			if ValidateRegion(region, groupedData) {
 				errorMsg = append(errorMsg, "Exclude Region '"+region+"' is not present in csv, please enter a valid region")
 			}
 		}
@@ -66,7 +66,7 @@ func ValidateSubDistributorData(data dto.Distributor, groupedData []dto.Country,
 		errorMsg = append(errorMsg, "Include Regions must not be empty, please enter valid regions")
 	} else {
 		for _, region := range data.Include {
-			if !ValidateRegion(region, groupedData) {
+			if ValidateRegion(region, groupedData) {
 				errorMsg = append(errorMsg, "Include Region '"+region+"' is not present in csv, please enter a valid region")
 			}
 		}
@@ -74,7 +74,7 @@ func ValidateSubDistributorData(data dto.Distributor, groupedData []dto.Country,
 
 	if len(data.Exclude) > 0 {
 		for _, region := range data.Exclude {
-			if !ValidateRegion(region, groupedData) {
+			if ValidateRegion(region, groupedData) {
 				errorMsg = append(errorMsg, "Exclude Region '"+region+"' is not present in csv, please enter a valid region")
 			}
 		}
@@ -99,8 +99,8 @@ func ValidateSubDistributorData(data dto.Distributor, groupedData []dto.Country,
 	}
 
 	if len(errorMsg) == 0 {
-		testData := append(data.Include, data.Exclude...)
-		checkPermissionWithParent := permission.CheckPermission(strings.ToUpper(strings.TrimSpace(data.Parent)), testData, "subDistributionCreation", distributorInformation)
+		InputData := append(data.Include, data.Exclude...)
+		checkPermissionWithParent := permission.CheckPermission(strings.TrimSpace(data.Parent), InputData, "subDistributionCreation", distributorInformation)
 		if len(checkPermissionWithParent) > 0 {
 			errorMsg = append(errorMsg, checkPermissionWithParent...)
 		}
@@ -113,7 +113,7 @@ func ValidateSubDistributorData(data dto.Distributor, groupedData []dto.Country,
 // distributor information.
 func ValidateDistributorName(distributorName string, distributorInformation []dto.Distributor) bool {
 	for _, distributor := range distributorInformation {
-		if distributor.Name == distributorName {
+		if strings.EqualFold(distributor.Name, distributorName) {
 			return true
 		}
 	}
@@ -121,51 +121,51 @@ func ValidateDistributorName(distributorName string, distributorInformation []dt
 }
 
 // The function `ValidateRegion` checks if a given region is valid based on a list of grouped data.
-func ValidateRegion(data string, groupedData []dto.Country) bool {
-	splitTestData := strings.Split(data, ",")
+func ValidateRegion(reg string, groupedData []dto.Country) bool {
+	splitTestData := strings.Split(reg, ",")
 	for _, region := range splitTestData {
-		testData := strings.Split(strings.ToUpper(region), "-")
+		InputData := strings.Split(strings.ToUpper(region), "-")
 
-		if len(testData) > 0 && len(testData) < 4 {
-			if len(testData) == 1 {
+		if len(InputData) > 0 && len(InputData) < 4 {
+			switch len(InputData) {
+			case 1:
 				for _, country := range groupedData {
-					if country.Name == testData[0] {
-						return true
+					if strings.EqualFold(country.Name, InputData[0]) {
+						return false
 					}
 				}
-				return false
-			} else if len(testData) == 2 {
+			case 2:
 				for _, country := range groupedData {
-					if country.Name == testData[1] {
+					if strings.EqualFold(country.Name, InputData[1]) {
 						for _, state := range country.States {
-							if state.Name == testData[0] {
-								return true
+							if strings.EqualFold(state.Name, InputData[0]) {
+								return false
 							}
 						}
 					}
 				}
-				return false
-			} else if len(testData) == 3 {
+			case 3:
 				for _, country := range groupedData {
-					if country.Name == testData[2] {
+					if strings.EqualFold(country.Name, InputData[2]) {
 						for _, state := range country.States {
-							if state.Name == testData[1] {
+							if strings.EqualFold(state.Name, InputData[1]) {
 								for _, city := range state.Cities {
-									if city.Name == testData[0] {
-										return true
+									if strings.EqualFold(city.Name, InputData[0]) {
+										return false
 									}
 								}
 							}
 						}
 					}
 				}
-				return false
+			default:
+				return true
 			}
 		} else {
-			return false
+			return true
 		}
 	}
-	return false
+	return true
 }
 
 // The function `ValidateCheckPermissionData` validates the `CheckPermissionData` object by checking if
@@ -181,7 +181,7 @@ func ValidateCheckPermissionData(data dto.CheckPermissionData, groupedData []dto
 	}
 
 	for _, region := range data.Regions {
-		if !ValidateRegion(region, groupedData) {
+		if ValidateRegion(region, groupedData) {
 			errorMsg = append(errorMsg, strings.ToUpper(region)+" does not exist in the csv file, please enter a valid region")
 		}
 	}
