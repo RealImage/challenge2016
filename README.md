@@ -24,6 +24,7 @@ To run the program, execute the `main.go` file. Upon execution, the program will
 > **_NOTE:_**  List of choices is prompted to perform actions based on user input and continues to prompt the user until the program is exited.
 - List of choices
 ```
+Use the arrow keys to navigate: ↓ ↑ → ←
 Select one of the below choices:
 1. Create a new distributor
 2. Create a sub distributor
@@ -32,7 +33,7 @@ Select one of the below choices:
 5. Exit the program
 ```
 
-- Choosing "Create a new distributor" by press 1 and enter
+- Choosing "Create a new distributor"
 
 ```
 Enter distributor name: kumaran
@@ -40,7 +41,7 @@ Enter the regions you want to include for this distributor: india,china,pakistan
 Enter the regions you want to exclude for this distributor: chennai-tamil nadu-india
 ```
 
-- Choosing "Create a sub distributor" by press 2 and enter
+- Choosing "Create a sub distributor"
 
 ```
 Enter distributor name: poorna
@@ -49,7 +50,7 @@ Enter the regions you want to exclude for this distributor: salem-tamil nadu-ind
 Enter the name of the parent distributor: kumaran
 ```
 
-- Choosing "Check permission for a distributor" by press 3 and enter
+- Choosing "Check permission for a distributor"
 
 ```
 Enter distributor name that needs to be checked: poorna
@@ -57,7 +58,7 @@ Enter regions that need to be checked: india
 Check Permission Result: [POORNA has access to INDIA]
 ```
 
-- Choosing "View Distributors information" by press 4 and enter
+- Choosing "View Distributors information"
 
 ```
 Distributor Information:
@@ -65,7 +66,7 @@ Name: KUMARAN, Include: [INDIA CHINA PAKISTAN], Exclude: [CHENNAI-TAMIL NADU-IND
 Name: POORNA, Include: [INDIA], Exclude: [SALEM-TAMIL NADU-INDIA], Parent: KUMARAN
 ```
 
-- Choosing "View Distributors information" by press 5 and enter then it will exit the program.
+- Choosing "View Distributors information", it will exit the program.
 
 ### Author
 
