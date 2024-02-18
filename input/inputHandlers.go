@@ -12,6 +12,7 @@ import (
 // The `PromptMenu` function in Go displays a menu for selecting different choices and returns the
 // selected option.
 func PromptMenu() string {
+	fmt.Println("Please specify the regions you wish to include or exclude for this distributor (use hyphens for specifying location hierarchy, e.g., Chennai-Tamil Nadu-India, Karnataka-India)")
 	prompt := promptui.Select{
 		Label: "Select one of the below choices",
 		Items: []string{

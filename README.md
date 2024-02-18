@@ -2,13 +2,21 @@
 
 This project is a distributor management system designed to handle the creation of distributors, sub-distributors, checking permissions, and viewing distributor information. The system utilizes a CSV file containing data about cities, states, and countries for region validation.
 
-## How to Run
+## How to Run the code base
 Ensure you have Go installed on your system. Navigate to the root directory of the project and run the following command:
 
 ```bash
 go run main.go
 ```
 Follow the on-screen prompts to interact with the program.
+
+## How to Run the .exe file
+To run the executable file (distibuter.exe), follow these steps:
+
+1. Ensure that both the executable file and the cities.csv file are in the same folder.
+2. Double-click on the executable file (distibuter.exe).
+3. The program will start running, and you can interact with it through the command-line interface.
+4. Follow the on-screen prompts to perform various actions like creating distributors, sub-distributors, checking permissions, and viewing distributor information.
 
 ## Usage
 
