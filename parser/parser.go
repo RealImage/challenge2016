@@ -31,7 +31,7 @@ func ParseCSVFile(csvFilePath string) ([]dto.Country, error) {
 		var countryIndex int
 		countryExists := false
 		for i, country := range groupedData {
-			if country.Name == countryName {
+			if strings.EqualFold(country.Name, countryName) {
 				countryIndex = i
 				countryExists = true
 				break
@@ -53,7 +53,7 @@ func ParseCSVFile(csvFilePath string) ([]dto.Country, error) {
 			var stateIndex int
 			stateExists := false
 			for i, state := range groupedData[countryIndex].States {
-				if state.Name == stateName {
+				if strings.EqualFold(state.Name, stateName) {
 					stateIndex = i
 					stateExists = true
 					break

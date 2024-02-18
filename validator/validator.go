@@ -6,54 +6,10 @@ import (
 	"strings"
 )
 
-// The function `ValidateDistributorData` validates distributor data by checking for empty fields,
-// duplicate names, and valid regions.
-func ValidateDistributorData(data dto.Distributor, groupedData []dto.Country, distributorInformation []dto.Distributor) []string {
-	var errorMsg []string
-
-	if strings.TrimSpace(data.Name) == "" {
-		errorMsg = append(errorMsg, "Distributor Name must not be empty, please enter a valid distributor name")
-	} else if ValidateDistributorName(strings.ToUpper(strings.TrimSpace(data.Name)), distributorInformation) {
-		errorMsg = append(errorMsg, "Distributor Name already exists")
-	}
-
-	if len(data.Include) == 0 {
-		errorMsg = append(errorMsg, "Include Regions must not be empty, please enter valid regions")
-	} else {
-		for _, region := range data.Include {
-			if ValidateRegion(region, groupedData) {
-				errorMsg = append(errorMsg, "Include Region '"+region+"' is not present in csv, please enter a valid region")
-			}
-		}
-	}
-
-	if len(data.Exclude) > 0 {
-		for _, region := range data.Exclude {
-			if ValidateRegion(region, groupedData) {
-				errorMsg = append(errorMsg, "Exclude Region '"+region+"' is not present in csv, please enter a valid region")
-			}
-		}
-	}
-
-	if len(data.Exclude) > 0 && len(data.Include) > 0 {
-		for _, ExcludeRegion := range data.Exclude {
-			for _, IncludeRegion := range data.Include {
-				if strings.EqualFold(ExcludeRegion, IncludeRegion) {
-					errorMsg = append(errorMsg, "Exclude Region and Include Region should not be Same, please enter a valid region")
-				}
-
-			}
-
-		}
-	}
-
-	return errorMsg
-}
-
-// The function `ValidateSubDistributorData` validates the data of a sub-distributor, checking for
+// The function `ValidateDistributorData` validates the data of a sub-distributor, checking for
 // errors such as empty fields, duplicate names, invalid regions, and incorrect parent distributor
 // name.
-func ValidateSubDistributorData(data dto.Distributor, groupedData []dto.Country, distributorInformation []dto.Distributor) []string {
+func ValidateDistributorData(data dto.Distributor, groupedData []dto.Country, distributorInformation []dto.Distributor, subDistributor bool) []string {
 	var errorMsg []string
 
 	if strings.TrimSpace(data.Name) == "" {
@@ -92,17 +48,19 @@ func ValidateSubDistributorData(data dto.Distributor, groupedData []dto.Country,
 		}
 	}
 
-	if strings.TrimSpace(data.Parent) == "" {
-		errorMsg = append(errorMsg, "Parent distributor Name must not be empty, please enter a valid parent distributor name")
-	} else if !ValidateDistributorName(strings.ToUpper(strings.TrimSpace(data.Parent)), distributorInformation) {
-		errorMsg = append(errorMsg, "Parent distributor Name does not exist, please enter an existing parent distributor name")
-	}
+	if subDistributor {
+		if strings.TrimSpace(data.Parent) == "" {
+			errorMsg = append(errorMsg, "Parent distributor Name must not be empty, please enter a valid parent distributor name")
+		} else if !ValidateDistributorName(strings.ToUpper(strings.TrimSpace(data.Parent)), distributorInformation) {
+			errorMsg = append(errorMsg, "Parent distributor Name does not exist, please enter an existing parent distributor name")
+		}
 
-	if len(errorMsg) == 0 {
-		InputData := append(data.Include, data.Exclude...)
-		checkPermissionWithParent := permission.CheckPermission(strings.TrimSpace(data.Parent), InputData, "subDistributionCreation", distributorInformation)
-		if len(checkPermissionWithParent) > 0 {
-			errorMsg = append(errorMsg, checkPermissionWithParent...)
+		if len(errorMsg) == 0 {
+			InputData := append(data.Include, data.Exclude...)
+			checkPermissionWithParent := permission.CheckPermission(strings.TrimSpace(data.Parent), InputData, "subDistributionCreation", distributorInformation)
+			if len(checkPermissionWithParent) > 0 {
+				errorMsg = append(errorMsg, checkPermissionWithParent...)
+			}
 		}
 	}
 

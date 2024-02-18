@@ -1,93 +1,83 @@
 package input
 
 import (
-	"bufio"
 	"challenge2016/dto" // Importing DTO package for data transfer objects
-	"fmt"
-	"os"
+	"log"
 	"strings"
+
+	"github.com/manifoldco/promptui"
 )
 
-// AskNextQuestion prints the menu and returns the user's choice
-func AskNextQuestion() string {
-	fmt.Println("Select one of the below choices:")
-	fmt.Println("1. Create a new distributor")
-	fmt.Println("2. Create a sub distributor")
-	fmt.Println("3. Check permission for a distributor")
-	fmt.Println("4. View Distributors information")
-	fmt.Println("5. Exit the program")
-
-	reader := bufio.NewReader(os.Stdin)
-	choice, _ := reader.ReadString('\n')
-	choice = strings.TrimSpace(choice)
-	return choice
-}
-
-// GetDistributorData retrieves data for a new distributor from user input
-func GetDistributorData() dto.Distributor {
-	var distributor dto.Distributor
-	fmt.Print("Enter distributor name: ")
-	fmt.Scanln(&distributor.Name)
-	fmt.Print("Enter the regions you want to include for this distributor: ")
-	includeRegions := GetInputRegions()
-	distributor.Include = includeRegions
-	fmt.Print("Enter the regions you want to exclude for this distributor: ")
-	excludeRegions := GetInputRegions()
-	distributor.Exclude = excludeRegions
-	return distributor
-}
-
-// GetSubDistributorData retrieves data for a new sub-distributor from user input
-func GetSubDistributorData() dto.Distributor {
-	var distributor dto.Distributor
-	fmt.Print("Enter distributor name: ")
-	fmt.Scanln(&distributor.Name)
-	fmt.Print("Enter the regions you want to include for this distributor: ")
-	includeRegions := GetInputRegions()
-	distributor.Include = includeRegions
-	fmt.Print("Enter the regions you want to exclude for this distributor: ")
-	excludeRegions := GetInputRegions()
-	distributor.Exclude = excludeRegions
-	fmt.Print("Enter the name of the parent distributor: ")
-	fmt.Scanln(&distributor.Parent)
-	return distributor
-}
-
-// GetInputRegions retrieves regions from user input
-func GetInputRegions() []string {
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
-	input = strings.TrimSpace(input)
-
-	// Split by comma first
-	regions := strings.Split(input, ",")
-
-	cleanedRegions := make([]string, 0)
-
-	for _, region := range regions {
-		// Check if the region contains a hyphen
-		if strings.Contains(region, "-") {
-			cleanedRegions = append(cleanedRegions, strings.TrimSpace(strings.ToUpper(region)))
-		} else {
-			// If no hyphen, split by comma
-			subRegions := strings.Split(strings.TrimSpace(region), "-")
-			for _, subRegion := range subRegions {
-				cleanedRegion := strings.TrimSpace(subRegion)
-				if cleanedRegion != "" {
-					cleanedRegions = append(cleanedRegions, strings.ToUpper(cleanedRegion))
-				}
-			}
-		}
+// The `PromptMenu` function in Go displays a menu for selecting different choices and returns the
+// selected option.
+func PromptMenu() string {
+	prompt := promptui.Select{
+		Label: "Select one of the below choices",
+		Items: []string{
+			"Create a new distributor",
+			"Create a sub distributor",
+			"Check permission for a distributor",
+			"View Distributors information",
+			"Exit",
+		},
 	}
-	return cleanedRegions
+
+	_, result, err := prompt.Run()
+	if err != nil {
+		log.Fatalf("Prompt failed %v\n", err)
+	}
+
+	return result
 }
 
-// GetCheckPermissionData retrieves data for permission checking from user input
-func GetCheckPermissionData() dto.CheckPermissionData {
+// The function `PromptDistributorData` in Go prompts the user to enter distributor data including
+// name, regions to include and exclude, and optionally the parent distributor name.
+func PromptDistributorData(subDistributor bool) dto.Distributor {
+	var distributor dto.Distributor
+
+	promptName := promptui.Prompt{
+		Label: "Enter distributor name:",
+	}
+	name, _ := promptName.Run()
+	distributor.Name = name
+
+	promptInclude := promptui.Prompt{
+		Label: "Enter the regions you want to include for this distributor (comma separated): ",
+	}
+	includeInput, _ := promptInclude.Run()
+	distributor.Include = strings.Split(includeInput, ",")
+
+	promptExclude := promptui.Prompt{
+		Label: "Enter the regions you want to exclude for this distributor (comma separated): ",
+	}
+	excludeInput, _ := promptExclude.Run()
+	distributor.Exclude = strings.Split(excludeInput, ",")
+
+	if subDistributor {
+		promptParent := promptui.Prompt{
+			Label: "Enter the name of the parent distributor: ",
+		}
+		parent, _ := promptParent.Run()
+		distributor.Parent = parent
+	}
+
+	return distributor
+}
+
+// The `PromptCheckPermissionData` function in Go prompts the user to enter a distributor name and
+// regions for permission checking.
+func PromptCheckPermissionData() dto.CheckPermissionData {
 	var data dto.CheckPermissionData
-	fmt.Print("Enter distributor name that needs to be checked: ")
-	fmt.Scanln(&data.DistributorName)
-	fmt.Print("Enter regions that need to be checked: ")
-	data.Regions = GetInputRegions()
+
+	promptName := promptui.Prompt{
+		Label: "Enter distributor name that needs to be checked:",
+	}
+	data.DistributorName, _ = promptName.Run()
+
+	promptRegions := promptui.Prompt{
+		Label: "Enter distributor name that needs to be checked (comma separated):",
+	}
+	regionsInput, _ := promptRegions.Run()
+	data.Regions = strings.Split(regionsInput, ",")
 	return data
 }
