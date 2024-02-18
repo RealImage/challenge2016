@@ -45,7 +45,7 @@ func main() {
 				continue
 			}
 			checkPermissionResult := permission.CheckPermission(checkPermissionData.DistributorName, checkPermissionData.Regions, "Check Permission", distributorInformation) // Checking permission
-			fmt.Println("Check Permission Result:", checkPermissionResult)
+			fmt.Println("Check Permission Result:\n", strings.Join(checkPermissionResult, "\n"))
 		case "View Distributors information":
 			for _, distributor := range distributorInformation {
 				fmt.Printf("Name: %s, Include: %v, Exclude: %v, Parent: %s\n", distributor.Name, distributor.Include, distributor.Exclude, distributor.Parent)
