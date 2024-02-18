@@ -2,6 +2,7 @@ package input
 
 import (
 	"challenge2016/dto" // Importing DTO package for data transfer objects
+	"fmt"
 	"log"
 	"strings"
 
@@ -36,29 +37,37 @@ func PromptDistributorData(subDistributor bool) dto.Distributor {
 	var distributor dto.Distributor
 
 	promptName := promptui.Prompt{
-		Label: "Enter distributor name:",
+		Label:       "Enter distributor name:",
+		HideEntered: true,
 	}
 	name, _ := promptName.Run()
 	distributor.Name = name
+	fmt.Println(promptName.Label, name)
 
 	promptInclude := promptui.Prompt{
-		Label: "Enter the regions you want to include for this distributor (comma separated): ",
+		Label:       "Enter the regions you want to include for this distributor (comma separated): ",
+		HideEntered: true,
 	}
 	includeInput, _ := promptInclude.Run()
 	distributor.Include = strings.Split(includeInput, ",")
+	fmt.Println(promptInclude.Label, includeInput)
 
 	promptExclude := promptui.Prompt{
-		Label: "Enter the regions you want to exclude for this distributor (comma separated): ",
+		Label:       "Enter the regions you want to exclude for this distributor (comma separated): ",
+		HideEntered: true,
 	}
 	excludeInput, _ := promptExclude.Run()
 	distributor.Exclude = strings.Split(excludeInput, ",")
+	fmt.Println(promptExclude.Label, excludeInput)
 
 	if subDistributor {
 		promptParent := promptui.Prompt{
-			Label: "Enter the name of the parent distributor: ",
+			Label:       "Enter the name of the parent distributor: ",
+			HideEntered: true,
 		}
 		parent, _ := promptParent.Run()
 		distributor.Parent = parent
+		fmt.Println(promptParent.Label, parent)
 	}
 
 	return distributor
@@ -70,14 +79,18 @@ func PromptCheckPermissionData() dto.CheckPermissionData {
 	var data dto.CheckPermissionData
 
 	promptName := promptui.Prompt{
-		Label: "Enter distributor name that needs to be checked:",
+		Label:       "Enter distributor name that needs to be checked:",
+		HideEntered: true,
 	}
 	data.DistributorName, _ = promptName.Run()
+	fmt.Println(promptName.Label, data.DistributorName)
 
 	promptRegions := promptui.Prompt{
-		Label: "Enter distributor name that needs to be checked (comma separated):",
+		Label:       "Enter distributor name that needs to be checked (comma separated):",
+		HideEntered: true,
 	}
 	regionsInput, _ := promptRegions.Run()
 	data.Regions = strings.Split(regionsInput, ",")
+	fmt.Println(promptRegions.Label, data.Regions)
 	return data
 }
