@@ -1,41 +1,81 @@
-# Real Image Challenge 2016
+# Distributor Management System
 
-In the cinema business, a feature film is usually provided to a regional distributor based on a contract for exhibition in a particular geographical territory.
+This project is a distributor management system designed to handle the creation of distributors, sub-distributors, checking permissions, and viewing distributor information. The system utilizes a CSV file containing data about cities, states, and countries for region validation.
 
-Each authorization is specified by a combination of included and excluded regions. For example, a distributor might be authorzied in the following manner:
+## How to Run the code base
+Ensure you have Go installed on your system. Navigate to the root directory of the project and run the following command:
+
+```bash
+go run main.go
 ```
-Permissions for DISTRIBUTOR1
-INCLUDE: INDIA
-INCLUDE: UNITEDSTATES
-EXCLUDE: KARNATAKA-INDIA
-EXCLUDE: CHENNAI-TAMILNADU-INDIA
+Follow the on-screen prompts to interact with the program.
+
+## How to Run the .exe file
+To run the executable file (distibuter.exe), follow these steps:
+
+1. Ensure that both the executable file and the cities.csv file are in the same folder.
+2. Double-click on the executable file (distibuter.exe).
+3. The program will start running, and you can interact with it through the command-line interface.
+4. Follow the on-screen prompts to perform various actions like creating distributors, sub-distributors, checking permissions, and viewing distributor information.
+
+## Usage
+
+To run the program, execute the `main.go` file. Upon execution, the program will prompt the user with a menu to select various options:
+
+1. Create a new distributor: Allows the user to create a new distributor.
+2. Create a sub-distributor: Allows the user to create a sub-distributor under an existing distributor.
+3. Check permission for a distributor: Allows the user to check permissions for a distributor.
+4. View Distributors information: Displays information about existing distributors.
+5. Exit the program: Exits the program.
+
+### Sample Inputs/Outputs:
+> **_NOTE:_**  List of choices is prompted to perform actions based on user input and continues to prompt the user until the program is exited.
+- List of choices
 ```
-This allows `DISTRIBUTOR1` to distribute in any city inside the United States and India, *except* cities in the state of Karnataka (in India) and the city of Chennai (in Tamil Nadu, India).
+Use the arrow keys to navigate: ↓ ↑ → ←
+Select one of the below choices:
+1. Create a new distributor
+2. Create a sub distributor
+3. Check permission for a distributor
+4. View Distributors information     
+5. Exit the program
+```
 
-At this point, asking your program if `DISTRIBUTOR1` has permission to distribute in `CHICAGO-ILLINOIS-UNITEDSTATES` should get `YES` as the answer, and asking if distribution can happen in `CHENNAI-TAMILNADU-INDIA` should of course be `NO`. Asking if distribution is possible in `BANGALORE-KARNATAKA-INDIA` should also be `NO`, because the whole state of Karnataka has been excluded.
-
-Sometimes, a distributor might split the work of distribution amount smaller sub-distiributors inside their authorized geographies. For instance, `DISTRIBUTOR1` might assign the following permissions to `DISTRIBUTOR2`:
+- Choosing "Create a new distributor"
 
 ```
-Permissions for DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: INDIA
-EXCLUDE: TAMILNADU-INDIA
+Enter distributor name: kumaran
+Enter the regions you want to include for this distributor: india,china,pakistan
+Enter the regions you want to exclude for this distributor: chennai-tamil nadu-india
 ```
-Now, `DISTRIBUTOR2` can distribute the movie anywhere in `INDIA`, except inside `TAMILNADU-INDIA` and `KARNATAKA-INDIA` - `DISTRIBUTOR2`'s permissions are always a subset of `DISTRIBUTOR1`'s permissions. It's impossible/invalid for `DISTRIBUTOR2` to have `INCLUDE: CHINA`, for example, because `DISTRIBUTOR1` isn't authorized to do that in the first place. 
 
-If `DISTRIBUTOR2` authorizes `DISTRIBUTOR3` to handle just the city of Hubli, Karnataka, India, for example:
+- Choosing "Create a sub distributor"
+
 ```
-Permissions for DISTRIBUTOR3 < DISTRIBUTOR2 < DISTRIBUTOR1
-INCLUDE: HUBLI-KARNATAKA-INDIA
+Enter distributor name: poorna
+Enter the regions you want to include for this distributor: india
+Enter the regions you want to exclude for this distributor: salem-tamil nadu-india
+Enter the name of the parent distributor: kumaran
 ```
-Again, `DISTRIBUTOR2` cannot authorize `DISTRIBUTOR3` with a region that they themselves do not have access to. 
 
-We've provided a CSV with the list of all countries, states and cities in the world that we know of - please use the data mentioned there for this program. *The codes you see there may be different from what you see here, so please always use the codes in the CSV*. This Readme is only an example. 
+- Choosing "Check permission for a distributor"
 
-Write a program in any language you want (If you're here from Gophercon, use Go :D) that does this. Feel free to make your own input and output format / command line tool / GUI / Webservice / whatever you want. Feel free to hold the dataset in whatever structure you want, but try not to use external databases - as far as possible stick to your langauage without bringing in MySQL/Postgres/MongoDB/Redis/Etc.
+```
+Enter distributor name that needs to be checked: poorna
+Enter regions that need to be checked: india
+Check Permission Result: [POORNA has access to INDIA]
+```
 
-To submit a solution, fork this repo and send a Pull Request on Github. 
+- Choosing "View Distributors information"
 
-For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
+```
+Distributor Information:
+Name: KUMARAN, Include: [INDIA CHINA PAKISTAN], Exclude: [CHENNAI-TAMIL NADU-INDIA], Parent:
+Name: POORNA, Include: [INDIA], Exclude: [SALEM-TAMIL NADU-INDIA], Parent: KUMARAN
+```
 
+- Choosing "View Distributors information", it will exit the program.
 
+### Author
+
+[Kumaran](https://github.com/kumaranElavazhagn)
