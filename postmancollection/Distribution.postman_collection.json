@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "38886bca-d578-44d8-9c16-bf9e63dbacec",
+		"name": "Distribution",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13883914"
+	},
+	"item": [
+		{
+			"name": "Create Distributor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Distributorname\": \"d1\",\r\n    \"Includes\": [\r\n        {\r\n            \"CountryCode\": \"IN\",\r\n            \"ProvinceCode\": \"\",\r\n            \"CityCode\": \"\"\r\n        },\r\n        {\r\n            \"CountryCode\": \"US\",\r\n            \"ProvinceCode\": \"\",\r\n            \"CityCode\": \"\"\r\n        }\r\n    ],\r\n    \"Excludes\": [\r\n        {\r\n            \"CountryCode\": \"IN\",\r\n            \"ProvinceCode\": \"KA\",\r\n            \"CityCode\": \"YELUR\"\r\n        },\r\n        {\r\n            \"CountryCode\": \"IN\",\r\n            \"ProvinceCode\": \"TN\",\r\n            \"CityCode\": \"\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/distributors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"distributors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Distributor Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Distributorname\": \"d4\",\r\n    \"ParentDistributorName\": \"d1\",\r\n    \"Includes\": [\r\n        {\r\n            \"CountryCode\": \"IN\",\r\n            \"ProvinceCode\": \"TN\",\r\n            \"CityCode\": \"\"\r\n        },\r\n        {\r\n            \"CountryCode\": \"IN\",\r\n            \"ProvinceCode\": \"AP\",\r\n            \"CityCode\": \"\"\r\n        }\r\n    ],\r\n    \"Excludes\": [\r\n        {\r\n            \"CountryCode\": \"IN\",\r\n            \"ProvinceCode\": \"AP\",\r\n            \"CityCode\": \"KOTAL\"\r\n        },\r\n        {\r\n            \"CountryCode\": \"IN\",\r\n            \"ProvinceCode\": \"TG\",\r\n            \"CityCode\": \"\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/distributors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"distributors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Location access",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/distributors/d4/locationaccess?countrycode=IN&provincecode=AP&citycode=VIGAR",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"distributors",
+						"d4",
+						"locationaccess"
+					],
+					"query": [
+						{
+							"key": "countrycode",
+							"value": "IN"
+						},
+						{
+							"key": "provincecode",
+							"value": "AP"
+						},
+						{
+							"key": "citycode",
+							"value": "VIGAR"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Distributor Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/distributors/d4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"distributors",
+						"d4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
