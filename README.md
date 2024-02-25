@@ -39,3 +39,13 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
 
+# Task
+Implemented Create Distributor with location access, Check location access of a distributor api's
+
+# apis list
+find them in postmancollection folder or export it in postman
+
+## Steps to run
+```
+cd server
+go run main.go
