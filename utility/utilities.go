@@ -8,6 +8,7 @@ import (
 )
 
 // Helper function to find parent Distributor of a given distributor
+// The function is O(n) - to find parent distributor
 func FindParentDistributor(distributor string, distributorMap map[string][]model.Distributor) model.Distributor {
 
 	// Iterate through all the children in the map, if not found, return empty struct
@@ -22,6 +23,7 @@ func FindParentDistributor(distributor string, distributorMap map[string][]model
 }
 
 // Helper function to return Distributor{} object for a given distributor name
+// The function is O(n) - to search the distributors
 func CheckDistributor(distributorMap map[string][]model.Distributor, name string) (model.Distributor, string) {
 
 	var val []model.Distributor
