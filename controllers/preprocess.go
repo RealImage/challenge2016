@@ -10,13 +10,13 @@ import (
 )
 
 var LocMap map[string]model.Location
-var DistributorMap map[string][]model.Distributor // to track all parents and their children, for easy retrieval
+var DistributorMap map[string]map[string]model.Distributor // to track all parents and their children, for easy retrieval
 var scanner *bufio.Scanner
 
 // Preprocess the provided data, create a map out of the same for easy access.
 func Preprocess() {
 	scanner = bufio.NewScanner(os.Stdin)
-	DistributorMap = make(map[string][]model.Distributor, 0)
+	DistributorMap = make(map[string]map[string]model.Distributor, 0)
 
 	file, err := os.Open("cities.csv")
 	if err != nil {

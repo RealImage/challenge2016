@@ -9,14 +9,13 @@ import (
 
 // Helper function to find parent Distributor of a given distributor
 // The function is O(n) - to find parent distributor
-func FindParentDistributor(distributor string, distributorMap map[string][]model.Distributor) model.Distributor {
+// Optimized to O(p) - P is the count of parents in the tree
+func FindParentDistributor(distributor string, distributorMap map[string]map[string]model.Distributor) model.Distributor {
 
 	// Iterate through all the children in the map, if not found, return empty struct
-	for _, val := range distributorMap {
-		for _, childD := range val {
-			if childD.Name == distributor {
-				return val[0]
-			}
+	for key, val := range distributorMap {
+		if _, ok := val[distributor]; ok {
+			return val[key]
 		}
 	}
 	return model.Distributor{}
@@ -24,21 +23,21 @@ func FindParentDistributor(distributor string, distributorMap map[string][]model
 
 // Helper function to return Distributor{} object for a given distributor name
 // The function is O(n) - to search the distributors
-func CheckDistributor(distributorMap map[string][]model.Distributor, name string) (model.Distributor, string) {
+// Optimized to O(p) - P is the count of parents in the tree
+func CheckDistributor(distributorMap map[string]map[string]model.Distributor, name string) (model.Distributor, string) {
 
-	var val []model.Distributor
-	var ok bool
-	if val, ok = distributorMap[name]; ok && val[0].Name == name {
-		return val[0], "parent"
+	if val, ok := distributorMap[name]; ok {
+		if val1, ok1 := val[name]; ok1 {
+			return val1, "parent"
+		}
 	}
 
 	for _, ele := range distributorMap {
-		for _, childDistributor := range ele {
-			if childDistributor.Name == name {
-				return childDistributor, "child"
-			}
+		if ele1, ok := ele[name]; ok {
+			return ele1, "child"
 		}
 	}
+
 	return model.Distributor{}, ""
 }
 

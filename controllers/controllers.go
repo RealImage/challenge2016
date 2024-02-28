@@ -35,8 +35,9 @@ func AddSubDistributor() {
 	}
 
 	UpdateIncludeAndExcludePermissions(&subDistributor, parentName, true)
-	DistributorMap[parentDistributor.Name] = append(DistributorMap[parentDistributor.Name], subDistributor)
-	fmt.Printf("Sub Distributor added under Parent Distributor ", parentName)
+	(DistributorMap[parentDistributor.Name])[subDistributor.Name] = subDistributor
+	DistributorMap[subDistributor.Name] = make(map[string]model.Distributor)
+	fmt.Println("Sub Distributor added under Parent Distributor ", parentName)
 }
 
 func AddDistributor() {
@@ -56,7 +57,9 @@ func AddDistributor() {
 		SubDistributors: []*model.Distributor{},
 	}
 	UpdateIncludeAndExcludePermissions(&distributor, "", false)
-	DistributorMap[name] = append(DistributorMap[name], distributor)
+	DistributorMap[name] = map[string]model.Distributor{
+		name: distributor,
+	}
 }
 
 func CheckForAccess() {
@@ -226,7 +229,7 @@ func UpdatePermissions() {
 	}
 	if rel != "" {
 		UpdateIncludeAndExcludePermissions(&distributor, "", isSub)
-		DistributorMap[name] = append(DistributorMap[name], distributor)
+		(DistributorMap[name])[distributor.Name] = distributor
 	} else {
 		fmt.Println(" Distributor does not exist")
 	}
