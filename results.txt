@@ -1,0 +1,655 @@
+PS C:\Users\Biswajit\Desktop\challenge2016> go run .\main.go
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+2
+Enter name of the distributor to be added: 
+j
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+j
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+rourkela steel city
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+j
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+3
+Enter Country to be checked: 
+united states
+NO
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+a
+Distributor does not exist
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+j
+Enter the name of the Sub Distributor to be added: 
+a
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+united states
+Enter State:
+
+Parent is NOT AUTHORISED in the region provided
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+odisha
+Enter City:
+
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+Sub Distributor added under Parent Distributor  j
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+rourkela steel city
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+delhi
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked:
+delhi
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+delhi
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1  
+Enter City to be checked: 
+palsana
+NO
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+2
+Enter State to be checked: 
+odisha
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+3
+Enter Country to be checked: 
+india
+NO
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+b
+Distributor does not exist
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+a
+Enter the name of the Sub Distributor to be added: 
+b
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+odisha
+Enter City:
+rourkela steel city
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+panic: assignment to entry in nil map
+
+goroutine 1 [running]:
+realImage.com/m/controllers.AddSubDistributor()
+        C:/Users/Biswajit/Desktop/challenge2016/controllers/controllers.go:38 +0x4b1
+main.main()
+        C:/Users/Biswajit/Desktop/challenge2016/main.go:25 +0x239
+exit status 2
+PS C:\Users\Biswajit\Desktop\challenge2016> go run .\main.go
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+2
+Enter name of the distributor to be added: 
+a
+Choose Option to execute
+1. Add Inclusions       
+2. Add Exclusions       
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+a
+Enter the name of the Sub Distributor to be added: 
+b
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+odisha
+Enter City:
+
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+Sub Distributor added under Parent Distributor  a
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+b
+Enter the name of the Sub Distributor to be added: 
+c
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+odisha
+Enter City:
+rourkela steel city
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+panic: assignment to entry in nil map
+
+goroutine 1 [running]:
+realImage.com/m/controllers.AddSubDistributor()
+        C:/Users/Biswajit/Desktop/challenge2016/controllers/controllers.go:38 +0x4b1
+main.main()
+        C:/Users/Biswajit/Desktop/challenge2016/main.go:25 +0x239
+exit status 2
+PS C:\Users\Biswajit\Desktop\challenge2016> go run .\main.go
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+2
+Enter name of the distributor to be added: 
+a
+Choose Option to execute
+1. Add Inclusions       
+2. Add Exclusions       
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+
+Choose Option to execute
+1. Add Inclusions       
+2. Add Exclusions       
+3. Exit
+3
+Exiting Permissions Update section
+Select a option to proceed ahead  
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+a
+Enter the name of the Sub Distributor to be added: 
+b
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+odisha
+Enter City:
+
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+Sub Distributor added under Parent Distributor  a
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+a
+Enter the name of the Sub Distributor to be added: 
+c
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+gujarat
+Enter City:
+
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+Sub Distributor added under Parent Distributor  a
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+1
+Enter the name of the Parent for whom child distributor will be added: 
+b
+Enter the name of the Sub Distributor to be added: 
+d
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+1
+Enter Country:
+india
+Enter State:
+odisha
+Enter City:
+rourkela steel city
+Choose Option to execute
+1. Add Inclusions
+2. Add Exclusions
+3. Exit
+3
+Exiting Permissions Update section
+Sub Distributor added under Parent Distributor  b
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+rourkela steel city
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+a
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+2
+Enter State to be checked: 
+assam
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+b
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+rourkela steel city
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+b
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+2
+Enter State to be checked: 
+gujarat
+NO
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+b
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+3
+Enter Country to be checked: 
+united states
+NO
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+c
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+vadodara
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+c
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+rourkela steel city
+NO
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+d
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+1
+Enter City to be checked: 
+rourkela steel city
+YES
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+4
+Enter the name of the distributor or Subdistributor for which we want to check access: 
+d
+Search by Location ::::::::::
+1. Search By City
+2. Search By state
+3. Search By country
+
+2
+Enter State to be checked: 
+gujarat
+NO
+Select a option to proceed ahead
+1. Add Sub-distributor
+2. Add Distributor
+3. Update Permissions for a distributor
+4. Check for access
+5. Exit the program
+5
+exit status 1
+PS C:\Users\Biswajit\Desktop\challenge2016>
