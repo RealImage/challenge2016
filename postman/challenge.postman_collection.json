@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "1160a5f6-8bb3-454e-8a91-2110380df32d",
+		"name": "Permission Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23484470"
+	},
+	"item": [
+		{
+			"name": "getPermissions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"DISTRIBUTOR2\",\n  \"locations\": [\"UP-IN\",\"IN\"]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/distributor/check",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"distributor",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDistributors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/distributors",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"distributors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add Distributor1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"DISTRIBUTOR1\",\n  \"includes\": [\"IN\"],\n  \"excludes\": [\"UP-IN\"]\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/distributor/add",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"distributor",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add Distributor2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"DISTRIBUTOR2\",\n  \"includes\": [\"IN\"],\n  \"parent\": \"DISTRIBUTOR1\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/distributor/add",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"distributor",
+						"add"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		}
+	]
+}
