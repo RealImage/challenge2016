@@ -1,0 +1,13 @@
+# GoLand IDE
+.idea/
+
+# Go dependencies
+vendor/
+
+# Go build and binary files
+*.exe
+*.dll
+*.so
+*.dylib
+bin/
+dist/
