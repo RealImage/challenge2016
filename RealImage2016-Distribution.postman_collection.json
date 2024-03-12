@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "cedd34a6-8896-4fb6-8348-2deed649195a",
+		"name": "RealImage2016/Distribution",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24332650"
+	},
+	"item": [
+		{
+			"name": "Location access",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8005/api/v1/distributors/d4/locationaccess?countrycode=IN&provincecode=AP",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"distributors",
+						"d4",
+						"locationaccess"
+					],
+					"query": [
+						{
+							"key": "countrycode",
+							"value": "IN"
+						},
+						{
+							"key": "provincecode",
+							"value": "AP"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Distributor Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8005/api/v1/distributors/d1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8005",
+					"path": [
+						"api",
+						"v1",
+						"distributors",
+						"d1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Distributor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distributorName\": \"Distributor1\",\n    \"includes\": [\n        {\n            \"countryCode\": \"IN\",\n            \"provinceCode\": \"\",\n            \"cityCode\": \"\"\n        },\n        {\n            \"countryCode\": \"US\",\n            \"provinceCode\": \"\",\n            \"cityCode\": \"\"\n        }\n    ],\n    \"excludes\": [\n        {\n            \"countryCode\": \"IN\",\n            \"provinceCode\": \"KA\",\n            \"cityCode\": \"YELUR\"\n        },\n        {\n            \"countryCode\": \"IN\",\n            \"provinceCode\": \"TN\",\n            \"cityCode\": \"\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8005/api/v1/distributors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8005",
+					"path": [
+						"api",
+						"v1",
+						"distributors"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
