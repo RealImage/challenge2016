@@ -39,3 +39,8 @@ To submit a solution, fork this repo and send a Pull Request on Github.
 For any questions or clarifications, raise an issue on this repo and we'll answer your questions as fast as we can.
 
 
+##Added Three APIs for Distributor
+## 1 - Post API to create the Distributor Details entry in Map
+## 2 - Get API to get the Distributor Location Access deatials
+## 3 - Get API to get the Distributor Details from Map
+## Postman CURL Given for the reference
